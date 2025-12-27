@@ -1,4 +1,4 @@
-## Form to create a new ResourceItem
+## Form to create/edit a new ResourceItem 
 extends Control
 
 # Path to the save file
