@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcrisb6jq3ase"]
+
+[ext_resource type="Script" uid="uid://bfeb7dp3gunh4" path="res://user_interface/division_item/division_item.gd" id="1_l0i4a"]
+
+[node name="DivisionLineItem" type="Control"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+script = ExtResource("1_l0i4a")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 31.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="RTLblCounter" type="RichTextLabel" parent="Panel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+bbcode_enabled = true
+text = "1"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeLineItemText" type="LineEdit" parent="Panel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnDeleteLineItem" type="Button" parent="Panel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+text = "Delete"
+
+[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/BtnDeleteLineItem" to="." method="_on_btn_delete_line_item_pressed"]

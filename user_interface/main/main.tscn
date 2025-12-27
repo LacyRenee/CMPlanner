@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3 uid="uid://u4r18f8c1kiy"]
+
+[ext_resource type="Script" uid="uid://ycrpsd4i532c" path="res://user_interface/main/main.gd" id="1_uknf8"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uknf8")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainerMain" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainerMain"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainerMain/MarginContainer"]
+layout_mode = 2
+
+[node name="RtlTitle" type="RichTextLabel" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "CM Planner "
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerAttacher" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="ControlSpacer1" type="Control" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnSchedule" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Schedule"
+
+[node name="BtnHome" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Home"
+
+[node name="BtnResources" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Resources"
+
+[node name="BtnSettings" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Settings"
+
+[node name="ControlSpacer2" type="Control" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/BtnHome" to="." method="_on_btn_home_pressed"]
+[connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/BtnResources" to="." method="_on_btn_resources_pressed"]
