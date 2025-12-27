@@ -1,10 +1,4 @@
 ## The entry point into the application
-## Then have a child "in-game world" that can be swapped out with other "world nodes"
-## website: https://docs.godotengine.org/en/stable/tutorials/best_practices/scene_organization.html
-## Things to consider:
-## 1. Tracks all of its data interanlly?
-## 2. should be globally accessible?
-## 3. Should exist in isolation?
 ## Need to add a GUI as a singleton
 ## The key to scene organization is to consider the SceneTree in relational terms rather than spatial terms. 
 ## Are the nodes dependent on their parent's existence? If not, then they can thrive all by themselves somewhere else. 
