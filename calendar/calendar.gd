@@ -1,3 +1,8 @@
+################################################################################
+### Calendar View for a month at a time
+### Able to go to previous months and next months
+### Made with the calendar_library plugin
+################################################################################
 extends Control
 
 @onready var panel_container: PanelContainer = %PanelContainer
@@ -6,7 +11,7 @@ extends Control
 @onready var lbl_calendar_header: Label = %LblCalendarHeader
 
 ## Access to the grid calendar header labels
-@onready var grid_calendar_header: GridContainer = %GridCalendarHeader
+@onready var grid_calendar_week_header: GridContainer = %GridCalendarWeekHeader
 
 ## Access to the grid container for the calendar
 @onready var grid_calendar_dates: GridContainer = %GridCalendarDates
@@ -25,9 +30,6 @@ var selected_date : Calendar.Date
 
 ## A reference to today's current date
 var todays_date : Calendar.Date
-
-## Resource of variable options for the calendar
-#var calendar_locale : CalendarLocaleExample = CalendarLocaleExample.new()
 
 # Placeholder label for when a date is selected
 var selected_date_label : Label 

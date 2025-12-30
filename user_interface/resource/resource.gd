@@ -53,7 +53,7 @@ const DIVSION_PATH : String = "res://user_interface/division_item/division_item.
 @onready var le_description: LineEdit = %LeDescription
 
 ## The allocated space on the form for the division line items to be displayed if division type is NOT 'None'
-@onready var division_container = $Panel/MarginContainer/VBoxContainer/VBoxCDivisionList
+@onready var division_container: VBoxContainer = %VBoxCDivisionList
 
 ## The vbox that specifically holds all of the division items
 @onready var division_list: VBoxContainer = %VBoxCDivision

@@ -1,0 +1,16 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dcw1avgvkfth5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ojfxf"]
+bg_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+
+[resource]
+Button/font_sizes/font_size = 20
+HBoxContainer/constants/separation = 0
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 0
+MarginContainer/constants/margin_right = 0
+MarginContainer/constants/margin_top = 10
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_ojfxf")
+RichTextLabel/font_sizes/normal_font_size = 20

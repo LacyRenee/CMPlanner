@@ -1,9 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjnsoiqn7vnog"]
+[gd_scene load_steps=5 format=3 uid="uid://bjnsoiqn7vnog"]
 
 [ext_resource type="Script" uid="uid://c8le1c02viplu" path="res://user_interface/all_resources/all_resources.gd" id="1_4hvgi"]
+[ext_resource type="Theme" uid="uid://28fjs4ix3c8g" path="res://user_interface/all_resources/all_resource_theme.tres" id="1_l6uru"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s8xgl"]
-bg_color = Color(0.786191, 0.83177876, 0.8454542, 1)
+bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_s8xgl"]
 
@@ -14,6 +15,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_l6uru")
 script = ExtResource("1_4hvgi")
 
 [node name="Panel" type="Panel" parent="."]
@@ -32,10 +34,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
@@ -50,8 +48,13 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BtnAddResourceItem" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BtnAddResourceItem" type="Button" parent="Panel/MarginContainer/VBoxContainer/PanelContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Add a Resource Item"
@@ -61,10 +64,16 @@ layout_mode = 2
 theme_override_constants/separation = 10
 theme_override_styles/separator = SubResource("StyleBoxLine_s8xgl")
 
-[node name="ILAllResources" type="ItemList" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="ILAllResources" type="ItemList" parent="Panel/MarginContainer/VBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/BtnAddResourceItem" to="." method="_on_btn_add_resource_item_pressed"]
-[connection signal="item_selected" from="Panel/MarginContainer/VBoxContainer/ILAllResources" to="." method="_on_il_all_resources_item_selected"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/PanelContainer/BtnAddResourceItem" to="." method="_on_btn_add_resource_item_pressed"]
+[connection signal="item_selected" from="Panel/MarginContainer/VBoxContainer/MarginContainer/ILAllResources" to="." method="_on_il_all_resources_item_selected"]
