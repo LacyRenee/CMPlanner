@@ -1,0 +1,178 @@
+[gd_scene load_steps=6 format=3 uid="uid://bko3kjq6xx2gm"]
+
+[ext_resource type="Script" uid="uid://byybxsssk155i" path="res://calendar/calendar.gd" id="1_ml3vj"]
+[ext_resource type="Theme" uid="uid://yqxweiso00hl" path="res://calendar/calendar_dates_theme.tres" id="2_djgmv"]
+[ext_resource type="Theme" uid="uid://hc8g362vkvcc" path="res://calendar/calendar_header_theme.tres" id="2_r5j44"]
+[ext_resource type="Theme" uid="uid://cjgk2ordqhpri" path="res://calendar/calendar_week_label_theme.tres" id="3_8ghgs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_djgmv"]
+bg_color = Color(0.98039216, 1, 1, 1)
+
+[node name="Calendar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ml3vj")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_djgmv")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxCalendarHeader" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_r5j44")
+
+[node name="BtnPreviousMonth" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "<"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="LblCalendarHeader" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "December 2025"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnNextMonth" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 8
+text = ">"
+
+[node name="GridCalendarWeekHeader" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("3_8ghgs")
+columns = 7
+
+[node name="PanelContainerColumn1" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainerColumn1" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn1"]
+layout_mode = 2
+
+[node name="LblColumn1" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn1/MarginContainerColumn1"]
+layout_mode = 2
+text = "Sunday"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerColumn2" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainerColumn2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn2"]
+layout_mode = 2
+
+[node name="LblColumn2" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn2/MarginContainerColumn2"]
+layout_mode = 2
+text = "Monday"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerColumn3" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainerColumn3" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn3"]
+layout_mode = 2
+
+[node name="LblColumn3" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn3/MarginContainerColumn3"]
+layout_mode = 2
+text = "Tuesday"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerColumn4" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainerColumn4" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn4"]
+layout_mode = 2
+
+[node name="LblColumn4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn4/MarginContainerColumn4"]
+layout_mode = 2
+text = "Wednesday"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerColumn5" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainerColumn5" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn5"]
+layout_mode = 2
+
+[node name="LblColumn5" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn5/MarginContainerColumn5"]
+layout_mode = 2
+text = "Thursday"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerColumn6" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainerColumn6" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn6"]
+layout_mode = 2
+
+[node name="LblColumn6" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn6/MarginContainerColumn6"]
+layout_mode = 2
+text = "Friday"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerColumn7" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainerColumn7" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn7"]
+layout_mode = 2
+
+[node name="LblColumn7" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn7/MarginContainerColumn7"]
+layout_mode = 2
+text = "Saturday"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridCalendarDates" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_djgmv")
+columns = 7
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader/BtnPreviousMonth" to="." method="_on_btn_previous_month_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader/BtnNextMonth" to="." method="_on_btn_next_month_pressed"]
