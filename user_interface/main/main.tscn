@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://u4r18f8c1kiy"]
+[gd_scene load_steps=4 format=3 uid="uid://u4r18f8c1kiy"]
 
 [ext_resource type="Script" uid="uid://ycrpsd4i532c" path="res://user_interface/main/main.gd" id="1_uknf8"]
-[ext_resource type="Theme" uid="uid://dcw1avgvkfth5" path="res://user_interface/main/main_header_footer_theme.tres" id="2_x06om"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0lq4d"]
 bg_color = Color(0.98039216, 1, 1, 1)
@@ -34,16 +33,17 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-theme = ExtResource("2_x06om")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
 
 [node name="RtlTitle" type="RichTextLabel" parent="PanelContainerMain/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 0
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/normal_font_size = 24
 text = "CM Planner "
 fit_content = true
 horizontal_alignment = 1
@@ -58,13 +58,13 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_x06om")
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
-theme = ExtResource("2_x06om")
 
 [node name="PanelContainer1" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ControlSpacer1" type="Control" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer1"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -73,6 +73,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnSchedule" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Schedule"
@@ -82,6 +83,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnHome" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer3"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Home"
@@ -91,6 +93,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnResources" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer4"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Resources"
@@ -100,6 +103,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnSettings" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer5"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Settings"
@@ -109,6 +113,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="ControlSpacer2" type="Control" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer6"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 

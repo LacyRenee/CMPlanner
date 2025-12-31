@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkau00fj4iq3m"]
+[gd_scene load_steps=3 format=3 uid="uid://bkau00fj4iq3m"]
 
 [ext_resource type="Script" uid="uid://dtcqellqw7q6v" path="res://user_interface/resource/resource.gd" id="1_bn3c3"]
-[ext_resource type="Theme" uid="uid://b1hjga6ow823e" path="res://user_interface/resource/resource_theme.tres" id="1_jjqua"]
 [ext_resource type="PackedScene" uid="uid://dcrisb6jq3ase" path="res://user_interface/division_item/division_item.tscn" id="2_jjqua"]
 
 [node name="Resource" type="Control"]
@@ -11,7 +10,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_jjqua")
 script = ExtResource("1_bn3c3")
 metadata/_edit_use_anchors_ = true
 
@@ -22,6 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_type_variation = &"BackgroundPanel"
 metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
@@ -98,6 +97,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 5.0
+theme_override_colors/font_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 
 [node name="HBoxCContributor" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -106,6 +106,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 
 [node name="LeContributorName" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCContributor"]
 unique_name_in_owner = true
@@ -262,21 +263,16 @@ size_flags_stretch_ratio = 5.0
 
 [node name="VBoxCDivisionList" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PanelDivision" type="Panel" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList"]
+[node name="PanelDivision" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_type_variation = &"BackgroundPanel"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="VBoxCDivision" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision/ScrollContainer"]
 unique_name_in_owner = true
@@ -288,14 +284,7 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -31.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 2
 alignment = 2
 
 [node name="BtnDivision" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision/VBoxContainer"]
