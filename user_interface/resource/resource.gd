@@ -53,7 +53,7 @@ const DIVSION_PATH : String = "res://user_interface/division_item/division_item.
 @onready var le_description: LineEdit = %LeDescription
 
 ## The allocated space on the form for the division line items to be displayed if division type is NOT 'None'
-@onready var division_container = $Panel/MarginContainer/VBoxContainer/VBoxCDivisionList
+@onready var division_container: VBoxContainer = %VBoxCDivisionList
 
 ## The vbox that specifically holds all of the division items
 @onready var division_list: VBoxContainer = %VBoxCDivision
@@ -176,6 +176,7 @@ func update_view() -> void:
 			resource_type_options.disabled = true
 			contributor_options.disabled = true
 			contributor_name.editable = false
+			ob_subject.disabled = true
 			le_url.editable = false
 			le_publisher.editable = false
 			le_copyright_date.editable = false
@@ -206,6 +207,7 @@ func enable_form_fields() -> void:
 	resource_type_options.disabled = false
 	contributor_options.disabled = false
 	contributor_name.editable = true
+	ob_subject.disabled = false
 	le_url.editable = true
 	le_publisher.editable = true
 	le_copyright_date.editable = true
