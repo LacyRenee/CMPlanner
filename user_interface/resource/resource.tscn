@@ -263,6 +263,7 @@ size_flags_stretch_ratio = 5.0
 
 [node name="VBoxCDivisionList" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -339,6 +340,7 @@ size_flags_stretch_ratio = 4.0
 
 [connection signal="item_selected" from="PanelContainer/MarginContainer/VBoxContainer/HBoxCDivisionType/ObDivisionType" to="." method="_on_ob_divistion_type_item_selected"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision/VBoxContainer/BtnDivision" to="." method="_on_btn_division_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnSchedule" to="." method="_on_btn_schedule_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnSave" to="." method="_on_btn_save_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnEdit" to="." method="_on_btn_edit_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnUpdate" to="." method="_on_btn_update_pressed"]

@@ -1,11 +1,13 @@
-## Form to create/edit a new ResourceItem 
+################################################################################
+### Form to create/view/edit a new ResourceItem 
+################################################################################
 extends Control
 
 # Path to the save file
 const RESOURCE_FOLDER_PATH : String = "res://data/resources/"
 
 # Path to the division item scene
-const DIVSION_PATH : String = "res://user_interface/division_item/division_item.tscn"
+const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division_item.tscn"
 
 
 ## onready variables
@@ -87,7 +89,7 @@ var resource_item = ResourceItem.new()
 var resource_item_path : String = ""
 
 ## Preload the division line item in case it's needed
-var division_line_item = preload(DIVSION_PATH)
+var division_line_item = preload(DIVSION_SCENE_PATH)
 
 ## Shows which view the user is in: new, edit, view
 var view_option : ResourceLists.ViewingOptions
@@ -252,7 +254,7 @@ func get_all_division_items() -> Array:
 	var array : Array[String]
 	
 	for i in division_item_list:
-		array.append(i.get_text())		
+		array.append(i.get_text())
 	
 	return array
 
@@ -379,7 +381,7 @@ func _on_btn_save_pressed() -> void:
 	# Save the form data
 	save_data()
 	
-	ResourceSaver.save(resource_item, CmDatabase.get_db_resource_filepath() + "/" + str(resource_item) + ".tres")
+	ResourceSaver.save(resource_item, CmDatabaseUtilities.get_db_resource_filepath() + "/" + str(resource_item) + ".tres")
 
 	# Remove error fromats if any
 	remove_format_themes()
@@ -456,3 +458,9 @@ func confirm_delete_dialog_canceled() -> void:
 func confirm_delete_dialog_ok()-> void: 
 	DirAccess.remove_absolute(resource_item.resource_path)
 	SignalBus.display_all_resource_page.emit()
+
+
+## Changes the view to the ResourceSceduler view
+func _on_btn_schedule_pressed() -> void:
+	SignalBus.display_resource_schedule_page.emit(resource_item)
+	pass 

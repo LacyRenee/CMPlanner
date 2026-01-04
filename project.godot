@@ -31,7 +31,7 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 
 ResourceLists="*res://data/resource_lists.gd"
 SignalBus="*res://scripts/signal_bus.gd"
-CmDatabase="*res://data/cm_database.gd"
+CmDatabaseUtilities="*res://models/cm_database_utilities.gd"
 MyCalendarLocale="*res://calendar/my_calendar_locale.gd"
 
 [display]

@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://bko3kjq6xx2gm"]
 
-[ext_resource type="Script" uid="uid://byybxsssk155i" path="res://calendar/calendar.gd" id="1_ml3vj"]
-[ext_resource type="Theme" uid="uid://yqxweiso00hl" path="res://calendar/calendar_dates_theme.tres" id="2_djgmv"]
-[ext_resource type="Theme" uid="uid://hc8g362vkvcc" path="res://calendar/calendar_header_theme.tres" id="2_r5j44"]
-[ext_resource type="Theme" uid="uid://cjgk2ordqhpri" path="res://calendar/calendar_week_label_theme.tres" id="3_8ghgs"]
+[ext_resource type="Script" uid="uid://byybxsssk155i" path="res://user_interface/calendar/calendar.gd" id="1_ml3vj"]
+[ext_resource type="Theme" uid="uid://yqxweiso00hl" path="res://user_interface/calendar/calendar_dates_theme.tres" id="2_djgmv"]
+[ext_resource type="Theme" uid="uid://hc8g362vkvcc" path="res://user_interface/calendar/calendar_header_theme.tres" id="2_r5j44"]
+[ext_resource type="Theme" uid="uid://cjgk2ordqhpri" path="res://user_interface/calendar/calendar_week_label_theme.tres" id="3_8ghgs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_djgmv"]
 bg_color = Color(0.98039216, 1, 1, 1)
@@ -81,6 +81,7 @@ layout_mode = 2
 
 [node name="LblColumn1" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn1/MarginContainerColumn1"]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Sunday"
 fit_content = true
 horizontal_alignment = 1
@@ -95,6 +96,7 @@ layout_mode = 2
 
 [node name="LblColumn2" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn2/MarginContainerColumn2"]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Monday"
 fit_content = true
 horizontal_alignment = 1
@@ -109,6 +111,7 @@ layout_mode = 2
 
 [node name="LblColumn3" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn3/MarginContainerColumn3"]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Tuesday"
 fit_content = true
 horizontal_alignment = 1
@@ -123,6 +126,7 @@ layout_mode = 2
 
 [node name="LblColumn4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn4/MarginContainerColumn4"]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Wednesday"
 fit_content = true
 horizontal_alignment = 1
@@ -137,6 +141,7 @@ layout_mode = 2
 
 [node name="LblColumn5" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn5/MarginContainerColumn5"]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Thursday"
 fit_content = true
 horizontal_alignment = 1
@@ -151,6 +156,7 @@ layout_mode = 2
 
 [node name="LblColumn6" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn6/MarginContainerColumn6"]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Friday"
 fit_content = true
 horizontal_alignment = 1
@@ -165,6 +171,7 @@ layout_mode = 2
 
 [node name="LblColumn7" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn7/MarginContainerColumn7"]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Saturday"
 fit_content = true
 horizontal_alignment = 1
