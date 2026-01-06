@@ -117,6 +117,7 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
+[connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2/BtnSchedule" to="." method="_on_btn_schedule_pressed"]
 [connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer3/BtnHome" to="." method="_on_btn_home_pressed"]
 [connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer4/BtnResources" to="." method="_on_btn_resources_pressed"]
 [connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer5/BtnSettings" to="." method="_on_btn_settings_pressed"]

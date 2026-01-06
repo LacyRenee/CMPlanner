@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://hfqkkxdxuord"]
+[gd_scene load_steps=4 format=3 uid="uid://hfqkkxdxuord"]
 
 [ext_resource type="Script" uid="uid://csdc71gfibpet" path="res://user_interface/resource_scheduler/resource_scheduler.gd" id="1_eu1rl"]
+[ext_resource type="PackedScene" uid="uid://bko3kjq6xx2gm" path="res://user_interface/calendar/calendar.tscn" id="2_n8u6i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n8u6i"]
+bg_color = Color(1, 1, 1, 1)
 
 [node name="ResourceScheduler" type="Control"]
 layout_mode = 3
@@ -22,18 +26,223 @@ theme_type_variation = &"BackgroundPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="PanelContainerResourceSchedulerHeader" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
 
-[node name="LblResourceSchedulerHeader" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainer"]
+[node name="LblResourceSchedulerHeader" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceSchedulerHeader"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
 text = "Resource Scheduler"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PanelContainerResourceItem" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblResource" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Resource:"
+fit_content = true
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Start typing to search for a resource"
+
+[node name="ItemListResource" type="ItemList" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainerAssignStudents" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxStudents" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignStudents"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignStudents/VBoxStudents"]
+layout_mode = 2
+text = "Assign to Student:"
+fit_content = true
+
+[node name="ControlSpacer" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="PanelContainerAssignSubject" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignSubject"]
+layout_mode = 2
+
+[node name="LblSubject" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignSubject/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Subject: "
+fit_content = true
+
+[node name="OptionButtonSubjects" type="OptionButton" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignSubject/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainerAssignStudyMethod" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod"]
+layout_mode = 2
+
+[node name="LblStudyMethod" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Study Method:"
+fit_content = true
+
+[node name="OptionButtonStudyMethods" type="OptionButton" parent="Panel/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainerStartDate" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate"]
+layout_mode = 2
+
+[node name="LblStartDate" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Start Date:"
+fit_content = true
+
+[node name="BtnTodaysDate" type="Button" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+theme_override_colors/font_focus_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+theme_override_colors/font_pressed_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+theme_override_colors/font_hover_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_n8u6i")
+text = "Pick Date"
+
+[node name="Popup" type="Popup" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(500, 300)
+
+[node name="Calendar" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/Popup" instance=ExtResource("2_n8u6i")]
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelContainerUseOn" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn"]
+layout_mode = 2
+
+[node name="LblUseOn" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Use on:"
+fit_content = true
+
+[node name="CheckSunday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+action_mode = 0
+text = "Sun"
+
+[node name="CheckMonday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+action_mode = 0
+text = "Mon"
+
+[node name="CheckTuesday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+action_mode = 0
+text = "Tue"
+
+[node name="CheckWednesday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+action_mode = 0
+text = "Wed"
+
+[node name="CheckThursday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+action_mode = 0
+text = "Thu
+"
+
+[node name="CheckFriday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+action_mode = 0
+text = "Fri
+"
+
+[node name="CheckSaturday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+action_mode = 0
+text = "Sat
+"
+
+[node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="BtnSaveSchedule" type="Button" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "Save Schedule"
+
+[node name="BtnCancelSchedule" type="Button" parent="Panel/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/BtnTodaysDate" to="." method="_on_button_pressed"]

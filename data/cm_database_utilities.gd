@@ -34,7 +34,7 @@ func _ready() -> void:
 	
 	
 	# Create the settings file
-	var settings_path = CmDatabaseUtilities.get_settings_resource_filepath()
+	var settings_path = get_settings_resource_filepath()
 	if !ResourceLoader.load(settings_path):
 		create_settings_file()
 	else:

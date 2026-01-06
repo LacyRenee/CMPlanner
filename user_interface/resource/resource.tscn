@@ -281,67 +281,68 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Division" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision/ScrollContainer/VBoxCDivision" instance=ExtResource("2_jjqua")]
+[node name="DivisionLineItem" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision/ScrollContainer/VBoxCDivision" instance=ExtResource("2_jjqua")]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList"]
 layout_mode = 2
-alignment = 2
 
-[node name="BtnDivision" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision/VBoxContainer"]
+[node name="BtnDivision" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
 text = "Add More Divisons"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainerMenuControls" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="ControlSpacer1" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ControlSpacer1" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
 
-[node name="BtnSchedule" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnSchedule" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Schedule It"
 
-[node name="BtnSave" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnSave" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 text = "Save"
 
-[node name="BtnEdit" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnEdit" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Edit"
 
-[node name="BtnUpdate" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnUpdate" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Update"
 
-[node name="BtnDelete" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="BtnDelete" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Delete"
 
-[node name="ControlSpacer2" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ControlSpacer2" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
 
 [connection signal="item_selected" from="PanelContainer/MarginContainer/VBoxContainer/HBoxCDivisionType/ObDivisionType" to="." method="_on_ob_divistion_type_item_selected"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/PanelDivision/VBoxContainer/BtnDivision" to="." method="_on_btn_division_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnSchedule" to="." method="_on_btn_schedule_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnSave" to="." method="_on_btn_save_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnEdit" to="." method="_on_btn_edit_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnUpdate" to="." method="_on_btn_update_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnDelete" to="." method="_on_btn_delete_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/VBoxCDivisionList/VBoxContainer/BtnDivision" to="." method="_on_btn_division_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls/BtnSchedule" to="." method="_on_btn_schedule_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls/BtnSave" to="." method="_on_btn_save_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls/BtnEdit" to="." method="_on_btn_edit_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls/BtnUpdate" to="." method="_on_btn_update_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainerMenuControls/BtnDelete" to="." method="_on_btn_delete_pressed"]

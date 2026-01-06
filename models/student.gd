@@ -1,5 +1,5 @@
 class_name Student
-extends ResourceItem
+extends Resource
 
 @export var name : String = ''
 @export var grade : String

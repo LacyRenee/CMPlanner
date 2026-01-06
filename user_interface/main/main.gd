@@ -21,6 +21,9 @@ const RESOURCE_SCHEDULE_SCENE_PATH : String = "res://user_interface/resource_sch
 ## Scene path for the Settings page
 const SETTINGS_SCENE_PATH : String = "res://user_interface/settings/settings.tscn"
 
+## Scene path for the schedule page
+const SCHEDULE_SCENE_PATH : String = "res://user_interface/schedule/schedule.tscn"
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:	
@@ -36,6 +39,9 @@ func _ready() -> void:
 	
 	# Displays the resource schedule page
 	SignalBus.connect("display_resource_schedule_page", display_resource_schedule_view, 0)
+	
+	# Displays the schedule page
+	SignalBus.connect("display_schedule_page", display_schedule_page, 0)
 	#endregion
 	pass
 
@@ -90,9 +96,24 @@ func display_resource_page() -> void:
 
 ## Displays the settings page
 func display_settings_page() -> void:
+	# remove any other page
+	remove_scene_from_attacher()
+	
 	var settings_page = load(SETTINGS_SCENE_PATH)
 	var instance = settings_page.instantiate()
 	panel_container_attacher.add_child(instance)
+	pass
+
+
+## Displays the schedule page
+func display_schedule_page() -> void:
+	# remove any other page
+	remove_scene_from_attacher()
+	
+	var schedule_page = load(SCHEDULE_SCENE_PATH)
+	var instance = schedule_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	
 	pass
 
 
@@ -123,3 +144,10 @@ func _on_btn_settings_pressed() -> void:
 	remove_scene_from_attacher()
 	display_settings_page()
 	pass
+
+
+## Displays the schedule page
+func _on_btn_schedule_pressed() -> void:
+	SignalBus.display_schedule_page.emit()
+	print("Schedule")
+	pass 

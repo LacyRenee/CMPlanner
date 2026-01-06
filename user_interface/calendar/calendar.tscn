@@ -10,11 +10,18 @@ bg_color = Color(0.98039216, 1, 1, 1)
 
 [node name="Calendar" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
 script = ExtResource("1_ml3vj")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -38,7 +45,7 @@ layout_mode = 2
 theme = ExtResource("2_r5j44")
 
 [node name="BtnPreviousMonth" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "<"
@@ -51,7 +58,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="LblCalendarHeader" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader/MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(30, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "December 2025"
@@ -59,14 +66,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BtnNextMonth" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxCalendarHeader"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
 text = ">"
 
 [node name="GridCalendarWeekHeader" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme = ExtResource("3_8ghgs")
 columns = 7

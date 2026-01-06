@@ -1,14 +1,22 @@
-## Division Item that populates the Division section on a ResourceItem
+################################################################################
+### Division Item that populates the Division section on a ResourceItem
+################################################################################
 extends Control
 
+## Access to the counter label
 @onready var rt_lbl_counter: RichTextLabel = %RTLblCounter
+
+## Access to the line edit for adding a description
 @onready var le_line_item_text: LineEdit = %LeLineItemText
+
+## Access to the delete line item button
 @onready var btn_delete_line_item: Button = %BtnDeleteLineItem
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	print("Division item create. LineEdit is " + str(le_line_item_text.editable))
+	pass 
 
 ## Removes the selected line item
 func _on_btn_delete_line_item_pressed() -> void:
