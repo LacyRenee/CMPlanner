@@ -137,7 +137,6 @@ func update_view() -> void:
 	# Toggle which finalization button is on the form
 	match view_option:
 		ResourceData.ViewingOptions.New:
-			print("New")
 			# Toggle correct buttons
 			btn_save.visible = true
 			btn_edit.visible = false
@@ -219,9 +218,6 @@ func enable_form_fields() -> void:
 	le_description.editable = true
 	division_type_options.disabled = false
 	division_button.disabled = false
-	
-	#print(division_list.get_child(0).le_line_item_text.editable)
-	
 	pass
 
 

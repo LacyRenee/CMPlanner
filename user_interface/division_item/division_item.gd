@@ -15,7 +15,6 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("Division item create. LineEdit is " + str(le_line_item_text.editable))
 	pass 
 
 ## Removes the selected line item

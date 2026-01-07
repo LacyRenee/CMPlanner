@@ -65,18 +65,19 @@ text = "Resource:"
 fit_content = true
 vertical_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
+[node name="LeSearchResource" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Start typing to search for a resource"
 
 [node name="ItemListResource" type="ItemList" parent="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 35)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="PanelContainerAssignStudents" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
@@ -154,12 +155,12 @@ theme_override_colors/font_hover_pressed_color = Color(0.039215688, 0.039215688,
 theme_override_styles/normal = SubResource("StyleBoxFlat_n8u6i")
 text = "Pick Date"
 
-[node name="Popup" type="Popup" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+[node name="PopupCalendar" type="Popup" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
 oversampling_override = 1.0
 initial_position = 1
 size = Vector2i(500, 300)
 
-[node name="Calendar" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/Popup" instance=ExtResource("2_n8u6i")]
+[node name="Calendar" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/PopupCalendar" instance=ExtResource("2_n8u6i")]
 anchors_preset = 15
 anchor_left = 0.0
 anchor_top = 0.0
@@ -173,6 +174,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PanelContainerUseOn" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
@@ -185,45 +187,45 @@ layout_mode = 2
 text = "Use on:"
 fit_content = true
 
-[node name="CheckSunday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="CheckSunday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
 text = "Sun"
 
-[node name="CheckMonday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="CheckMonday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
 text = "Mon"
 
-[node name="CheckTuesday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="CheckTuesday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
 text = "Tue"
 
-[node name="CheckWednesday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="CheckWednesday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
 text = "Wed"
 
-[node name="CheckThursday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="CheckThursday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
 text = "Thu
 "
 
-[node name="CheckFriday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="CheckFriday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
 text = "Fri
 "
 
-[node name="CheckSaturday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="CheckSaturday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
@@ -245,4 +247,14 @@ text = "Save Schedule"
 layout_mode = 2
 text = "Cancel"
 
+[node name="LblInfo" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 765.0
+offset_top = 585.0
+offset_right = 1180.0
+offset_bottom = 692.0
+
+[connection signal="text_changed" from="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer/LeSearchResource" to="." method="_on_le_search_resource_text_changed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/BtnTodaysDate" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnSaveSchedule" to="." method="_on_btn_save_schedule_pressed"]

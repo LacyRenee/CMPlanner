@@ -21,6 +21,13 @@ extends Resource
 ## Day of the week the subject is to be started
 @export var start_date : String
 
-var start_after
+## Use after a specified resource
+@export var start_after : ResourceItem
 
-var use_with
+## Use in conjunction with the selected resource
+@export var use_with : ResourceItem
+
+## Specifies whether the Subject is scheduled or not
+@export var is_active : bool = true
+
+var assignments : Dictionary = {}

@@ -85,3 +85,10 @@ enum week_day {
 	Friday,
 	Saturday
 }
+
+enum progress {
+	Incomplete,
+	In_progress,
+	Completed,
+	Finished
+}

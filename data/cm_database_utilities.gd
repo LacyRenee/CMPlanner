@@ -42,6 +42,12 @@ func _ready() -> void:
 	pass
 
 
+## Saves the scheduled resource to the cmdatabase.tres file
+static func save_scheduled_resource(p_resource) -> void:
+	
+	pass
+
+
 ## The user file path to the resource folder
 static func get_resource_directory_filepath() -> String:
 	return cm_database_path + RESOURCES_FOLDER_PATH
