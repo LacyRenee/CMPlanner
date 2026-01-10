@@ -15,7 +15,7 @@ extends Control
 func _ready() -> void:
 	# Add all students
 	var student_list = CMDatabaseUtilities.get_student_list()
-	for student in student_list.students:
+	for student in student_list:
 		create_student_checkbox(student.name)
 	pass
 

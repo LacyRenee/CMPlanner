@@ -3,9 +3,6 @@
 ################################################################################
 extends Control
 
-# Path to the save file
-const RESOURCE_FOLDER_PATH : String = "res://data/resources/"
-
 # Path to the division item scene
 const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division_item.tscn"
 
@@ -241,9 +238,7 @@ func save_data() -> void:
 	# function to retrieve all division types
 	if division_type_options.selected != ResourceData.DivisionType.None: 
 		resource_item.division_type = division_type_options.selected as ResourceData.DivisionType
-		
 		resource_item.division_list = get_all_division_items()
-		
 	pass
 
 
@@ -376,11 +371,10 @@ func _on_btn_save_pressed() -> void:
 			error_format_number_of_pages()
 			return
 	
-	# Save the form data
+	# Save the form data to the resource
 	save_data()
+	CMDatabaseUtilities.save_resource_item(resource_item)
 	
-	ResourceSaver.save(resource_item, CmDatabaseUtilities.get_resource_directory_filepath() + "/" + str(resource_item) + ".tres")
-
 	# Remove error fromats if any
 	remove_format_themes()
 	
@@ -401,8 +395,9 @@ func _on_btn_update_pressed() -> void:
 			error_format_number_of_pages()
 			return
 	
-	# Save the data	
+	# Save the data
 	save_data()
+	CMDatabaseUtilities.update_resource_item(resource_item)
 	
 	# Remove any format themes
 	remove_format_themes()
@@ -421,8 +416,6 @@ func _on_ob_divistion_type_item_selected(index: int) -> void:
 	else:
 		division_container.hide()
 	pass 
-
-
 #endregion
 
 
@@ -453,7 +446,7 @@ func confirm_delete_dialog_canceled() -> void:
 
 ## Ok button for the confirm delete dialog
 func confirm_delete_dialog_ok()-> void: 
-	DirAccess.remove_absolute(resource_item.resource_path)
+	CMDatabaseUtilities.remove_resource_item(resource_item)
 	SignalBus.display_all_resource_page.emit()
 
 

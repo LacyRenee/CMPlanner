@@ -14,13 +14,12 @@ extends Control
 ## Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# 
-	var directory = CmDatabaseUtilities.get_all_resources()
-	if directory != null:
+	var resources = CmDatabaseUtilities.get_all_resources()
+	if !resources.is_empty():
 		# Add all of the resources to the ItemList
-		for file in directory.get_files():
-			var resource = load(directory.get_current_dir() + "/" + file)
-			var index = resource_list.add_item(resource.title)
-			resource_list.set_item_metadata(index, resource)
+		for r in resources:
+			var index = resource_list.add_item(r.title)
+			resource_list.set_item_metadata(index, r)
 	pass 
 
 
