@@ -13,7 +13,7 @@ extends Control
 const STUDENT_SCENE_PATH = preload("uid://dndwdy5tdbq1l")
 
 ## Holds a list of all the students
-var student_list : StudentList
+var student_list : Array[Student]
 
 
 ## Called the first time the node enters the tree scene
@@ -32,7 +32,7 @@ func refresh_student_list() -> void:
 	student_list = CMDatabaseUtilities.get_student_list()
 	
 	var family_count = 1
-	for student in student_list.students:
+	for student in student_list:
 		# Don't add family to the list
 		if family_count == 1: 
 			pass
@@ -58,15 +58,4 @@ func remove_all_students() -> void:
 			else:
 				v_box_container.remove_child(child)
 			count += 1
-	pass
-
-
-## Adds the new student to the table
-func create_student_row(p_student) -> void:
-	var instance = STUDENT_SCENE_PATH.instantiate()
-	v_box_container.add_child(instance)
-	
-	instance.edit_name(p_student[0])
-	instance.edit_grade(p_student[1])
-	
 	pass

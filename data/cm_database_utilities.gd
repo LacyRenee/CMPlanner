@@ -19,9 +19,6 @@ static var cm_database_path : String =  OS.get_user_data_dir()
 ## The directory for all the resources
 static var dir_access_resources : DirAccess
 
-## Holds all the students 
-static var student_list : StudentList
-
 
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
@@ -33,18 +30,60 @@ func _ready() -> void:
 		print("Resource directory already exists")
 	
 	
-	# Create the settings file
-	var settings_path = get_settings_resource_filepath()
-	if !ResourceLoader.load(settings_path):
-		create_settings_file()
-	else:
-		student_list = ResourceLoader.load(get_settings_resource_filepath())
+	# Create the application's database file and the required Family student
+	var db_path = get_database_filepath()
+	if !ResourceLoader.load(db_path):
+		var db : CMDatabase =  CMDatabase.new()
+		
+		var family_student : Student = Student.new()
+		family_student.name = "Family"
+		family_student.grade = "NA"
+		family_student.is_active = true
+		
+		db.student_list.append(family_student)
+				
+		ResourceSaver.save(db, get_database_filepath())
 	pass
 
 
-## Saves the scheduled resource to the cmdatabase.tres file
-static func save_scheduled_resource(p_resource) -> void:
+## Retrieves the list of students
+static func get_student_list() -> Array[Student]:
+	var db = ResourceLoader.load(get_database_filepath())
+	return db.student_list
+
+
+## Adds a student to the student list file
+static func add_student(p_student) -> void:
+	var db = ResourceLoader.load(get_database_filepath())
+	db.student_list.append(p_student)
 	
+	overwrite_database(db)
+	pass
+
+
+## Removes the selected student from the database
+static func remove_student(p_student) -> void:
+	var db = ResourceLoader.load(get_database_filepath())
+	var index = db.student_list.find(p_student)
+	db.student_list.remove_at(index)
+	overwrite_database(db)
+	pass
+
+
+## Saves the edited student to the save file
+static func save_edited_student(p_student : Student) -> void:
+	var db = ResourceLoader.load(get_database_filepath())
+	var index = db.student_list.students.find(p_student)
+	db.student_list[index].name = p_student.name
+	db.student_list[index].grade = p_student.grade
+	
+	overwrite_database(db)
+	pass
+
+
+## Saves the student file list
+static func overwrite_database(p_file : CMDatabase) -> void:
+	ResourceSaver.save(p_file, get_database_filepath())
 	pass
 
 
@@ -54,7 +93,7 @@ static func get_resource_directory_filepath() -> String:
 
 
 ## The user file path to the user settings
-static func get_settings_resource_filepath() -> String:
+static func get_database_filepath() -> String:
 	return cm_database_path + SETTINGS_PATH
 
 
@@ -62,56 +101,3 @@ static func get_settings_resource_filepath() -> String:
 static func get_all_resources() -> DirAccess:
 	dir_access_resources = DirAccess.open(get_resource_directory_filepath())
 	return dir_access_resources
-
-
-static func remove_student(p_student) -> void:
-	var index = student_list.students.find(p_student)
-	student_list.students.remove_at(index)
-	save_student_file(student_list)
-	pass
-
-
-## Creates the file for user settings
-static func create_settings_file() -> void:
-	student_list = StudentList.new()
-	
-	var family_student : Student = Student.new()
-	family_student.name = "Family"
-	family_student.grade =  "NA"
-	family_student.is_active = true
-	
-	student_list.students.append(family_student)
-	
-	save_student_file(student_list)
-	pass
-
-
-## Saves the student file list
-static func save_student_file(file : StudentList) -> void:
-	ResourceSaver.save(file, get_settings_resource_filepath())
-	pass
-
-
-## Saves the edited student to the save file
-static func save_edited_student(file : Student) -> void:
-	var index = student_list.students.find(file)
-	student_list.students[index].name = file.name
-	student_list.students[index].grade = file.grade
-	
-	save_student_file(student_list)
-	pass
-
-
-## Adds a student to the student list file
-static func add_student(p_student) -> void:
-	var all_students = ResourceLoader.load(get_settings_resource_filepath())
-	all_students.add_student(p_student)
-	
-	save_student_file(all_students)
-	pass
-
-
-## Retrieves the list of students
-static func get_student_list() -> StudentList:
-	student_list = ResourceLoader.load(get_settings_resource_filepath())
-	return student_list

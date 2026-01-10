@@ -17,15 +17,15 @@ extends Control
 @onready var popup_panel: PopupPanel = %PopupPanel
 
 ## List of students saved on the user's drive
-var student_directory : StudentList
+var student_directory : Array[Student]
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Open the student directory
-	student_directory = ResourceLoader.load(CMDatabaseUtilities.get_settings_resource_filepath())
+	student_directory = CMDatabaseUtilities.get_student_list()
 	
-	if student_directory.students.size() <= 1:
+	if student_directory.size() <= 1:
 		student_table.visible = false
 	else:
 		student_table.visible = true
