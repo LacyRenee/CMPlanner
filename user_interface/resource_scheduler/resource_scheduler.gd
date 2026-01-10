@@ -4,8 +4,6 @@
 extends Control
 @onready var lbl_info: Label = %LblInfo
 
-
-
 ## Access to the Student container for error checking
 @onready var panel_container_assign_students: PanelContainer = %PanelContainerAssignStudents
 
@@ -31,7 +29,6 @@ extends Control
 @onready var item_list_resource: ItemList = %ItemListResource
 
 
-
 ## defined error number for missing a resource
 const ERROR_MISSING_RESOURCE : int = 1
 
@@ -51,14 +48,13 @@ func _ready() -> void:
 	btn_todays_date.text = str(Calendar.Date.today())
 	
 	# Populate all the resources
-	var resource_list = CMDatabaseUtilities.get_all_resources()
-	for file in resource_list.get_files():
-		var resource = load(resource_list.get_current_dir() + "/" + file)
-		var index = item_list_resource.add_item(resource.title)
-		item_list_resource.set_item_metadata(index, resource)
+	var resource_list : Array[ResourceItem] = CMDatabaseUtilities.get_all_resources()
+	for r in resource_list:
+		var index = item_list_resource.add_item(r.title)
+		item_list_resource.set_item_metadata(index, r)
 		
-		var index_duplicate = item_list_resource_duplicate.add_item(resource.title)
-		item_list_resource_duplicate.set_item_metadata(index_duplicate, resource)
+		var index_duplicate = item_list_resource_duplicate.add_item(r.title)
+		item_list_resource_duplicate.set_item_metadata(index_duplicate, r)
 	
 	# Add all students
 	var student_list = CMDatabaseUtilities.get_student_list()

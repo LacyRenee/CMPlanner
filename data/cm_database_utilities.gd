@@ -1,5 +1,8 @@
 ################################################################################
 ### Utility class to handle all of the database management for the application
+### - Students
+### - ResourceItems
+### - Subjects 
 ################################################################################
 class_name CMDatabaseUtilities
 extends Node
@@ -9,9 +12,6 @@ const DATABASE_PATH = "/cm_database.tres"
 
 ## Base path for the user's folder
 static var cm_database_path : String =  OS.get_user_data_dir()
-
-## The directory for all the resources
-static var dir_access_resources : DirAccess
 
 
 ## Called when the node enters the scene tree for the first time
@@ -60,9 +60,9 @@ static func remove_student(p_student) -> void:
 ## Saves the edited student to the save file
 static func save_edited_student(p_student : Student) -> void:
 	var db = get_database()
-	var index = db.student_list.students.find(p_student)
-	db.student_list[index].name = p_student.name
-	db.student_list[index].grade = p_student.grade
+	var index = db.student_list.find(p_student)
+	db.student_list.get(index).name = p_student.name
+	db.student_list.get(index).grade = p_student.grade
 	
 	overwrite_database(db)
 	pass
