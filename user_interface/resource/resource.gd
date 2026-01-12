@@ -452,5 +452,5 @@ func confirm_delete_dialog_ok()-> void:
 
 ## Changes the view to the ResourceSceduler view
 func _on_btn_schedule_pressed() -> void:
-	SignalBus.display_resource_schedule_page.emit(resource_item)
+	SignalBus.display_selected_resource_schedule_page.emit(resource_item)
 	pass 

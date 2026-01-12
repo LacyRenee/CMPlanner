@@ -20,7 +20,7 @@ extends Control
 @onready var option_button_study_methods: OptionButton = %OptionButtonStudyMethods
 
 ## Calendar date picker popup
-@onready var popup_calendar: Popup = $Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/Popup
+@onready var popup_calendar: Popup = %PopupCalendar
 
 ## Access to the button used to display the calendar popup
 @onready var btn_todays_date: Button = %BtnTodaysDate
@@ -39,6 +39,7 @@ const ERROR_MISSING_STUDENT : int = 2
 const ERROR_MISSING_WEEK_DAYS : int = 3
 
 ## Holds the resource item list backup
+## Used when filtering the resource list
 var item_list_resource_duplicate : ItemList = ItemList.new()
 
 
@@ -72,9 +73,23 @@ func _ready() -> void:
 	# Connects to the selected date for the start date 
 	SignalBus.connect("date_selected", set_selected_date, 0)
 	
+	## Connects to the selected resource schedule it 
+	SignalBus.connect("schedule_selected_resource", set_selected_resource, 0)
+	
 	pass 
 
 
+## Selects the resourceitem that was sent from the resource page
+func set_selected_resource(p_resource : ResourceItem) -> void:
+	for i in range(item_list_resource.get_item_count()):
+		print(p_resource.title)
+		print(item_list_resource.get_item_text(i).to_lower())
+		if item_list_resource.get_item_text(i).to_lower().find(p_resource.title.to_lower()) != -1:
+			item_list_resource.select(i)
+	pass
+
+
+## Sets calendar picker date to today
 func set_selected_date(p_date) -> void:
 	btn_todays_date.text = str(p_date)
 	pass
@@ -209,7 +224,7 @@ func _on_btn_save_schedule_pressed() -> void:
 	
 	for selected in selected_students:
 		if selected.is_pressed() == true:
-			for student in student_list.students:
+			for student in student_list:
 				if student.name == selected.text:
 					new_subject.student.append(student)
 	
@@ -221,7 +236,22 @@ func _on_btn_save_schedule_pressed() -> void:
 	
 	for selected in selected_days:
 		if selected.is_pressed() == true:
-			new_subject.week_day.append(selected.text)
+			match  selected.text:
+				"Sun":
+					new_subject.week_days.append(ResourceData.week_day.Sunday)
+				"Mon":
+					new_subject.week_days.append(ResourceData.week_day.Monday)
+				"Tue":
+					new_subject.week_days.append(ResourceData.week_day.Tuesday)
+				"Wed":
+					new_subject.week_days.append(ResourceData.week_day.Wednesday)
+				"Thu":
+					new_subject.week_days.append(ResourceData.week_day.Thursday)
+				"Fri":
+					new_subject.week_days.append(ResourceData.week_day.Friday)
+				"Sat":
+					new_subject.week_days.append(ResourceData.week_day.Saturday)
+			
 	
 	## Add the start date
 	new_subject.start_date = btn_todays_date.text
@@ -232,6 +262,8 @@ func _on_btn_save_schedule_pressed() -> void:
 		new_subject.assignments = assignments
 	
 	## Save the resource to the database
+	CMDatabaseUtilities.add_subject(new_subject)
+	SignalBus.display_schedule_page.emit()
 	pass 
 
 
@@ -246,5 +278,10 @@ func _on_le_search_resource_text_changed(new_text: String) -> void:
 			var index = item_list_resource.add_item(item_list_resource_duplicate.get_item_metadata(i).title)
 			item_list_resource.set_item_metadata(index, item_list_resource_duplicate.get_item_metadata(i))
 			item_list_resource.select(index)
-			print(item_list_resource.is_selected(index))
 	pass
+
+
+## Goes back to the Schedule page view
+func _on_btn_cancel_schedule_pressed() -> void:
+	SignalBus.display_schedule_page.emit()
+	pass 

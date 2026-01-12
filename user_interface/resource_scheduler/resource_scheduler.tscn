@@ -156,6 +156,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_n8u6i")
 text = "Pick Date"
 
 [node name="PopupCalendar" type="Popup" parent="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+unique_name_in_owner = true
 oversampling_override = 1.0
 initial_position = 1
 size = Vector2i(500, 300)
@@ -258,3 +259,4 @@ offset_bottom = 692.0
 [connection signal="text_changed" from="Panel/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer/LeSearchResource" to="." method="_on_le_search_resource_text_changed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/BtnTodaysDate" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnSaveSchedule" to="." method="_on_btn_save_schedule_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnCancelSchedule" to="." method="_on_btn_cancel_schedule_pressed"]

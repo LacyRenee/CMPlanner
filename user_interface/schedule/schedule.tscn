@@ -1,19 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bgemwbjwf2kpf"]
+[gd_scene load_steps=3 format=3 uid="uid://bgemwbjwf2kpf"]
 
 [ext_resource type="Script" uid="uid://dh20lurv0ctqb" path="res://user_interface/schedule/schedule.gd" id="1_bmqd4"]
 [ext_resource type="StyleBox" uid="uid://lg7x2s4pkdar" path="res://user_interface/schedule/weekly_overview_header.tres" id="2_frsvj"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4hksu"]
-bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
 
 [node name="Schedule" type="Control"]
 layout_mode = 3
@@ -96,19 +84,41 @@ layout_mode = 2
 text = "Week Overview"
 fit_content = true
 
-[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer"]
+[node name="VBoxWeeklyOverviewTable" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-columns = 7
+size_flags_vertical = 3
 
-[node name="PanelContainerHeader1" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
+[node name="HBoxWeeklyOverviewHeader" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PanelContainerHeader1" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_frsvj")
 
-[node name="MarginContainerHeader1" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader1"]
+[node name="MarginContainerHeader1" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader1"]
 layout_mode = 2
 
-[node name="LblHeader1" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader1/MarginContainerHeader1"]
+[node name="LblHeader1" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader1/MarginContainerHeader1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "Student"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelContainerHeader2" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_frsvj")
+
+[node name="MarginContainerHeader2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader2"]
+layout_mode = 2
+
+[node name="LblHeader2" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader2/MarginContainerHeader2"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
@@ -117,15 +127,15 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerHeader2" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
+[node name="PanelContainerHeader3" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_frsvj")
 
-[node name="MarginContainerHeader2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader2"]
+[node name="MarginContainerHeader3" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader3"]
 layout_mode = 2
 
-[node name="LblHeader2" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader2/MarginContainerHeader2"]
+[node name="LblHeader3" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader3/MarginContainerHeader3"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
@@ -134,15 +144,15 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerHeader3" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
+[node name="PanelContainerHeader4" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_frsvj")
 
-[node name="MarginContainerColumn3" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader3"]
+[node name="MarginContainerColumn4" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader4"]
 layout_mode = 2
 
-[node name="LblColumn3" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader3/MarginContainerColumn3"]
+[node name="LblColumn4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader4/MarginContainerColumn4"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
@@ -151,15 +161,15 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerHeader4" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
+[node name="PanelContainerHeader5" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_frsvj")
 
-[node name="MarginContainerHeader4" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader4"]
+[node name="MarginContainerHeader5" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader5"]
 layout_mode = 2
 
-[node name="LblHeader4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader4/MarginContainerHeader4"]
+[node name="LblHeader5" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader5/MarginContainerHeader5"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
@@ -168,15 +178,15 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerHeader5" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
+[node name="PanelContainerHeader6" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_frsvj")
 
-[node name="MarginContainerHeader5" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader5"]
+[node name="MarginContainerHeader6" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader6"]
 layout_mode = 2
 
-[node name="LblHeader5" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader5/MarginContainerHeader5"]
+[node name="LblHeader6" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader6/MarginContainerHeader6"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
@@ -185,15 +195,15 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerHeader6" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
+[node name="PanelContainerHeader7" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_frsvj")
 
-[node name="MarginContainerHeader6" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader6"]
+[node name="MarginContainerHeader7" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader7"]
 layout_mode = 2
 
-[node name="LblHeader6" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader6/MarginContainerHeader6"]
+[node name="LblHeader7" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader7/MarginContainerHeader7"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
@@ -202,15 +212,15 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerHeader7" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
+[node name="PanelContainerHeader8" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = ExtResource("2_frsvj")
 
-[node name="MarginContainerHeader7" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader7"]
+[node name="MarginContainerHeader8" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader8"]
 layout_mode = 2
 
-[node name="LblHeader7" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerHeader7/MarginContainerHeader7"]
+[node name="LblHeader8" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader8/MarginContainerHeader8"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
@@ -219,77 +229,8 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerColumn1" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"BackgroundPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_4hksu")
-
-[node name="MarginContainerColumn1" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerColumn1"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="PanelContainerColumn2" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"BackgroundPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_4hksu")
-
-[node name="MarginContainerColumn1" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerColumn2"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="PanelContainerColumn3" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"BackgroundPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_4hksu")
-
-[node name="MarginContainerColumn3" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerColumn3"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="PanelContainerColumn4" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"BackgroundPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_4hksu")
-
-[node name="MarginContainerColumn4" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerColumn4"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="PanelContainerColumn5" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"BackgroundPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_4hksu")
-
-[node name="MarginContainerColumn5" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerColumn5"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="PanelContainerColumn6" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"BackgroundPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_4hksu")
-
-[node name="MarginContainerColumn6" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerColumn6"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="PanelContainerColumn7" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"BackgroundPanel"
-theme_override_styles/panel = SubResource("StyleBoxFlat_4hksu")
-
-[node name="MarginContainerColumn7" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/GridContainer/PanelContainerColumn7"]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
 [node name="PanelContainerSubjectOverview" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 8
 
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/BtnScheduleResource" to="." method="_on_btn_schedule_resource_pressed"]

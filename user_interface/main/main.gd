@@ -37,23 +37,39 @@ func _ready() -> void:
 	# Displays the new resource page
 	SignalBus.connect("display_new_resource_page", display_new_resource_page, 0)
 	
-	# Displays the resource schedule page
-	SignalBus.connect("display_resource_schedule_page", display_resource_schedule_view, 0)
+	# Displays the selected resource schedule page
+	SignalBus.connect("display_selected_resource_schedule_page", display_selected_resource_schedule_view, 0)
+	
+	# Displays the generic resource schedule page
+	SignalBus.connect("display_resource_schedule_page", display_resource_schedule_page, 0)
 	
 	# Displays the schedule page
 	SignalBus.connect("display_schedule_page", display_schedule_page, 0)
+	
+	
 	#endregion
 	pass
 
 
+## Displays the generic resource scheduler page
+func display_resource_schedule_page() -> void:
+	remove_scene_from_attacher()
+	
+	var resource_scheduler_page = load(RESOURCE_SCHEDULE_SCENE_PATH)
+	var instance = resource_scheduler_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	pass
+
+
 ## Displays the resource scheduler page
-func display_resource_schedule_view(p_resource : ResourceItem) -> void:
+func display_selected_resource_schedule_view(p_resource : ResourceItem) -> void:
 	remove_scene_from_attacher()
 	
 	var resource_schedule_page = load(RESOURCE_SCHEDULE_SCENE_PATH)
 	var instance = resource_schedule_page.instantiate()
 	panel_container_attacher.add_child(instance)
-
+	
+	SignalBus.schedule_selected_resource.emit(p_resource)
 	pass
 
 
@@ -149,5 +165,4 @@ func _on_btn_settings_pressed() -> void:
 ## Displays the schedule page
 func _on_btn_schedule_pressed() -> void:
 	SignalBus.display_schedule_page.emit()
-	print("Schedule")
 	pass 

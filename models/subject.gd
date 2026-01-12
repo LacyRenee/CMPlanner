@@ -16,7 +16,7 @@ extends Resource
 @export var study_method : ResourceData.study_method
 
 # Selected day or days on which the subject is to be studied
-@export var week_day : Array[ResourceData.week_day]
+@export var week_days : Array[ResourceData.week_day]
 
 ## Day of the week the subject is to be started
 @export var start_date : String

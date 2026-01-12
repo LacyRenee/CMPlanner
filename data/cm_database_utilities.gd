@@ -103,6 +103,20 @@ static func remove_resource_item(p_resource : ResourceItem) -> void:
 #endregion
 
 
+## Seves the subject to the database
+static func add_subject(p_subject : Subject) -> void:
+	var db = get_database()
+	db.subject_list.append(p_subject)
+	overwrite_database(db)
+	pass
+
+
+## Retrieve all the subjects in the database
+static func get_subject_list() -> Array[Subject]:
+	var db = get_database()
+	return db.subject_list
+
+
 ## Retreives the database file
 static func get_database() -> CMDatabase:
 	var db : CMDatabase = ResourceLoader.load(get_database_filepath())
