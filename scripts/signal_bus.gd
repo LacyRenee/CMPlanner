@@ -45,3 +45,7 @@ signal date_selected(date)
 ## Emitted when a student checkbox is checked on the schedule page
 @warning_ignore("unused_signal")
 signal student_filter_checked(checkbox)
+
+## Emitted when an assigned subject is removed from the schedule
+@warning_ignore("unused_signal")
+signal refresh_scheduled_subject_view

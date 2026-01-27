@@ -15,7 +15,7 @@ extends Resource
 ## Method in which the subject is to be studied
 @export var study_method : ResourceData.study_method
 
-# Selected day or days on which the subject is to be studied
+## Selected day or days on which the subject is to be studied
 @export var week_days : Array[ResourceData.week_day]
 
 ## Day of the week the subject is to be started
@@ -30,4 +30,7 @@ extends Resource
 ## Specifies whether the Subject is scheduled or not
 @export var is_active : bool = true
 
-var assignments : Dictionary = {}
+## Selected division type used for assignments
+@export var division_type : ResourceData.DivisionType
+
+@export var assignments : Array[Assignment] = []  

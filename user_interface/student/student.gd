@@ -25,7 +25,7 @@ func _ready() -> void:
 
 
 ## Sets the student's name
-func edit_name(p_name : String) -> void:
+func edit_name(p_name : String = '') -> void:
 	le_name.text = p_name
 	pass
 

@@ -82,8 +82,6 @@ func _ready() -> void:
 ## Selects the resourceitem that was sent from the resource page
 func set_selected_resource(p_resource : ResourceItem) -> void:
 	for i in range(item_list_resource.get_item_count()):
-		print(p_resource.title)
-		print(item_list_resource.get_item_text(i).to_lower())
 		if item_list_resource.get_item_text(i).to_lower().find(p_resource.title.to_lower()) != -1:
 			item_list_resource.select(i)
 	pass
@@ -113,22 +111,23 @@ func create_student_checkbox(p_name) -> void:
 
 ## Creates an assignment for each division item for the ResourceItem
 ## Marks each division item as "Incomplete"
-func create_assignments(resource : ResourceItem) -> Dictionary:
-	var dictionary : Dictionary
+func create_assignments(p_resource : ResourceItem) -> Array[Assignment]:
+	var assignment_list : Array[Assignment] = []
 	
-	for item in resource.division_list:
-		var entry = {
-			Title = item,
-			Progress = ResourceData.progress.Incomplete
-		}
-		dictionary["assignment"] = entry
+	for title in p_resource.division_list:
+		var assignment : Assignment = Assignment.new()
+		assignment.title = title
+		assignment.progress = ResourceData.progress.Incomplete
+		assignment_list.append(assignment)
 	
-	return dictionary
+	return assignment_list
+
+
 
 
 ## Goes through each editable node and verifies that each required field is
 ## filled out
-func error_check_form() -> void:
+func error_check_form() -> Array[int]:
 	# Error check form to make sure there's a resource
 	var errors : Array[int] = []
 	if item_list_resource.get_selected_items().is_empty():
@@ -156,10 +155,7 @@ func error_check_form() -> void:
 	if checked_days_count == 0:
 		errors.append(ERROR_MISSING_WEEK_DAYS)
 	
-	if errors.size() > 0:
-		add_error_formats(errors)
-		return
-	pass
+	return errors
 
 
 ## Displays to the user what fields must be filled out
@@ -207,7 +203,10 @@ func _on_btn_save_schedule_pressed() -> void:
 	remove_error_formats()
 	
 	## Error check the form for required fields
-	error_check_form()
+	var errors = error_check_form()
+	if !errors.is_empty():
+		add_error_formats(errors)
+		return
 	
 	## Create the new subject and add all the data
 	var new_subject : Subject = Subject.new()
@@ -233,7 +232,7 @@ func _on_btn_save_schedule_pressed() -> void:
 	
 	# Add the week days
 	var selected_days = get_tree().get_nodes_in_group("day_selected")
-	
+
 	for selected in selected_days:
 		if selected.is_pressed() == true:
 			match  selected.text:
@@ -251,15 +250,13 @@ func _on_btn_save_schedule_pressed() -> void:
 					new_subject.week_days.append(ResourceData.week_day.Friday)
 				"Sat":
 					new_subject.week_days.append(ResourceData.week_day.Saturday)
-			
 	
 	## Add the start date
 	new_subject.start_date = btn_todays_date.text
 	
 	## Create the assignments if the ResourceItem has a division type
 	if new_subject.resource.division_type != ResourceData.DivisionType.None:
-		var assignments = create_assignments(new_subject.resource)
-		new_subject.assignments = assignments
+		new_subject.assignments = create_assignments(new_subject.resource)
 	
 	## Save the resource to the database
 	CMDatabaseUtilities.add_subject(new_subject)

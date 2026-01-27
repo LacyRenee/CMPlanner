@@ -6,6 +6,13 @@ extends Control
 
 const STUDENT_ROW_GROUP = "student_row"
 
+## Path to the Panel subject scene
+const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
+
+## Path to the sutdent lesson info scene
+const STUDENT_LESSON_INFO = preload("uid://chj1la6p3ou7h")
+
+
 ## Access to the hbox to add all available students
 @onready var h_box_students: HBoxContainer = %HBoxStudents
 
@@ -15,18 +22,150 @@ const STUDENT_ROW_GROUP = "student_row"
 ## Access to the hbox to add all available subjects
 @onready var h_box_subjects: HBoxContainer = %HBoxSubjects
 
+## Access to the vbox to display subjects
+@onready var vbox_subject_view : VBoxContainer = %VBoxSubjectView
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Add the student rows to the table
+	create_schedule_overview_table()
+	
+	# Add the assignment overview
+	create_subject_overview()
+	
+	SignalBus.connect("refresh_scheduled_subject_view", refresh_page)
+	
+	pass
+
+
+## Refreshes the schedule page
+func refresh_page() -> void:
+	# Need to remove all children from the table
+	var table_rows = vbox_weekly_overview_table.get_children()
+	var table_row_count = 0
+	for row in table_rows:
+		if table_row_count != 0:
+			vbox_weekly_overview_table.remove_child(row)
+		
+		table_row_count += 1
+	
+	# Remove all children from the subject overview
+	var overview_row = vbox_subject_view.get_children()
+	for row in overview_row:
+		vbox_subject_view.remove_child(row)
+	
+	# Remove all students
+	var student_row = h_box_students.get_children()
+	for row in student_row:
+		h_box_students.remove_child(row)
+		
+	create_schedule_overview_table()
+	create_subject_overview()
+	pass
+
+
+## Creates the table row for each student and any assigned subjects
+func create_schedule_overview_table() -> void:
 	# Add the "Filter by student" and student rows to the weekly overview
 	var student_list = CMDatabaseUtilities.get_student_list()
 	var assignment_list = CMDatabaseUtilities.get_subject_list()
+	
 	for student in student_list:
 		create_student_checkbox(student.name)
 		create_student_weekly_overview_row(student)
 		var assignments = get_all_student_assignments(student, assignment_list)
 		create_weekly_assignment_overview(student, assignments)
+	pass
+
+
+## Creates the subject assignment overview table
+func create_subject_overview() -> void:
+	print("subject overview")
+	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
+	var subject_list = ResourceData.Subjects
 	
+	for item in subject_list:
+		var panel_scene = PANEL_SUBJECT.instantiate()
+		panel_scene.get_child(0).get_child(0).text = item
+		panel_scene.visible = false
+		vbox_subject_view.add_child(panel_scene)
+	
+	# Add the student subject assignments to the subject view
+	for subject_assignment in student_subject_list:
+		add_assignment_to_subject_view(subject_assignment)
+	pass
+
+
+## For each students, the assignment is added to the correct subject view
+func add_assignment_to_subject_view(p_assignment : Subject) -> void:
+	var subject = ResourceData.Subjects.keys()[p_assignment.subject]
+	var nodes = vbox_subject_view.get_children()
+	
+	for n in nodes:
+		if n.get_child(0).get_child(0).text == subject:
+			var student_count = p_assignment.student.size()
+			if student_count > 1:
+				for student in p_assignment.student:
+					create_subject_assignment(p_assignment, n)
+			else:
+				create_subject_assignment(p_assignment, n)
+	pass
+
+
+## Creates the assignments for the specified subject for all students
+func create_subject_assignment(p_assignment : Subject, p_container : Node) -> void:
+	var student_lesson_info_scene = STUDENT_LESSON_INFO.instantiate()
+	p_container.get_child(0).add_child(student_lesson_info_scene)
+	student_lesson_info_scene.lbl_student_name.text = p_assignment.student[0].name
+	student_lesson_info_scene.lbl_subject_title.text = ResourceData.Subjects.keys()[p_assignment.subject]
+	student_lesson_info_scene.lbl_lesson_method.text = ResourceData.study_method.keys()[p_assignment.study_method]
+	student_lesson_info_scene.set_subject(p_assignment)
+	
+	# Format the "Start label" text
+	var start_title = "Start: " if !p_assignment.start_date.is_empty() else "Start After: "
+	student_lesson_info_scene.lbl_start.text = start_title + p_assignment.start_date \
+			if !p_assignment.start_date.is_empty() \
+			else p_assignment.start_after
+	
+	# Format the division type text (e.g., Chapter 1 - 10)
+	if student_lesson_info_scene.lbl_division_type.text == ResourceData.DivisionType.keys()[ResourceData.DivisionType.None]:
+		student_lesson_info_scene.lbl_division_type.text = ""
+	else:
+		var count = p_assignment.assignments.size()
+		student_lesson_info_scene.lbl_division_type.text = \
+			ResourceData.DivisionType.keys()[p_assignment.resource.division_type] \
+			+ " 1 - " \
+			+ str(count)
+	
+	# Highlight the selected week days for the assignment 
+	for day in p_assignment.week_days:
+		var background_color : StyleBoxFlat = StyleBoxFlat.new()
+		background_color.bg_color = Color.CADET_BLUE
+		
+		match day:
+			1:
+				student_lesson_info_scene.lbl_day_1.add_theme_color_override("default_color", Color.WHITE)
+				student_lesson_info_scene.lbl_day_1.add_theme_stylebox_override("normal", background_color)
+			2:
+				student_lesson_info_scene.lbl_day_2.add_theme_color_override("default_color", Color.WHITE)
+				student_lesson_info_scene.lbl_day_2.add_theme_stylebox_override("normal", background_color)
+			3: 
+				student_lesson_info_scene.lbl_day_3.add_theme_color_override("default_color", Color.WHITE)
+				student_lesson_info_scene.lbl_day_3.add_theme_stylebox_override("normal", background_color)
+			4:
+				student_lesson_info_scene.lbl_day_4.add_theme_color_override("default_color", Color.WHITE)
+				student_lesson_info_scene.lbl_day_4.add_theme_stylebox_override("normal", background_color)
+			5:
+				student_lesson_info_scene.lbl_day_5.add_theme_color_override("default_color", Color.WHITE)
+				student_lesson_info_scene.lbl_day_5.add_theme_stylebox_override("normal", background_color)
+			6:
+				student_lesson_info_scene.lbl_day_6.add_theme_color_override("default_color", Color.WHITE)
+				student_lesson_info_scene.lbl_day_6.add_theme_stylebox_override("normal", background_color)
+			7:
+				student_lesson_info_scene.lbl_day_7.add_theme_color_override("default_color", Color.WHITE)
+				student_lesson_info_scene.lbl_day_7.add_theme_stylebox_override("normal", background_color)
+	p_container.visible = true
 	pass
 
 

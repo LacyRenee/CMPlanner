@@ -56,12 +56,14 @@ enum Subjects {
 	Other
 }
 
+## Viewing options for a ResourceItem
 enum ViewingOptions{
 	New,
 	Edit,
 	View
 }
 
+## Method in which the assignment is to be completed
 enum study_method {
 	Complete,
 	Do_a_hands_activity,
@@ -76,6 +78,7 @@ enum study_method {
 	Watch_together
 }
 
+## List of all the days of the week
 enum week_day {
 	Sunday,
 	Monday,
@@ -86,6 +89,7 @@ enum week_day {
 	Saturday
 }
 
+## Progress report for assignments
 enum progress {
 	Incomplete,
 	In_progress,

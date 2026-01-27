@@ -216,22 +216,19 @@ text = "Wed"
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
-text = "Thu
-"
+text = "Thu"
 
 [node name="CheckFriday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
-text = "Fri
-"
+text = "Fri"
 
 [node name="CheckSaturday" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
 custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 action_mode = 0
-text = "Sat
-"
+text = "Sat"
 
 [node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2

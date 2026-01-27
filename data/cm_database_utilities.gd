@@ -103,7 +103,7 @@ static func remove_resource_item(p_resource : ResourceItem) -> void:
 #endregion
 
 
-## Seves the subject to the database
+## Saves the subject to the database
 static func add_subject(p_subject : Subject) -> void:
 	var db = get_database()
 	db.subject_list.append(p_subject)
@@ -115,6 +115,15 @@ static func add_subject(p_subject : Subject) -> void:
 static func get_subject_list() -> Array[Subject]:
 	var db = get_database()
 	return db.subject_list
+
+
+## Removes the scheduled resource
+static func remove_subject_from_schedule(p_subject : Subject) -> void:
+	var db = get_database()
+	var index = db.subject_list.find(p_subject)
+	db.subject_list.remove_at(index)
+	overwrite_database(db)
+	pass
 
 
 ## Retreives the database file
