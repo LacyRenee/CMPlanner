@@ -10,7 +10,7 @@ extends Resource
 @export var resource : ResourceItem
 
 ## Student to which the subject is assigned
-@export var student : Array[Student] = []
+@export var student : Student
 
 ## Method in which the subject is to be studied
 @export var study_method : ResourceData.study_method

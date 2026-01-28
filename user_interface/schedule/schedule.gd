@@ -34,6 +34,7 @@ func _ready() -> void:
 	# Add the assignment overview
 	create_subject_overview()
 	
+	# Signals the Schedule page to refresh
 	SignalBus.connect("refresh_scheduled_subject_view", refresh_page)
 	
 	pass
@@ -41,27 +42,34 @@ func _ready() -> void:
 
 ## Refreshes the schedule page
 func refresh_page() -> void:
+	remove_children_from_scene()
+	
+	create_schedule_overview_table()
+	create_subject_overview()
+	pass
+
+
+## Removes the children views from the schedule view
+func remove_children_from_scene() -> void:
+	# Remove all students
+	var student_row = h_box_students.get_children()
+	for row in student_row:
+		row.call_deferred("queue_free")
+	
 	# Need to remove all children from the table
 	var table_rows = vbox_weekly_overview_table.get_children()
 	var table_row_count = 0
 	for row in table_rows:
+		# Don't remove the header!
 		if table_row_count != 0:
-			vbox_weekly_overview_table.remove_child(row)
+			row.call_deferred("queue_free")
 		
 		table_row_count += 1
-	
+		
 	# Remove all children from the subject overview
 	var overview_row = vbox_subject_view.get_children()
 	for row in overview_row:
-		vbox_subject_view.remove_child(row)
-	
-	# Remove all students
-	var student_row = h_box_students.get_children()
-	for row in student_row:
-		h_box_students.remove_child(row)
-		
-	create_schedule_overview_table()
-	create_subject_overview()
+		row.call_deferred("queue_free")
 	pass
 
 
@@ -70,7 +78,7 @@ func create_schedule_overview_table() -> void:
 	# Add the "Filter by student" and student rows to the weekly overview
 	var student_list = CMDatabaseUtilities.get_student_list()
 	var assignment_list = CMDatabaseUtilities.get_subject_list()
-	
+		
 	for student in student_list:
 		create_student_checkbox(student.name)
 		create_student_weekly_overview_row(student)
@@ -81,9 +89,11 @@ func create_schedule_overview_table() -> void:
 
 ## Creates the subject assignment overview table
 func create_subject_overview() -> void:
-	print("subject overview")
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
 	var subject_list = ResourceData.Subjects
+	
+	if student_subject_list.is_empty():
+		return
 	
 	for item in subject_list:
 		var panel_scene = PANEL_SUBJECT.instantiate()
@@ -104,12 +114,7 @@ func add_assignment_to_subject_view(p_assignment : Subject) -> void:
 	
 	for n in nodes:
 		if n.get_child(0).get_child(0).text == subject:
-			var student_count = p_assignment.student.size()
-			if student_count > 1:
-				for student in p_assignment.student:
-					create_subject_assignment(p_assignment, n)
-			else:
-				create_subject_assignment(p_assignment, n)
+			create_subject_assignment(p_assignment, n)
 	pass
 
 
@@ -117,9 +122,12 @@ func add_assignment_to_subject_view(p_assignment : Subject) -> void:
 func create_subject_assignment(p_assignment : Subject, p_container : Node) -> void:
 	var student_lesson_info_scene = STUDENT_LESSON_INFO.instantiate()
 	p_container.get_child(0).add_child(student_lesson_info_scene)
-	student_lesson_info_scene.lbl_student_name.text = p_assignment.student[0].name
-	student_lesson_info_scene.lbl_subject_title.text = ResourceData.Subjects.keys()[p_assignment.subject]
-	student_lesson_info_scene.lbl_lesson_method.text = ResourceData.study_method.keys()[p_assignment.study_method]
+	
+	# TODO Turn into a link to view the resource?
+	student_lesson_info_scene.lbl_student_name.text = p_assignment.student.name
+	
+	student_lesson_info_scene.lbl_subject_title.text = p_assignment.resource.title
+	student_lesson_info_scene.lbl_lesson_method.text = ResourceData.study_method.keys()[p_assignment.study_method].replace("_", " ")
 	student_lesson_info_scene.set_subject(p_assignment)
 	
 	# Format the "Start label" text
@@ -144,25 +152,25 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 		background_color.bg_color = Color.CADET_BLUE
 		
 		match day:
-			1:
+			0:
 				student_lesson_info_scene.lbl_day_1.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_1.add_theme_stylebox_override("normal", background_color)
-			2:
+			1:
 				student_lesson_info_scene.lbl_day_2.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_2.add_theme_stylebox_override("normal", background_color)
-			3: 
+			2: 
 				student_lesson_info_scene.lbl_day_3.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_3.add_theme_stylebox_override("normal", background_color)
-			4:
+			3:
 				student_lesson_info_scene.lbl_day_4.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_4.add_theme_stylebox_override("normal", background_color)
-			5:
+			4:
 				student_lesson_info_scene.lbl_day_5.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_5.add_theme_stylebox_override("normal", background_color)
-			6:
+			5:
 				student_lesson_info_scene.lbl_day_6.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_6.add_theme_stylebox_override("normal", background_color)
-			7:
+			6:
 				student_lesson_info_scene.lbl_day_7.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_7.add_theme_stylebox_override("normal", background_color)
 	p_container.visible = true
@@ -174,7 +182,7 @@ func get_all_student_assignments(p_student : Student, p_assignment_list : Array[
 	var assignments : Array[Subject] = []
 	
 	for assignment in p_assignment_list:
-		if assignment.student.has(p_student):
+		if assignment.student.name == p_student.name:
 			assignments.append(assignment)
 	
 	return assignments
@@ -184,12 +192,12 @@ func get_all_student_assignments(p_student : Student, p_assignment_list : Array[
 func create_student_weekly_overview_row(p_student : Student) -> void:
 	var hbox : HBoxContainer = HBoxContainer.new()
 	hbox.name = p_student.name
+	hbox.set_meta("student_id", p_student)
 	hbox.add_to_group(STUDENT_ROW_GROUP)
 	
 	# Create column 1 with the student label
 	var panel : PanelContainer = create_panel_container()
 	var margin : MarginContainer = MarginContainer.new()
-
 	var label1 : RichTextLabel = RichTextLabel.new()
 	label1.text = p_student.name
 	label1.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -203,6 +211,8 @@ func create_student_weekly_overview_row(p_student : Student) -> void:
 	for column in 7:
 		var column_container : PanelContainer = create_panel_container()
 		var column_margin : MarginContainer = MarginContainer.new()
+		var column_vbox : VBoxContainer = VBoxContainer.new()
+		column_margin.add_child(column_vbox)
 		column_container.add_child(column_margin)
 		hbox.add_child(column_container)
 	
@@ -210,7 +220,7 @@ func create_student_weekly_overview_row(p_student : Student) -> void:
 	pass
 
 
-## Creates the 
+## Creates the panel container for a cell
 func create_panel_container() -> PanelContainer:
 	var container : PanelContainer = PanelContainer.new()
 	container.add_theme_stylebox_override("panel", preload("uid://ckpswvy11b8mw"))
@@ -225,7 +235,7 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 	var student_row : HBoxContainer
 	
 	for row in student_rows:
-		if row.name.begins_with(p_student.name):
+		if row.get_meta("student_id") == p_student:
 			student_row = row
 	
 	for assignment in p_assignment_list:
@@ -233,25 +243,25 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 			var label = create_weekly_assignment_label(assignment.subject, assignment.resource.title)
 			match day:
 				ResourceData.week_day.Sunday:
-					student_row.get_child(1).add_child(label)
+					student_row.get_child(1).get_child(0).get_child(0).add_child(label)
 					pass
 				ResourceData.week_day.Monday:
-					student_row.get_child(2).add_child(label)
+					student_row.get_child(2).get_child(0).get_child(0).add_child(label)
 					pass
 				ResourceData.week_day.Tuesday:
-					student_row.get_child(3).add_child(label)
+					student_row.get_child(3).get_child(0).get_child(0).add_child(label)
 					pass
 				ResourceData.week_day.Wednesday:
-					student_row.get_child(4).add_child(label)
+					student_row.get_child(4).get_child(0).get_child(0).add_child(label)
 					pass
 				ResourceData.week_day.Thursday:
-					student_row.get_child(5).add_child(label)
+					student_row.get_child(5).get_child(0).get_child(0).add_child(label)
 					pass
 				ResourceData.week_day.Friday:
-					student_row.get_child(6).add_child(label)
+					student_row.get_child(6).get_child(0).get_child(0).add_child(label)
 					pass
 				ResourceData.week_day.Saturday:
-					student_row.get_child(7).add_child(label)
+					student_row.get_child(7).get_child(0).get_child(0).add_child(label)
 					pass
 	pass
 
@@ -260,6 +270,8 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 func create_weekly_assignment_label(p_subject : ResourceData.Subjects, p_title : String) -> RichTextLabel:
 	var label : RichTextLabel = RichTextLabel.new()
 	label.text = ResourceData.Subjects.keys()[p_subject] + " - " + p_title
+	label.fit_content = true
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_FILL
 	return label
 
 

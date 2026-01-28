@@ -2,8 +2,6 @@
 ### ResourceScheduler
 ################################################################################
 extends Control
-@onready var lbl_info: Label = %LblInfo
-
 ## Access to the Student container for error checking
 @onready var panel_container_assign_students: PanelContainer = %PanelContainerAssignStudents
 
@@ -60,7 +58,7 @@ func _ready() -> void:
 	# Add all students
 	var student_list = CMDatabaseUtilities.get_student_list()
 	for student in student_list:
-		create_student_checkbox(student.name)
+		create_student_checkbox(student)
 	
 	## Populate the subject options
 	for subject in ResourceData.Subjects:
@@ -94,16 +92,16 @@ func set_selected_date(p_date) -> void:
 
 
 ## Creates a checkbox for each student
-func create_student_checkbox(p_name) -> void:
+func create_student_checkbox(p_student : Student) -> void:
 	var margin_container : MarginContainer = MarginContainer.new()
 	
 	var checkbox : CheckBox = CheckBox.new()
-	checkbox.text = p_name
+	checkbox.text = p_student.name
 	checkbox.custom_minimum_size = Vector2(100,10)
 	checkbox.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 	checkbox.add_to_group("student_selected", true)
+	checkbox.set_meta("student_id", p_student)
 	
-
 	margin_container.add_child(checkbox)
 	v_box_students.add_child(margin_container)
 	pass
@@ -121,8 +119,6 @@ func create_assignments(p_resource : ResourceItem) -> Array[Assignment]:
 		assignment_list.append(assignment)
 	
 	return assignment_list
-
-
 
 
 ## Goes through each editable node and verifies that each required field is
@@ -192,11 +188,6 @@ func _on_button_pressed() -> void:
 	pass 
 
 
-func display_info(text) -> void:
-	lbl_info.text = str(text)
-	pass
-
-
 ## Saves the scheduled subject
 func _on_btn_save_schedule_pressed() -> void:
 	# Remove any prior themes
@@ -208,58 +199,58 @@ func _on_btn_save_schedule_pressed() -> void:
 		add_error_formats(errors)
 		return
 	
-	## Create the new subject and add all the data
-	var new_subject : Subject = Subject.new()
-	
-	# Add the selected resource
-	new_subject.resource = item_list_resource.get_item_metadata(0)
-	
-	# Add the subject
-	new_subject.subject = option_button_subjects.selected
-	
-	# Add the students
+	# Need to save the resource for each student selected 
+		# Add the students
 	var student_list = CMDatabaseUtilities.get_student_list()
 	var selected_students = get_tree().get_nodes_in_group("student_selected")
 	
-	for selected in selected_students:
-		if selected.is_pressed() == true:
-			for student in student_list:
-				if student.name == selected.text:
-					new_subject.student.append(student)
-	
-	# Add the study method
-	new_subject.study_method = option_button_study_methods.selected
-	
-	# Add the week days
-	var selected_days = get_tree().get_nodes_in_group("day_selected")
-
-	for selected in selected_days:
-		if selected.is_pressed() == true:
-			match  selected.text:
-				"Sun":
-					new_subject.week_days.append(ResourceData.week_day.Sunday)
-				"Mon":
-					new_subject.week_days.append(ResourceData.week_day.Monday)
-				"Tue":
-					new_subject.week_days.append(ResourceData.week_day.Tuesday)
-				"Wed":
-					new_subject.week_days.append(ResourceData.week_day.Wednesday)
-				"Thu":
-					new_subject.week_days.append(ResourceData.week_day.Thursday)
-				"Fri":
-					new_subject.week_days.append(ResourceData.week_day.Friday)
-				"Sat":
-					new_subject.week_days.append(ResourceData.week_day.Saturday)
-	
-	## Add the start date
-	new_subject.start_date = btn_todays_date.text
-	
-	## Create the assignments if the ResourceItem has a division type
-	if new_subject.resource.division_type != ResourceData.DivisionType.None:
-		new_subject.assignments = create_assignments(new_subject.resource)
-	
-	## Save the resource to the database
-	CMDatabaseUtilities.add_subject(new_subject)
+	for student in selected_students:
+		if student.is_pressed() == true:
+			# Create the new subject and add all the data
+			var new_subject : Subject = Subject.new()
+			
+			# Add the student 
+			new_subject.student = student.get_meta("student_id")
+			
+			# Add the selected resource
+			new_subject.resource = item_list_resource.get_item_metadata(0)
+			
+			# Add the subject
+			new_subject.subject = option_button_subjects.selected
+			
+			# Add the study method
+			new_subject.study_method = option_button_study_methods.selected
+			
+			# Add the week days
+			var selected_days = get_tree().get_nodes_in_group("day_selected")
+			for day in selected_days:
+				if day.is_pressed() == true:
+					match  day.text:
+						"Sun":
+							new_subject.week_days.append(ResourceData.week_day.Sunday)
+						"Mon":
+							new_subject.week_days.append(ResourceData.week_day.Monday)
+						"Tue":
+							new_subject.week_days.append(ResourceData.week_day.Tuesday)
+						"Wed":
+							new_subject.week_days.append(ResourceData.week_day.Wednesday)
+						"Thu":
+							new_subject.week_days.append(ResourceData.week_day.Thursday)
+						"Fri":
+							new_subject.week_days.append(ResourceData.week_day.Friday)
+						"Sat":
+							new_subject.week_days.append(ResourceData.week_day.Saturday)
+			
+			## Add the start date
+			new_subject.start_date = btn_todays_date.text
+			
+			## Create the assignments if the ResourceItem has a division type
+			if new_subject.resource.division_type != ResourceData.DivisionType.None:
+				new_subject.assignments = create_assignments(new_subject.resource)
+			
+			## Save the resource to the database
+			CMDatabaseUtilities.add_subject(new_subject)
+			
 	SignalBus.display_schedule_page.emit()
 	pass 
 

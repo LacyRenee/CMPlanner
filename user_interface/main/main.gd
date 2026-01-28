@@ -112,7 +112,7 @@ func display_resource_page() -> void:
 
 ## Displays the settings page
 func display_settings_page() -> void:
-	# remove any other page
+	# Remove any other page
 	remove_scene_from_attacher()
 	
 	var settings_page = load(SETTINGS_SCENE_PATH)
@@ -123,7 +123,7 @@ func display_settings_page() -> void:
 
 ## Displays the schedule page
 func display_schedule_page() -> void:
-	# remove any other page
+	# Remove any other page
 	remove_scene_from_attacher()
 	
 	var schedule_page = load(SCHEDULE_SCENE_PATH)
@@ -135,8 +135,10 @@ func display_schedule_page() -> void:
 
 ## Remove current container from the PanelContainerAttacher
 func remove_scene_from_attacher() -> void:
-	if panel_container_attacher.get_child_count():
-		panel_container_attacher.remove_child(panel_container_attacher.get_child(0))
+	if panel_container_attacher.get_child_count() > 0:
+		#panel_container_attacher.remove_child(panel_container_attacher.get_child(0))
+		panel_container_attacher.get_child(0).call_deferred("queue_free")
+	pass
 
 
 ## Displays the resource page
