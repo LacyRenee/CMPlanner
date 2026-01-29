@@ -58,6 +58,8 @@ func _on_btn_remove_from_schedule_pressed() -> void:
 	SignalBus.refresh_scheduled_subject_view.emit()
 	pass 
 
-## 
+## Changes the scene to the ResourceScheduler view
+## allowing the assignmnet to be edited
 func _on_btn_edit_schedule_pressed() -> void:
+	SignalBus.display_edited_resource_schedule_page.emit(subject)
 	pass 

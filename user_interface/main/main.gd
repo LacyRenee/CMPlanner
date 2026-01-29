@@ -46,7 +46,8 @@ func _ready() -> void:
 	# Displays the schedule page
 	SignalBus.connect("display_schedule_page", display_schedule_page, 0)
 	
-	
+	# Displays the resource schedule page with an assignment to be edited
+	SignalBus.connect("display_edited_resource_schedule_page", display_editable_resource_schedule_view, 0)
 	#endregion
 	pass
 
@@ -70,6 +71,17 @@ func display_selected_resource_schedule_view(p_resource : ResourceItem) -> void:
 	panel_container_attacher.add_child(instance)
 	
 	SignalBus.schedule_selected_resource.emit(p_resource)
+	pass
+
+## Displays the resource scheduler page with an assignment to be edited
+func display_editable_resource_schedule_view(p_assignment) -> void:
+	remove_scene_from_attacher()
+	
+	var resource_schedule_page = load(RESOURCE_SCHEDULE_SCENE_PATH)
+	var instance = resource_schedule_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	
+	SignalBus.edit_selected_assignment.emit(p_assignment)
 	pass
 
 

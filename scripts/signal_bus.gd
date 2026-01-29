@@ -49,3 +49,13 @@ signal student_filter_checked(checkbox)
 ## Emitted when an assigned subject is removed from the schedule
 @warning_ignore("unused_signal")
 signal refresh_scheduled_subject_view
+
+
+## Emitted when an assignment is to be edited
+@warning_ignore("unused_signal")
+signal display_edited_resource_schedule_page(assignment)
+
+
+## Emitted to display the selected assignment to be edited
+@warning_ignore("unused_signal")
+signal edit_selected_assignment(assignment)

@@ -192,7 +192,7 @@ func get_all_student_assignments(p_student : Student, p_assignment_list : Array[
 func create_student_weekly_overview_row(p_student : Student) -> void:
 	var hbox : HBoxContainer = HBoxContainer.new()
 	hbox.name = p_student.name
-	hbox.set_meta("student_id", p_student)
+	hbox.set_meta("student_id", p_student.resource_path)
 	hbox.add_to_group(STUDENT_ROW_GROUP)
 	
 	# Create column 1 with the student label
@@ -229,14 +229,15 @@ func create_panel_container() -> PanelContainer:
 	return container
 
 
-## Displays an overview of the weekly assignments
+## Displays an overview of the weekly assignments for each student for the table view
 func create_weekly_assignment_overview(p_student : Student, p_assignment_list : Array[Subject]) -> void:
 	var student_rows = vbox_weekly_overview_table.get_children()
 	var student_row : HBoxContainer
 	
 	for row in student_rows:
-		if row.get_meta("student_id") == p_student:
-			student_row = row
+		if row.has_meta("student_id"):
+			if row.get_meta("student_id") == p_student.resource_path:
+				student_row = row
 	
 	for assignment in p_assignment_list:
 		for day in assignment.week_days:

@@ -26,6 +26,12 @@ extends Control
 ## Access to all available resources
 @onready var item_list_resource: ItemList = %ItemListResource
 
+## Access to the update button
+@onready var btn_update_schedule: Button = %BtnUpdateSchedule
+
+## Access to the save button
+@onready var btn_save_schedule: Button = %BtnSaveSchedule
+
 
 ## defined error number for missing a resource
 const ERROR_MISSING_RESOURCE : int = 1
@@ -40,9 +46,14 @@ const ERROR_MISSING_WEEK_DAYS : int = 3
 ## Used when filtering the resource list
 var item_list_resource_duplicate : ItemList = ItemList.new()
 
+var view_option : ResourceData.ViewingOptions
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Set the View to "New"
+	update_view_option(ResourceData.ViewingOptions.New)
+	
 	# Add today's date to the date label
 	btn_todays_date.text = str(Calendar.Date.today())
 	
@@ -74,7 +85,38 @@ func _ready() -> void:
 	## Connects to the selected resource schedule it 
 	SignalBus.connect("schedule_selected_resource", set_selected_resource, 0)
 	
+	## Connects to the assignment to be edited
+	SignalBus.connect("edit_selected_assignment", display_selected_assignment, 0)
+	
 	pass 
+
+
+## Displays an assignment for editing purposes
+func display_selected_assignment(p_assignment : Subject) -> void:
+	update_view_option(ResourceData.ViewingOptions.Edit)
+	set_selected_resource(p_assignment.resource)
+	pass
+
+
+## Updates which view the user is in (e.g., edit, view, etc)
+func update_view_option(p_option) -> void:
+	view_option = p_option
+	update_view()
+	pass
+
+
+## Toggles the necessary UI nodes depending on the view
+func update_view() -> void:
+	match view_option:
+		ResourceData.ViewingOptions.New:
+			btn_save_schedule.visible = true
+			btn_update_schedule.visible = false
+		ResourceData.ViewingOptions.Edit:
+			btn_save_schedule.visible = false
+			btn_update_schedule.visible = true
+		ResourceData.ViewingOptions.View:
+			pass
+	pass
 
 
 ## Selects the resourceitem that was sent from the resource page
@@ -273,3 +315,7 @@ func _on_le_search_resource_text_changed(new_text: String) -> void:
 func _on_btn_cancel_schedule_pressed() -> void:
 	SignalBus.display_schedule_page.emit()
 	pass 
+
+
+func _on_btn_update_schedule_pressed() -> void:
+	pass

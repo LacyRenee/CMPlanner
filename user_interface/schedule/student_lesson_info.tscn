@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info.gd" id="1_h7fwo"]
 
 [node name="VBoxStudentLessonInfo" type="VBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 353.0
+grow_horizontal = 2
+size_flags_horizontal = 3
 script = ExtResource("1_h7fwo")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
@@ -135,13 +140,18 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Edit Schedule"
 
+[node name="ControlSpacer2" type="Control" parent="HBoxLesson"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
 [node name="LblStart" type="RichTextLabel" parent="HBoxLesson"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Start:"
 fit_content = true
-horizontal_alignment = 2
 
 [connection signal="pressed" from="HBoxLesson/BtnRemoveFromSchedule" to="." method="_on_btn_remove_from_schedule_pressed"]
 [connection signal="pressed" from="HBoxLesson/BtnEditSchedule" to="." method="_on_btn_edit_schedule_pressed"]
