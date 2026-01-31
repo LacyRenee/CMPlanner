@@ -43,6 +43,7 @@ func refresh_student_list() -> void:
 			instance.edit_name(student.name)
 			instance.edit_grade(student.grade)
 			instance.set_student_resource(student)
+			
 		family_count += 1
 	pass
 
@@ -56,6 +57,6 @@ func remove_all_students() -> void:
 			if count  == 1:
 				pass
 			else:
-				v_box_container.remove_child(child)
+				child.call_deferred("queue_free")
 			count += 1
 	pass
