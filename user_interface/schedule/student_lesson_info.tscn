@@ -1,0 +1,157 @@
+[gd_scene load_steps=2 format=3 uid="uid://chj1la6p3ou7h"]
+
+[ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info.gd" id="1_h7fwo"]
+
+[node name="VBoxStudentLessonInfo" type="VBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 353.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+script = ExtResource("1_h7fwo")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxContainer2"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+
+[node name="LblStudentName" type="RichTextLabel" parent="HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wayne"
+fit_content = true
+
+[node name="HBoxSubjectTitle" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxSubjectTitle"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="LblSubjectTitle" type="RichTextLabel" parent="HBoxSubjectTitle"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "A is for Art"
+fit_content = true
+
+[node name="PanelWeekDays" type="PanelContainer" parent="HBoxSubjectTitle"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxWeekDays" type="HBoxContainer" parent="HBoxSubjectTitle/PanelWeekDays"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="LblDay1" type="RichTextLabel" parent="HBoxSubjectTitle/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "S"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay2" type="RichTextLabel" parent="HBoxSubjectTitle/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "M"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay3" type="RichTextLabel" parent="HBoxSubjectTitle/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "T"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay4" type="RichTextLabel" parent="HBoxSubjectTitle/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "W"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay5" type="RichTextLabel" parent="HBoxSubjectTitle/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "R"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay6" type="RichTextLabel" parent="HBoxSubjectTitle/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "F"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay7" type="RichTextLabel" parent="HBoxSubjectTitle/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "S"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxLesson" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxLesson"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="LblDivisionType" type="RichTextLabel" parent="HBoxLesson"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Division Type"
+fit_content = true
+
+[node name="LblLessonMethod" type="RichTextLabel" parent="HBoxLesson"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Study Method"
+fit_content = true
+
+[node name="BtnRemoveFromSchedule" type="Button" parent="HBoxLesson"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Remove From Schedule"
+
+[node name="BtnEditSchedule" type="Button" parent="HBoxLesson"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Edit Schedule"
+
+[node name="ControlSpacer2" type="Control" parent="HBoxLesson"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="LblStart" type="RichTextLabel" parent="HBoxLesson"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start:"
+fit_content = true
+
+[connection signal="pressed" from="HBoxLesson/BtnRemoveFromSchedule" to="." method="_on_btn_remove_from_schedule_pressed"]
+[connection signal="pressed" from="HBoxLesson/BtnEditSchedule" to="." method="_on_btn_edit_schedule_pressed"]

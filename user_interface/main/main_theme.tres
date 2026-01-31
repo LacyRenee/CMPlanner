@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://y251c6k3e2gq"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://y251c6k3e2gq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65s4e"]
 bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
@@ -9,6 +9,9 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tj68n"]
+bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2xin"]
 bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
@@ -27,11 +30,20 @@ bg_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 BackgroundPanel/base_type = &"PanelContainer"
 BackgroundPanel/styles/panel = SubResource("StyleBoxFlat_65s4e")
 Button/styles/normal = SubResource("StyleBoxFlat_7bkw8")
+CheckBox/colors/checkbox_checked_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/colors/checkbox_unchecked_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/colors/font_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/colors/font_focus_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/colors/font_hover_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/colors/font_hover_pressed_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/colors/font_pressed_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/styles/normal = SubResource("StyleBoxFlat_tj68n")
 FoldableContainer/styles/panel = SubResource("StyleBoxFlat_v2xin")
 HeaderLabel/base_type = &"RichTextLabel"
 HeaderLabel/colors/default_color = Color(1, 1, 1, 1)
 HeaderLarge/colors/font_color = Color(1, 1, 1, 1)
 LineEdit/colors/font_color = Color(0, 0, 0, 1)
+LineEdit/colors/font_placeholder_color = Color(0.6, 0.6, 0.6, 1)
 LineEdit/colors/font_uneditable_color = Color(0, 0, 0, 1)
 LineEdit/styles/normal = SubResource("StyleBoxFlat_tm84v")
 OptionButton/colors/font_color = Color(0.039215688, 0.039215688, 0.23529412, 1)

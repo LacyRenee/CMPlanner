@@ -1,25 +1,25 @@
-## Displays all of available resources and allows for the creation of new resources
+################################################################################
+### AllResource displays all resource: books, videos, etc...
+### Allows access to create a new resource
+################################################################################
 extends Control
 
 # Access to the ItemList for all resources
 @onready var resource_list: ItemList = %ILAllResources
 
-# Access to the new resource button
+# Access to the "add new resource" button
 @onready var btn_add_resource_item: Button = %BtnAddResourceItem
-
-var is_new_resource_page_toggled : bool = false
 
 
 ## Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# Open the directory
-	var directory = DirAccess.open(CmDatabase.get_db_resource_filepath())
-	if directory != null:
+	# 
+	var resources = CmDatabaseUtilities.get_all_resources()
+	if !resources.is_empty():
 		# Add all of the resources to the ItemList
-		for file in directory.get_files():
-			var resource = load(directory.get_current_dir() + "/" + file)
-			var index = resource_list.add_item(resource.title)
-			resource_list.set_item_metadata(index, resource)
+		for r in resources:
+			var index = resource_list.add_item(r.title)
+			resource_list.set_item_metadata(index, r)
 	pass 
 
 

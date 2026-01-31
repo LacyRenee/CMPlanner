@@ -4,9 +4,9 @@
 bg_color = Color(0.6431373, 0.6431373, 0.6431373, 1)
 
 [resource]
-Button/font_sizes/font_size = 32
+Button/font_sizes/font_size = 16
 Button/styles/hover = SubResource("StyleBoxFlat_x4blg")
 Label/colors/font_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 Label/colors/font_outline_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 Label/constants/outline_size = 3
-Label/font_sizes/font_size = 32
+Label/font_sizes/font_size = 16

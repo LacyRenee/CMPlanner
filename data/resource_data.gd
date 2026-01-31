@@ -1,4 +1,6 @@
+################################################################################
 ## Global lists for a ResourceItem
+################################################################################
 extends Node
 
 ## ALl available types of Contributors
@@ -54,8 +56,43 @@ enum Subjects {
 	Other
 }
 
+## Viewing options for a ResourceItem
 enum ViewingOptions{
 	New,
 	Edit,
 	View
+}
+
+## Method in which the assignment is to be completed
+enum study_method {
+	Complete,
+	Do_a_hands_activity,
+	Do_a_picture_study,
+	Do_a_nature_study,
+	Listen_together,
+	Read_and_narrate,
+	Read_independently,
+	Read_Together,
+	Recite_aloud,
+	Sing_together,
+	Watch_together
+}
+
+## List of all the days of the week
+enum week_day {
+	Sunday,
+	Monday,
+	Tuesday,
+	Wednesday,
+	Thursday,
+	Friday,
+	Saturday
+}
+
+## Progress report for assignments
+enum progress {
+	Incomplete,
+	In_progress,
+	Completed,
+	Finished
 }

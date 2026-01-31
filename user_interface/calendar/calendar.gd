@@ -19,7 +19,7 @@ extends Control
 ## utility for all things calendar related
 var calendar : Calendar = Calendar.new()
 
-## Selected month
+## Selected monthlbl_todays_date
 var month : int
 
 ## Selected year
@@ -99,7 +99,7 @@ func add_date_panel_container()-> PanelContainer:
 	var panel : PanelContainer = PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	panel.custom_minimum_size = Vector2(window_size.x / 7, window_size.y / 7)
+	panel.custom_minimum_size = Vector2(window_size.x / 14, window_size.y / 14)
 	
 	
 	return panel
@@ -179,11 +179,12 @@ func _on_btn_next_month_pressed() -> void:
 	pass
 
 
-# Selectes the date pressed from the calendar
+# Selects the date pressed from the calendar
 func _on_date_pressed(date: Calendar.Date, date_label: Label):
 	set_selected_state(date_label)
-	#set_date_label(date)
 	selected_date = date
+	print("Date selected")
+	SignalBus.date_selected.emit(date)
 	pass
 
 

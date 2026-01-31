@@ -1,11 +1,10 @@
-## Form to create/edit a new ResourceItem 
+################################################################################
+### Form to create/view/edit a new ResourceItem 
+################################################################################
 extends Control
 
-# Path to the save file
-const RESOURCE_FOLDER_PATH : String = "res://data/resources/"
-
 # Path to the division item scene
-const DIVSION_PATH : String = "res://user_interface/division_item/division_item.tscn"
+const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division_item.tscn"
 
 
 ## onready variables
@@ -87,33 +86,33 @@ var resource_item = ResourceItem.new()
 var resource_item_path : String = ""
 
 ## Preload the division line item in case it's needed
-var division_line_item = preload(DIVSION_PATH)
+var division_line_item = preload(DIVSION_SCENE_PATH)
 
 ## Shows which view the user is in: new, edit, view
-var view_option : ResourceLists.ViewingOptions
+var view_option : ResourceData.ViewingOptions
 
 
 ## Called when the node enters the scene tree for the first time.
 func _ready() -> void:	
 	# Set the view_option
-	update_view_option(ResourceLists.ViewingOptions.New)
+	update_view_option(ResourceData.ViewingOptions.New)
 	
 	# Populate all the dropdowns on the form
 	#region
 	# Populate the Contributor List
-	for c in ResourceLists.Contributors :
+	for c in ResourceData.Contributors :
 		contributor_options.add_item(c)
 	
 	# Populate the Resource Type options	
-	for r in ResourceLists.ResourceType :
+	for r in ResourceData.ResourceType :
 		resource_type_options.add_item(r)
 	
 	# Populate the Division Type options
-	for d in ResourceLists.DivisionType :
+	for d in ResourceData.DivisionType :
 		division_type_options.add_item(d)
 	
 	# Populate the Subject options
-	for s in ResourceLists.Subjects :
+	for s in ResourceData.Subjects :
 		ob_subject.add_item(s)
 	#endregion
 	
@@ -124,17 +123,17 @@ func _ready() -> void:
 
 
 ## Updates the view option
-func update_view_option(option : ResourceLists.ViewingOptions) -> void:
-	view_option = option
+func update_view_option(p_option : ResourceData.ViewingOptions) -> void:
+	view_option = p_option
 	update_view()
 	pass
 
 
 ## Update the View based on the view option
-func update_view() -> void:	
+func update_view() -> void:
 	# Toggle which finalization button is on the form
 	match view_option:
-		ResourceLists.ViewingOptions.New:
+		ResourceData.ViewingOptions.New:
 			# Toggle correct buttons
 			btn_save.visible = true
 			btn_edit.visible = false
@@ -144,13 +143,12 @@ func update_view() -> void:
 			
 			enable_form_fields()
 			
-		ResourceLists.ViewingOptions.Edit:
+		ResourceData.ViewingOptions.Edit:
 			btn_save.visible = false
 			btn_edit.visible = false
 			btn_update.visible = true
 			btn_schedule.visible = false
 			btn_delete.visible = true
-			
 			
 			enable_form_fields()
 			
@@ -163,7 +161,7 @@ func update_view() -> void:
 					item.enable_text()
 					item.enable_delete_button()
 			
-		ResourceLists.ViewingOptions.View:
+		ResourceData.ViewingOptions.View:
 			btn_save.visible = false
 			btn_edit.visible = true
 			btn_update.visible = false
@@ -224,10 +222,10 @@ func enable_form_fields() -> void:
 func save_data() -> void:
 	resource_item.title = title.text
 	resource_item.isbn = isbn.text
-	resource_item.resource_type = resource_type_options.selected as ResourceLists.ResourceType
-	resource_item.contributor = contributor_options.selected as ResourceLists.Contributors
+	resource_item.resource_type = resource_type_options.selected as ResourceData.ResourceType
+	resource_item.contributor = contributor_options.selected as ResourceData.Contributors
 	resource_item.contributor_name = contributor_name.text
-	resource_item.subject = ob_subject.selected as ResourceLists.Subjects
+	resource_item.subject = ob_subject.selected as ResourceData.Subjects
 	resource_item.web_url = le_url.text
 	resource_item.publisher = le_publisher.text
 	resource_item.copyright_date = le_copyright_date.text
@@ -238,11 +236,9 @@ func save_data() -> void:
 	
 	
 	# function to retrieve all division types
-	if division_type_options.selected != ResourceLists.DivisionType.None: 
-		resource_item.division_type = division_type_options.selected as ResourceLists.DivisionType
-		
+	if division_type_options.selected != ResourceData.DivisionType.None: 
+		resource_item.division_type = division_type_options.selected as ResourceData.DivisionType
 		resource_item.division_list = get_all_division_items()
-		
 	pass
 
 
@@ -252,7 +248,7 @@ func get_all_division_items() -> Array:
 	var array : Array[String]
 	
 	for i in division_item_list:
-		array.append(i.get_text())		
+		array.append(i.get_text())
 	
 	return array
 
@@ -272,7 +268,7 @@ func renumber_divisions() -> void:
 
 	if all_division_items.is_empty():
 		division_container.visible = false
-		division_type_options.selected = ResourceLists.DivisionType.None
+		division_type_options.selected = ResourceData.DivisionType.None
 	else:
 		# Used to number the line items
 		var count = 1 
@@ -286,7 +282,7 @@ func renumber_divisions() -> void:
 ## Display selected Resource Information
 func display_selected_resource(resource: ResourceItem) -> void:
 	# Update the view!
-	update_view_option(ResourceLists.ViewingOptions.View)
+	update_view_option(ResourceData.ViewingOptions.View)
 	
 	# Save the current resource
 	resource_item = resource
@@ -298,7 +294,7 @@ func display_selected_resource(resource: ResourceItem) -> void:
 	contributor_name.text = resource_item.contributor_name
 	division_type_options.selected = resource_item.division_type
 	
-	if resource_item.division_type != ResourceLists.DivisionType.None:
+	if resource_item.division_type != ResourceData.DivisionType.None:
 		division_container.show()
 		division_list.remove_child(division_list.get_child(0))
 		
@@ -359,8 +355,7 @@ func _on_btn_division_pressed() -> void:
 
 ## Allow the form to be editable
 func _on_btn_edit_pressed() -> void:
-
-	update_view_option(ResourceLists.ViewingOptions.Edit)
+	update_view_option(ResourceData.ViewingOptions.Edit)
 	pass
 
 ## Saves the newly inputted ResourceItem
@@ -376,21 +371,20 @@ func _on_btn_save_pressed() -> void:
 			error_format_number_of_pages()
 			return
 	
-	# Save the form data
+	# Save the form data to the resource
 	save_data()
+	CMDatabaseUtilities.save_resource_item(resource_item)
 	
-	ResourceSaver.save(resource_item, CmDatabase.get_db_resource_filepath() + "/" + str(resource_item) + ".tres")
-
 	# Remove error fromats if any
 	remove_format_themes()
 	
-	view_option = ResourceLists.ViewingOptions.View
+	view_option = ResourceData.ViewingOptions.View
 	update_view()
-
 	pass
 
 
 ## Update the selected resource with the new information
+# TODO Update all assignments
 func _on_btn_update_pressed() -> void:
 	# Do not save resource without a title
 	if title.text.is_empty():
@@ -402,14 +396,15 @@ func _on_btn_update_pressed() -> void:
 			error_format_number_of_pages()
 			return
 	
-	# Save the data	
+	# Save the data
 	save_data()
+	CMDatabaseUtilities.update_resource_item(resource_item)
 	
 	# Remove any format themes
 	remove_format_themes()
 	
 	# Change the view
-	view_option = ResourceLists.ViewingOptions.View
+	view_option = ResourceData.ViewingOptions.View
 	update_view()
 	pass
 
@@ -422,8 +417,6 @@ func _on_ob_divistion_type_item_selected(index: int) -> void:
 	else:
 		division_container.hide()
 	pass 
-
-
 #endregion
 
 
@@ -432,7 +425,8 @@ func _on_btn_delete_pressed() -> void:
 	# Create confirmation delete dialog
 	var confirm_delete_dialog = ConfirmationDialog.new()
 	confirm_delete_dialog.title = "Please confirm"
-	confirm_delete_dialog.dialog_text = "Are you sure you want to delete " + resource_item.title + "?"
+	confirm_delete_dialog.dialog_text = "Are you sure you want to delete " + resource_item.title + "?" \
+										+ "\nDeleting the resource will also delete all student assignments"
 	confirm_delete_dialog.cancel_button_text = "Cancel"
 	confirm_delete_dialog.ok_button_text = "Ok"
 	
@@ -453,6 +447,15 @@ func confirm_delete_dialog_canceled() -> void:
 
 
 ## Ok button for the confirm delete dialog
-func confirm_delete_dialog_ok()-> void: 
-	DirAccess.remove_absolute(resource_item.resource_path)
+## Deletes all assignments associated with the resource and the 
+## selected ResourceItem
+func confirm_delete_dialog_ok()-> void:
+	CMDatabaseUtilities.remove_selected_resource_assignments(resource_item)
+	CMDatabaseUtilities.remove_resource_item(resource_item)
 	SignalBus.display_all_resource_page.emit()
+
+
+## Changes the view to the ResourceSceduler view
+func _on_btn_schedule_pressed() -> void:
+	SignalBus.display_selected_resource_schedule_page.emit(resource_item)
+	pass 

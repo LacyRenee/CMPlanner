@@ -9,15 +9,15 @@ extends Resource
 @export var isbn : String 
 
 ## Accepts the resource type from the ResourceLists: Book, Magazine, etc...
-@export var resource_type : ResourceLists.ResourceType
+@export var resource_type : ResourceData.ResourceType
 
 ## Accepts the resources contributor from the ResourceLists: Author, Illustrator, etc...
-@export var contributor : ResourceLists.Contributors
+@export var contributor : ResourceData.Contributors
 
 ## Identifies the contributor
 @export var contributor_name : String
 
-@export var subject : ResourceLists.Subjects
+@export var subject : ResourceData.Subjects
 
 ## Additional Details
 #region 
@@ -49,7 +49,7 @@ extends Resource
 @export var tags : Array[String]
 
 ## Accepts the resources division from the ResourceLists: Chapter, Lesson, etc...
-@export var division_type : ResourceLists.DivisionType
+@export var division_type : ResourceData.DivisionType
 
 ## A list of all the divisions for the resource
 @export var division_list : Array[String]
