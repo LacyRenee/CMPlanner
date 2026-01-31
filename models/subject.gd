@@ -33,4 +33,5 @@ extends Resource
 ## Selected division type used for assignments
 @export var division_type : ResourceData.DivisionType
 
+## Assignments to be scheduled for the student
 @export var assignments : Array[Assignment] = []  

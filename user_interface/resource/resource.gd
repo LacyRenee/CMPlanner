@@ -384,6 +384,7 @@ func _on_btn_save_pressed() -> void:
 
 
 ## Update the selected resource with the new information
+# TODO Update all assignments
 func _on_btn_update_pressed() -> void:
 	# Do not save resource without a title
 	if title.text.is_empty():
@@ -424,7 +425,8 @@ func _on_btn_delete_pressed() -> void:
 	# Create confirmation delete dialog
 	var confirm_delete_dialog = ConfirmationDialog.new()
 	confirm_delete_dialog.title = "Please confirm"
-	confirm_delete_dialog.dialog_text = "Are you sure you want to delete " + resource_item.title + "?"
+	confirm_delete_dialog.dialog_text = "Are you sure you want to delete " + resource_item.title + "?" \
+										+ "\nDeleting the resource will also delete all student assignments"
 	confirm_delete_dialog.cancel_button_text = "Cancel"
 	confirm_delete_dialog.ok_button_text = "Ok"
 	
@@ -445,7 +447,10 @@ func confirm_delete_dialog_canceled() -> void:
 
 
 ## Ok button for the confirm delete dialog
-func confirm_delete_dialog_ok()-> void: 
+## Deletes all assignments associated with the resource and the 
+## selected ResourceItem
+func confirm_delete_dialog_ok()-> void:
+	CMDatabaseUtilities.remove_selected_resource_assignments(resource_item)
 	CMDatabaseUtilities.remove_resource_item(resource_item)
 	SignalBus.display_all_resource_page.emit()
 

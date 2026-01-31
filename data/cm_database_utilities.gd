@@ -70,6 +70,7 @@ static func save_edited_student(p_student : Student) -> void:
 
 
 #region ResourceItem functions
+# TODO Need to add function to delete all assignments associated with the ResourceItem
 ## Retrieves all of the resources in the Resource directory
 static func get_all_resources() -> Array[ResourceItem]:
 	var db = get_database()
@@ -89,6 +90,10 @@ static func update_resource_item(p_resource : ResourceItem) -> void:
 	var db = get_database()
 	var index = db.resource_list.find(p_resource)
 	db.resource_list[index] = p_resource
+	
+	# Update all associated assignments
+	db.subject_list = update_selected_resource_assignments(p_resource)
+	
 	overwrite_database(db)
 	pass
 
@@ -125,6 +130,45 @@ static func remove_subject_from_schedule(p_subject : Subject) -> void:
 	overwrite_database(db)
 	pass
 
+
+## Updates the selected assignment
+static func update_assignment(p_assignment : Subject) -> void:
+	var db = get_database()
+	var index = db.subject_list.find(p_assignment)
+	db.subject_list[index] = p_assignment
+	overwrite_database(db)
+	pass
+
+
+## Removes all assignments associated with the selected ResourceItem
+static func remove_selected_resource_assignments(p_resource : ResourceItem) -> void:
+	var assignment_list : Array[Subject] = get_subject_list()
+	
+	for assignment in assignment_list:
+		if assignment.resource == p_resource:
+			remove_subject_from_schedule(assignment)
+	pass
+
+
+## Updates all assignments associated with the selected ResourceItem
+static func update_selected_resource_assignments(p_resource : ResourceItem) -> Array[Subject]:
+	var assignment_list : Array[Subject] = get_subject_list()
+
+	for assignment in assignment_list:
+		if assignment.resource == p_resource:
+			if assignment.division_type != ResourceData.DivisionType.None:
+				var new_assignment_list : Array[Assignment] = []
+				for title in p_resource.division_list:
+					var new_assignment : Assignment = Assignment.new()
+					new_assignment.title = title
+					new_assignment.progress = ResourceData.progress.Incomplete
+					new_assignment_list.append(new_assignment)
+				
+				assignment.assignments = new_assignment_list
+		else:
+			assignment_list.append(assignment)
+			
+	return assignment_list
 
 ## Retreives the database file
 static func get_database() -> CMDatabase:

@@ -127,7 +127,8 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 	student_lesson_info_scene.lbl_student_name.text = p_assignment.student.name
 	
 	student_lesson_info_scene.lbl_subject_title.text = p_assignment.resource.title
-	student_lesson_info_scene.lbl_lesson_method.text = ResourceData.study_method.keys()[p_assignment.study_method].replace("_", " ")
+	student_lesson_info_scene.lbl_lesson_method.text = \
+			ResourceData.study_method.keys()[p_assignment.study_method].replace("_", " ")
 	student_lesson_info_scene.set_subject(p_assignment)
 	
 	# Format the "Start label" text

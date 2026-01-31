@@ -46,6 +46,7 @@ const ERROR_MISSING_WEEK_DAYS : int = 3
 ## Used when filtering the resource list
 var item_list_resource_duplicate : ItemList = ItemList.new()
 
+## Users selected view (e.g., New, Edit, etc...)
 var view_option : ResourceData.ViewingOptions
 
 
@@ -92,9 +93,31 @@ func _ready() -> void:
 
 
 ## Displays an assignment for editing purposes
-func display_selected_assignment(p_assignment : Subject) -> void:
+func display_selected_assignment(p_assignment : Subject) -> void:	
+	# Update the view
 	update_view_option(ResourceData.ViewingOptions.Edit)
+	
+	# Selected the current resource
 	set_selected_resource(p_assignment.resource)
+	
+	option_button_subjects.selected = p_assignment.subject
+	option_button_study_methods.selected = p_assignment.study_method
+	btn_todays_date.text = p_assignment.start_date
+	
+	# Check selected student
+	var all_students = get_tree().get_nodes_in_group("student_selected")
+	for student in all_students:
+		if student.get_meta("student_id") == p_assignment.student:
+			student.button_pressed = true
+	
+	# Check selected days
+	var week_days = get_tree().get_nodes_in_group("day_selected")
+	
+	for day in p_assignment.week_days:
+		for d in week_days:
+			if d.name.contains(ResourceData.week_day.keys()[day]):
+				d.button_pressed = true
+	
 	pass
 
 
@@ -249,46 +272,10 @@ func _on_btn_save_schedule_pressed() -> void:
 	for student in selected_students:
 		if student.is_pressed() == true:
 			# Create the new subject and add all the data
-			var new_subject : Subject = Subject.new()
+			var new_subject : Subject = save_data()
 			
 			# Add the student 
 			new_subject.student = student.get_meta("student_id")
-			
-			# Add the selected resource
-			new_subject.resource = item_list_resource.get_item_metadata(0)
-			
-			# Add the subject
-			new_subject.subject = option_button_subjects.selected
-			
-			# Add the study method
-			new_subject.study_method = option_button_study_methods.selected
-			
-			# Add the week days
-			var selected_days = get_tree().get_nodes_in_group("day_selected")
-			for day in selected_days:
-				if day.is_pressed() == true:
-					match  day.text:
-						"Sun":
-							new_subject.week_days.append(ResourceData.week_day.Sunday)
-						"Mon":
-							new_subject.week_days.append(ResourceData.week_day.Monday)
-						"Tue":
-							new_subject.week_days.append(ResourceData.week_day.Tuesday)
-						"Wed":
-							new_subject.week_days.append(ResourceData.week_day.Wednesday)
-						"Thu":
-							new_subject.week_days.append(ResourceData.week_day.Thursday)
-						"Fri":
-							new_subject.week_days.append(ResourceData.week_day.Friday)
-						"Sat":
-							new_subject.week_days.append(ResourceData.week_day.Saturday)
-			
-			## Add the start date
-			new_subject.start_date = btn_todays_date.text
-			
-			## Create the assignments if the ResourceItem has a division type
-			if new_subject.resource.division_type != ResourceData.DivisionType.None:
-				new_subject.assignments = create_assignments(new_subject.resource)
 			
 			## Save the resource to the database
 			CMDatabaseUtilities.add_subject(new_subject)
@@ -317,5 +304,85 @@ func _on_btn_cancel_schedule_pressed() -> void:
 	pass 
 
 
+## Saves the information for the selected assignment
+func save_data() -> Subject:
+	var new_subject : Subject = Subject.new()
+	
+	# Add the selected resource
+	new_subject.resource = item_list_resource.get_item_metadata(0)
+	
+	## Create the assignments if the ResourceItem has a division type
+	if new_subject.resource.division_type != ResourceData.DivisionType.None:
+		new_subject.division_type = new_subject.resource.division_type
+		new_subject.assignments = create_assignments(new_subject.resource)
+	
+	new_subject.subject = option_button_subjects.selected
+	new_subject.study_method = option_button_study_methods.selected
+	new_subject.start_date = btn_todays_date.text
+	
+	# Add the week days
+	var selected_days = get_tree().get_nodes_in_group("day_selected")
+	for day in selected_days:
+		if day.is_pressed() == true:
+			match  day.text:
+				"Sun":
+					new_subject.week_days.append(ResourceData.week_day.Sunday)
+				"Mon":
+					new_subject.week_days.append(ResourceData.week_day.Monday)
+				"Tue":
+					new_subject.week_days.append(ResourceData.week_day.Tuesday)
+				"Wed":
+					new_subject.week_days.append(ResourceData.week_day.Wednesday)
+				"Thu":
+					new_subject.week_days.append(ResourceData.week_day.Thursday)
+				"Fri":
+					new_subject.week_days.append(ResourceData.week_day.Friday)
+				"Sat":
+					new_subject.week_days.append(ResourceData.week_day.Saturday)
+	
+	return new_subject
+
+
 func _on_btn_update_schedule_pressed() -> void:
+	# Remove any prior themes
+	remove_error_formats()
+	
+	## Error check the form for required fields
+	var errors = error_check_form()
+	if !errors.is_empty():
+		add_error_formats(errors)
+		return
+	
+	# Check to see if one student is selected or multiple
+	# If multiple students are selected, the db will need to be searched 
+	# to see if an assignment is already created for the selected student AND 
+	# resource. If there is no assignment created for the student, a new 
+	# assignment will be created
+	var student_list = get_tree().get_nodes_in_group("student_selected")
+	var student_count : int = 0
+	var selected_students : Array[Student] = []
+	for student in student_list:
+		if student.is_pressed():
+			student_count += 1
+			selected_students.append(student.get_meta("student_id"))
+
+	if student_count > 1:
+		for student in selected_students:
+			var assignment_list = CMDatabaseUtilities.get_subject_list()
+			for assignment in assignment_list:
+				var new_subject : Subject = save_data()
+				new_subject.student = student
+				
+				# Student assignment found! Update it
+				if assignment.student == student:
+					CMDatabaseUtilities.update_assignment(new_subject)
+				else:
+					CMDatabaseUtilities.add_subject(new_subject)
+			pass
+	else:
+		var new_subject : Subject = save_data()
+		new_subject.student = selected_students[0]
+		CMDatabaseUtilities.update_assignment(new_subject)
+		
+		SignalBus.display_schedule_page.emit()
 	pass
