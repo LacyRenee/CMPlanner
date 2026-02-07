@@ -349,6 +349,7 @@ func remove_format_themes() -> void:
 func _on_btn_division_pressed() -> void:
 	var instance = division_line_item.instantiate()
 	division_list.add_child(instance)
+	
 	renumber_divisions()
 	pass 
 

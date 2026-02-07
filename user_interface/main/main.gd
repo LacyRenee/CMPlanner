@@ -26,7 +26,11 @@ const SCHEDULE_SCENE_PATH : String = "res://user_interface/schedule/schedule.tsc
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:	
+func _ready() -> void:
+	# Set the screen scale factor 
+	if OS.has_feature("mobile"):
+		get_window().content_scale_factor = 4
+	
 	#region signals
 	# Displays a selected resources information 
 	SignalBus.connect("display_resource_info",display_resource_info_page, 0)
@@ -72,6 +76,7 @@ func display_selected_resource_schedule_view(p_resource : ResourceItem) -> void:
 	
 	SignalBus.schedule_selected_resource.emit(p_resource)
 	pass
+
 
 ## Displays the resource scheduler page with an assignment to be edited
 func display_editable_resource_schedule_view(p_assignment) -> void:
@@ -148,7 +153,6 @@ func display_schedule_page() -> void:
 ## Remove current container from the PanelContainerAttacher
 func remove_scene_from_attacher() -> void:
 	if panel_container_attacher.get_child_count() > 0:
-		#panel_container_attacher.remove_child(panel_container_attacher.get_child(0))
 		panel_container_attacher.get_child(0).call_deferred("queue_free")
 	pass
 
@@ -157,9 +161,10 @@ func remove_scene_from_attacher() -> void:
 func _on_btn_resources_pressed() -> void:
 	# Remove any child nodes
 	remove_scene_from_attacher()
-	
 	display_resource_page()
 	
+	# TODO remove focus box over buttons?
+	 #btn_start.release_focus()
 	pass 
 
 

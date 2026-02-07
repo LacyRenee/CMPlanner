@@ -133,11 +133,13 @@ fit_content = true
 [node name="BtnRemoveFromSchedule" type="Button" parent="HBoxLesson"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_vertical = 4
 text = "Remove From Schedule"
 
 [node name="BtnEditSchedule" type="Button" parent="HBoxLesson"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_vertical = 4
 text = "Edit Schedule"
 
 [node name="ControlSpacer2" type="Control" parent="HBoxLesson"]

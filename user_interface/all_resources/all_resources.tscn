@@ -40,8 +40,7 @@ layout_mode = 2
 
 [node name="RtlPageTitle" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 24
+theme_type_variation = &"HeaderLabelDark"
 bbcode_enabled = true
 text = "Resources"
 fit_content = true
@@ -51,12 +50,12 @@ vertical_alignment = 1
 [node name="PanelContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_type_variation = &"PanelButton"
 
 [node name="BtnAddResourceItem" type="Button" parent="Panel/MarginContainer/VBoxContainer/PanelContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 text = "Add a Resource Item"
 
 [node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer"]

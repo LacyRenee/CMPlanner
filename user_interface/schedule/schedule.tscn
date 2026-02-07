@@ -34,14 +34,22 @@ layout_mode = 2
 [node name="LblScheduleHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+theme_type_variation = &"HeaderLabelDark"
 text = "Schedule"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BtnScheduleResource" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 0
+theme_type_variation = &"PanelButton"
+
+[node name="BtnScheduleResource" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "Schedule a Resource"
 
 [node name="ControlSpacer2" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
@@ -104,9 +112,10 @@ layout_mode = 2
 [node name="LblHeader1" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader1/MarginContainerHeader1"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Student"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -121,9 +130,10 @@ layout_mode = 2
 [node name="LblHeader2" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader2/MarginContainerHeader2"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Sunday"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -138,9 +148,10 @@ layout_mode = 2
 [node name="LblHeader3" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader3/MarginContainerHeader3"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Monday"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -155,9 +166,10 @@ layout_mode = 2
 [node name="LblColumn4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader4/MarginContainerColumn4"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Tuesday"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -172,9 +184,10 @@ layout_mode = 2
 [node name="LblHeader5" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader5/MarginContainerHeader5"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Wednesday"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -189,9 +202,10 @@ layout_mode = 2
 [node name="LblHeader6" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader6/MarginContainerHeader6"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Thursday"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -206,9 +220,10 @@ layout_mode = 2
 [node name="LblHeader7" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader7/MarginContainerHeader7"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Friday"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -223,9 +238,10 @@ layout_mode = 2
 [node name="LblHeader8" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader8/MarginContainerHeader8"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 text = "Saturday"
 fit_content = true
+autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -249,4 +265,4 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/BtnScheduleResource" to="." method="_on_btn_schedule_resource_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/BtnScheduleResource" to="." method="_on_btn_schedule_resource_pressed"]

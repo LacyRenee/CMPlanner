@@ -1,9 +1,12 @@
 ################################################################################
-### Schedule Page
-### I want to display a weekly and daily schedule? Or put daily on the home page
+## Schedule Page
+## Displays a table view of all active students and subjects.
+## Displays a list of all active subjects and their corresponding assignments
+## for each student. 
 ################################################################################
 extends Control
 
+## Group name for all the students in the table view
 const STUDENT_ROW_GROUP = "student_row"
 
 ## Path to the Panel subject scene
@@ -13,30 +16,27 @@ const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
 const STUDENT_LESSON_INFO = preload("uid://chj1la6p3ou7h")
 
 
-## Access to the hbox to add all available students
-@onready var h_box_students: HBoxContainer = %HBoxStudents
+## Access to the hbox to add all available students as a checkbox
+@onready var h_box_students_checkbox: HBoxContainer = %HBoxStudents
 
 ## Access to the weekly overview table of assignments
 @onready var vbox_weekly_overview_table: VBoxContainer = %VBoxWeeklyOverviewTable
 
-## Access to the hbox to add all available subjects
-@onready var h_box_subjects: HBoxContainer = %HBoxSubjects
-
-## Access to the vbox to display subjects
-@onready var vbox_subject_view : VBoxContainer = %VBoxSubjectView
+## Access to the vbox to display an overview of all the active subjects
+@onready var vbox_subject_overview : VBoxContainer = %VBoxSubjectView
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# Add the student rows to the table
+	# Create a row for each student and add all active, associated subjects
 	create_schedule_overview_table()
 	
-	# Add the assignment overview
+	# Create the Subject overview for all active subjects and their 
+	# corresponding student assignments
 	create_subject_overview()
 	
 	# Signals the Schedule page to refresh
 	SignalBus.connect("refresh_scheduled_subject_view", refresh_page)
-	
 	pass
 
 
@@ -52,11 +52,11 @@ func refresh_page() -> void:
 ## Removes the children views from the schedule view
 func remove_children_from_scene() -> void:
 	# Remove all students
-	var student_row = h_box_students.get_children()
+	var student_row = h_box_students_checkbox.get_children()
 	for row in student_row:
 		row.call_deferred("queue_free")
 	
-	# Need to remove all children from the table
+	# Need to remove all students (except the header) from the table
 	var table_rows = vbox_weekly_overview_table.get_children()
 	var table_row_count = 0
 	for row in table_rows:
@@ -66,14 +66,15 @@ func remove_children_from_scene() -> void:
 		
 		table_row_count += 1
 		
-	# Remove all children from the subject overview
-	var overview_row = vbox_subject_view.get_children()
+	# Remove all assignments from the Subject Overview
+	var overview_row = vbox_subject_overview.get_children()
 	for row in overview_row:
 		row.call_deferred("queue_free")
 	pass
 
 
-## Creates the table row for each student and any assigned subjects
+## Creates the checkboxes for all active students, 
+## and the table row for each student and any assigned subjects
 func create_schedule_overview_table() -> void:
 	# Add the "Filter by student" and student rows to the weekly overview
 	var student_list = CMDatabaseUtilities.get_student_list()
@@ -82,12 +83,13 @@ func create_schedule_overview_table() -> void:
 	for student in student_list:
 		create_student_checkbox(student.name)
 		create_student_weekly_overview_row(student)
+		
 		var assignments = get_all_student_assignments(student, assignment_list)
 		create_weekly_assignment_overview(student, assignments)
 	pass
 
 
-## Creates the subject assignment overview table
+## Creates the subject assignment overview
 func create_subject_overview() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
 	var subject_list = ResourceData.Subjects
@@ -99,18 +101,18 @@ func create_subject_overview() -> void:
 		var panel_scene = PANEL_SUBJECT.instantiate()
 		panel_scene.get_child(0).get_child(0).text = item
 		panel_scene.visible = false
-		vbox_subject_view.add_child(panel_scene)
+		vbox_subject_overview.add_child(panel_scene)
 	
 	# Add the student subject assignments to the subject view
 	for subject_assignment in student_subject_list:
-		add_assignment_to_subject_view(subject_assignment)
+		add_assignment_to_subject_overview(subject_assignment)
 	pass
 
 
-## For each students, the assignment is added to the correct subject view
-func add_assignment_to_subject_view(p_assignment : Subject) -> void:
+## For each students, the assignment is added to the correct subject overview
+func add_assignment_to_subject_overview(p_assignment : Subject) -> void:
 	var subject = ResourceData.Subjects.keys()[p_assignment.subject]
-	var nodes = vbox_subject_view.get_children()
+	var nodes = vbox_subject_overview.get_children()
 	
 	for n in nodes:
 		if n.get_child(0).get_child(0).text == subject:
@@ -292,8 +294,8 @@ func create_student_checkbox(p_name) -> void:
 	control_spacer.custom_minimum_size = Vector2(100, 10)
 	
 	margin_container.add_child(checkbox)
-	h_box_students.add_child(margin_container)
-	h_box_students.add_child(control_spacer)
+	h_box_students_checkbox.add_child(margin_container)
+	h_box_students_checkbox.add_child(control_spacer)
 	pass
 
 

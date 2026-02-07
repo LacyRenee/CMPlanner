@@ -26,98 +26,121 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_0lq4d")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainerMain"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainerMain"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainerMain/MarginContainer"]
+[node name="PanelContainerHeader" type="PanelContainer" parent="PanelContainerMain/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerHeader"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="RtlTitle" type="RichTextLabel" parent="PanelContainerMain/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+[node name="RtlTitle" type="RichTextLabel" parent="PanelContainerMain/VBoxContainer/PanelContainerHeader/MarginContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-size_flags_vertical = 0
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderLabelLight"
 theme_override_font_sizes/normal_font_size = 24
-text = "CM Planner "
+bbcode_enabled = true
+text = "[b]CM Planner[/b]"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerAttacher" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
+[node name="PanelContainerAttacher" type="PanelContainer" parent="PanelContainerMain/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_x06om")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer"]
+[node name="PanelContainerFooter" type="PanelContainer" parent="PanelContainerMain/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="PanelContainer1" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter"]
+layout_mode = 2
+
+[node name="PanelContainer1" type="PanelContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ControlSpacer1" type="Control" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer1"]
+[node name="ControlSpacer1" type="Control" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer1"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PanelContainer2" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="VSeparator5" type="VSeparator" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PanelContainer2" type="PanelContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BtnSchedule" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2"]
+[node name="BtnSchedule" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer2"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Schedule"
 
-[node name="PanelContainer3" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="VSeparator1" type="VSeparator" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PanelContainer3" type="PanelContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BtnHome" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer3"]
+[node name="BtnHome" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer3"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Home"
 
-[node name="PanelContainer4" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="VSeparator2" type="VSeparator" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PanelContainer4" type="PanelContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BtnResources" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer4"]
+[node name="BtnResources" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer4"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Resources"
 
-[node name="PanelContainer5" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="VSeparator3" type="VSeparator" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PanelContainer5" type="PanelContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BtnSettings" type="Button" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer5"]
+[node name="BtnSettings" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer5"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Settings"
 
-[node name="PanelContainer6" type="PanelContainer" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="VSeparator4" type="VSeparator" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PanelContainer6" type="PanelContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ControlSpacer2" type="Control" parent="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer6"]
+[node name="ControlSpacer2" type="Control" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer6"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer2/BtnSchedule" to="." method="_on_btn_schedule_pressed"]
-[connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer3/BtnHome" to="." method="_on_btn_home_pressed"]
-[connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer4/BtnResources" to="." method="_on_btn_resources_pressed"]
-[connection signal="pressed" from="PanelContainerMain/MarginContainer/VBoxContainer/HBoxContainer/PanelContainer5/BtnSettings" to="." method="_on_btn_settings_pressed"]
+[connection signal="pressed" from="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer2/BtnSchedule" to="." method="_on_btn_schedule_pressed"]
+[connection signal="pressed" from="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer3/BtnHome" to="." method="_on_btn_home_pressed"]
+[connection signal="pressed" from="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer4/BtnResources" to="." method="_on_btn_resources_pressed"]
+[connection signal="pressed" from="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer5/BtnSettings" to="." method="_on_btn_settings_pressed"]
