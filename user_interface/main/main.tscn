@@ -39,7 +39,7 @@ layout_mode = 2
 [node name="RtlTitle" type="RichTextLabel" parent="PanelContainerMain/VBoxContainer/PanelContainerHeader/MarginContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_type_variation = &"HeaderLabelLight"
+theme_type_variation = &"HeaderLargeLabelLight"
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[b]CM Planner[/b]"
@@ -51,6 +51,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_x06om")
 

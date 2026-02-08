@@ -35,6 +35,7 @@ extends Control
 ## Access to the save button
 @onready var btn_save_schedule: Button = %BtnSaveSchedule
 
+@onready var item_list_students: ItemList = %ItemListStudents
 
 ## defined error number for missing a resource
 const ERROR_MISSING_RESOURCE : int = 1
@@ -52,9 +53,13 @@ var item_list_resource_duplicate : ItemList = ItemList.new()
 ## Users selected view (e.g., New, Edit, etc...)
 var view_option : ResourceData.ViewingOptions
 
+var is_mobile : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if OS.has_feature("mobile"):
+		is_mobile = true
+	
 	# Set the View to "New"
 	update_view_option(ResourceData.ViewingOptions.New)
 	
@@ -72,8 +77,13 @@ func _ready() -> void:
 	
 	# Add all students
 	var student_list = CMDatabaseUtilities.get_student_list()
+	
+	if is_mobile:
+		item_list_students.max_columns = 1
+		
 	for student in student_list:
-		create_student_checkbox(student)
+		var index = item_list_students.add_item(student.name)
+		item_list_students.set_item_metadata(index, student)
 	
 	## Populate the subject options
 	for subject in ResourceData.Subjects:
@@ -83,6 +93,7 @@ func _ready() -> void:
 	for method in ResourceData.study_method:
 		option_button_study_methods.add_item(method.replace("_", " "))
 	
+	#region Signals
 	# Connects to the selected date for the start date 
 	SignalBus.connect("date_selected", set_selected_date, 0)
 	
@@ -91,7 +102,7 @@ func _ready() -> void:
 	
 	## Connects to the assignment to be edited
 	SignalBus.connect("edit_selected_assignment", display_selected_assignment, 0)
-	
+	#endregion
 	pass 
 
 
@@ -108,10 +119,10 @@ func display_selected_assignment(p_assignment : Subject) -> void:
 	btn_todays_date.text = p_assignment.start_date
 	
 	# Check selected student
-	var all_students = get_tree().get_nodes_in_group("student_selected")
-	for student in all_students:
-		if student.get_meta("student_id") == p_assignment.student:
-			student.button_pressed = true
+	for index in range(item_list_students.get_item_count()):
+		var student = item_list_students.get_item_metadata(index)
+		if student == p_assignment.student:
+			item_list_students.select(index)
 	
 	# Check selected days
 	var week_days = get_tree().get_nodes_in_group("day_selected")
@@ -120,7 +131,6 @@ func display_selected_assignment(p_assignment : Subject) -> void:
 		for d in week_days:
 			if d.name.contains(ResourceData.week_day.keys()[day]):
 				d.button_pressed = true
-	
 	pass
 
 
@@ -159,22 +169,6 @@ func set_selected_date(p_date) -> void:
 	pass
 
 
-## Creates a checkbox for each student
-func create_student_checkbox(p_student : Student) -> void:
-	var margin_container : MarginContainer = MarginContainer.new()
-	
-	var checkbox : CheckBox = CheckBox.new()
-	checkbox.text = p_student.name
-	checkbox.custom_minimum_size = Vector2(100,10)
-	checkbox.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
-	checkbox.add_to_group("student_selected", true)
-	checkbox.set_meta("student_id", p_student)
-	
-	margin_container.add_child(checkbox)
-	v_box_students.add_child(margin_container)
-	pass
-
-
 ## Creates an assignment for each division item for the ResourceItem
 ## Marks each division item as "Incomplete"
 func create_assignments(p_resource : ResourceItem) -> Array[Assignment]:
@@ -192,20 +186,15 @@ func create_assignments(p_resource : ResourceItem) -> Array[Assignment]:
 ## Goes through each editable node and verifies that each required field is
 ## filled out
 func error_check_form() -> Array[int]:
-	# Error check form to make sure there's a resource
+	# Number os errors in the form
 	var errors : Array[int] = []
+	
 	if item_list_resource.get_selected_items().is_empty():
 		errors.append(ERROR_MISSING_RESOURCE)
 	
-	# Error check the form to ensure there's a student 
-	var checked_students = get_tree().get_nodes_in_group("student_selected")
-	var checked_students_count : int = 0
-	
-	for checkbox in checked_students:
-		if checkbox.is_pressed():
-			checked_students_count += 1
-	
-	if checked_students_count == 0:
+	# Error check the form to ensure there's a student
+	var checked_students = item_list_students.get_selected_items()
+	if checked_students.is_empty():
 		errors.append(ERROR_MISSING_STUDENT)
 	
 	# Error check the form to ensure there is a weekday selected 
@@ -250,63 +239,6 @@ func remove_error_formats() -> void:
 	pass
 
 
-## Displays the popup calendar date picker
-func _on_button_pressed() -> void:
-	popup_calendar.show()
-	pass 
-
-
-## Saves the scheduled subject
-func _on_btn_save_schedule_pressed() -> void:
-	# Remove any prior themes
-	remove_error_formats()
-	
-	## Error check the form for required fields
-	var errors = error_check_form()
-	if !errors.is_empty():
-		add_error_formats(errors)
-		return
-	
-	# Need to save the resource for each student selected 
-		# Add the students
-	var student_list = CMDatabaseUtilities.get_student_list()
-	var selected_students = get_tree().get_nodes_in_group("student_selected")
-	
-	for student in selected_students:
-		if student.is_pressed() == true:
-			# Create the new subject and add all the data
-			var new_subject : Subject = save_data()
-			
-			# Add the student 
-			new_subject.student = student.get_meta("student_id")
-			
-			## Save the resource to the database
-			CMDatabaseUtilities.add_subject(new_subject)
-			
-	SignalBus.display_schedule_page.emit()
-	pass 
-
-
-## Incrementally searches through the resource item lists, 
-## and selects the searched for ResourceItem
-func _on_le_search_resource_text_changed(new_text: String) -> void:
-	var search_value = new_text.to_lower()
-	item_list_resource.clear()
-	
-	for i in range(item_list_resource_duplicate.get_item_count()):
-		if item_list_resource_duplicate.get_item_text(i).to_lower().find(search_value) != -1:
-			var index = item_list_resource.add_item(item_list_resource_duplicate.get_item_metadata(i).title)
-			item_list_resource.set_item_metadata(index, item_list_resource_duplicate.get_item_metadata(i))
-			item_list_resource.select(index)
-	pass
-
-
-## Goes back to the Schedule page view
-func _on_btn_cancel_schedule_pressed() -> void:
-	SignalBus.display_schedule_page.emit()
-	pass 
-
-
 ## Saves the information for the selected assignment
 func save_data() -> Subject:
 	var new_subject : Subject = Subject.new()
@@ -346,6 +278,62 @@ func save_data() -> Subject:
 	return new_subject
 
 
+## Displays the popup calendar date picker
+func _on_button_pressed() -> void:
+	popup_calendar.show()
+	pass 
+
+
+## Saves the scheduled subject
+func _on_btn_save_schedule_pressed() -> void:
+	# Remove any prior themes
+	remove_error_formats()
+	
+	## Error check the form for required fields
+	var errors = error_check_form()
+	if !errors.is_empty():
+		add_error_formats(errors)
+		return
+	
+	# Need to save the resource for each student selected 
+		# Add the students
+	var student_list = CMDatabaseUtilities.get_student_list()
+	var selected_students = item_list_students.get_selected_items()
+	
+	for index in selected_students:
+		# Create the new subject and add all the data
+		var new_subject : Subject = save_data()
+		
+		# Add the student 
+		new_subject.student = item_list_students.get_item_metadata(index)
+		
+		## Save the resource to the database
+		CMDatabaseUtilities.add_subject(new_subject)
+		
+	SignalBus.display_schedule_page.emit()
+	pass 
+
+
+## Incrementally searches through the resource item lists, 
+## and selects the searched for ResourceItem
+func _on_le_search_resource_text_changed(new_text: String) -> void:
+	var search_value = new_text.to_lower()
+	item_list_resource.clear()
+	
+	for i in range(item_list_resource_duplicate.get_item_count()):
+		if item_list_resource_duplicate.get_item_text(i).to_lower().find(search_value) != -1:
+			var index = item_list_resource.add_item(item_list_resource_duplicate.get_item_metadata(i).title)
+			item_list_resource.set_item_metadata(index, item_list_resource_duplicate.get_item_metadata(i))
+			item_list_resource.select(index)
+	pass
+
+
+## Goes back to the Schedule page view
+func _on_btn_cancel_schedule_pressed() -> void:
+	SignalBus.display_schedule_page.emit()
+	pass 
+
+
 func _on_btn_update_schedule_pressed() -> void:
 	# Remove any prior themes
 	remove_error_formats()
@@ -368,7 +356,7 @@ func _on_btn_update_schedule_pressed() -> void:
 		if student.is_pressed():
 			student_count += 1
 			selected_students.append(student.get_meta("student_id"))
-
+	
 	if student_count > 1:
 		for student in selected_students:
 			var assignment_list = CMDatabaseUtilities.get_subject_list()

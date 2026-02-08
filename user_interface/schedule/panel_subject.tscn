@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://bv6p480uv7ng2"]
 
 [node name="PanelSubject" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_type_variation = &"BackgroundPanel"
 
 [node name="VBoxSubject" type="VBoxContainer" parent="."]
@@ -8,5 +13,6 @@ layout_mode = 2
 
 [node name="LblSubject" type="RichTextLabel" parent="VBoxSubject"]
 layout_mode = 2
+theme_type_variation = &"HeaderLargeLabelDark"
 text = "Art"
 fit_content = true

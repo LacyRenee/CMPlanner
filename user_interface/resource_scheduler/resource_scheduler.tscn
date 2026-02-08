@@ -15,32 +15,37 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_eu1rl")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_type_variation = &"BackgroundPanel"
 metadata/_edit_use_anchors_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="PanelContainerResourceSchedulerHeader" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainerResourceSchedulerHeader" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="LblResourceSchedulerHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceSchedulerHeader"]
+[node name="LblResourceSchedulerHeader" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceSchedulerHeader"]
 layout_mode = 2
 theme_type_variation = &"HeaderLabelDark"
 text = "Resource Scheduler"
@@ -48,17 +53,17 @@ fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainerResourceItem" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainerResourceItem" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
 layout_mode = 2
 
-[node name="LblResource" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
+[node name="LblResource" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 text = "Resource:"
@@ -66,87 +71,97 @@ fit_content = true
 autowrap_mode = 0
 vertical_alignment = 1
 
-[node name="LeSearchResource" type="LineEdit" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
+[node name="LeSearchResource" type="LineEdit" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Start typing to search for a resource"
 
-[node name="ItemListResource" type="ItemList" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
+[node name="ItemListResource" type="ItemList" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PanelContainerAssignStudents" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainerAssignStudents" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="VBoxStudents" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents"]
+[node name="VBoxStudents" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents/VBoxStudents"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents/VBoxStudents"]
 layout_mode = 2
 text = "Assign to Student:"
 fit_content = true
 
-[node name="ControlSpacer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ItemListStudents" type="ItemList" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents/VBoxStudents"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+select_mode = 2
+auto_width = true
+auto_height = true
+max_columns = 5
+same_column_width = true
+
+[node name="ControlSpacer" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="PanelContainerAssignSubject" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainerAssignSubject" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignSubject"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignSubject"]
 layout_mode = 2
 
-[node name="LblSubject" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignSubject/HBoxContainer"]
+[node name="LblSubject" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignSubject/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 text = "Subject: "
 fit_content = true
 autowrap_mode = 0
 
-[node name="OptionButtonSubjects" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignSubject/HBoxContainer"]
+[node name="OptionButtonSubjects" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignSubject/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PanelContainerAssignStudyMethod" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainerAssignStudyMethod" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod"]
 layout_mode = 2
 
-[node name="LblStudyMethod" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod/HBoxContainer"]
+[node name="LblStudyMethod" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 text = "Study Method:"
 fit_content = true
 autowrap_mode = 0
 
-[node name="OptionButtonStudyMethods" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod/HBoxContainer"]
+[node name="OptionButtonStudyMethods" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudyMethod/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PanelContainerStartDate" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainerStartDate" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate"]
 layout_mode = 2
 
-[node name="LblStartDate" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+[node name="LblStartDate" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 text = "Start Date:"
 fit_content = true
 
-[node name="BtnTodaysDate" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+[node name="BtnTodaysDate" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -158,13 +173,13 @@ theme_override_colors/font_hover_pressed_color = Color(0.039215688, 0.039215688,
 theme_override_styles/normal = SubResource("StyleBoxFlat_n8u6i")
 text = "Pick Date"
 
-[node name="PopupCalendar" type="Popup" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+[node name="PopupCalendar" type="Popup" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
 unique_name_in_owner = true
 oversampling_override = 1.0
 initial_position = 1
 size = Vector2i(500, 300)
 
-[node name="Calendar" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/PopupCalendar" instance=ExtResource("2_n8u6i")]
+[node name="Calendar" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/PopupCalendar" instance=ExtResource("2_n8u6i")]
 anchors_preset = 15
 anchor_left = 0.0
 anchor_top = 0.0
@@ -177,94 +192,101 @@ offset_bottom = 0.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PanelContainerUseOn" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainerUseOn" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn"]
 layout_mode = 2
-size_flags_horizontal = 0
 
-[node name="LblUseOn" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer"]
+[node name="LblUseOn" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 text = "Use on:"
 fit_content = true
 autowrap_mode = 0
 
-[node name="CheckSunday" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
-custom_minimum_size = Vector2(60, 0)
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="CheckSunday" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer/HBoxContainer" groups=["day_selected"]]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 focus_mode = 0
 action_mode = 0
 text = "Sun"
 
-[node name="CheckMonday" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
-custom_minimum_size = Vector2(60, 0)
+[node name="CheckMonday" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer/HBoxContainer" groups=["day_selected"]]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 focus_mode = 0
 action_mode = 0
 text = "Mon"
 
-[node name="CheckTuesday" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
-custom_minimum_size = Vector2(60, 0)
+[node name="CheckTuesday" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer/HBoxContainer" groups=["day_selected"]]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 focus_mode = 0
 action_mode = 0
 text = "Tue"
 
-[node name="CheckWednesday" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
-custom_minimum_size = Vector2(60, 0)
+[node name="CheckWednesday" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer/HBoxContainer" groups=["day_selected"]]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 focus_mode = 0
 action_mode = 0
 text = "Wed"
 
-[node name="CheckThursday" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
-custom_minimum_size = Vector2(60, 0)
+[node name="CheckThursday" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer/HBoxContainer" groups=["day_selected"]]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 focus_mode = 0
 action_mode = 0
 text = "Thu"
 
-[node name="CheckFriday" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
-custom_minimum_size = Vector2(60, 0)
+[node name="CheckFriday" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer/HBoxContainer" groups=["day_selected"]]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 focus_mode = 0
 action_mode = 0
 text = "Fri"
 
-[node name="CheckSaturday" type="CheckBox" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/HBoxContainer" groups=["day_selected"]]
-custom_minimum_size = Vector2(60, 0)
+[node name="CheckSaturday" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerUseOn/VBoxContainer/MarginContainer/HBoxContainer" groups=["day_selected"]]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 focus_mode = 0
 action_mode = 0
 text = "Sat"
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="BtnUpdateSchedule" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="BtnUpdateSchedule" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Update Schedule"
 
-[node name="BtnSaveSchedule" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="BtnSaveSchedule" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save Schedule"
 
-[node name="BtnCancelSchedule" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+[node name="BtnCancelSchedule" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 text = "Cancel"
 
-[connection signal="text_changed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer/LeSearchResource" to="." method="_on_le_search_resource_text_changed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/BtnTodaysDate" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnUpdateSchedule" to="." method="_on_btn_update_schedule_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnSaveSchedule" to="." method="_on_btn_save_schedule_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnCancelSchedule" to="." method="_on_btn_cancel_schedule_pressed"]
+[connection signal="text_changed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer/LeSearchResource" to="." method="_on_le_search_resource_text_changed"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/BtnTodaysDate" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnUpdateSchedule" to="." method="_on_btn_update_schedule_pressed"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnSaveSchedule" to="." method="_on_btn_save_schedule_pressed"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnCancelSchedule" to="." method="_on_btn_cancel_schedule_pressed"]

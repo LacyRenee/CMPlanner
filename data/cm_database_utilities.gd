@@ -7,11 +7,30 @@
 class_name CMDatabaseUtilities
 extends Node
 
+enum GRADES {
+	Preschool,
+	Kindergarten,
+	First_Grade,
+	Second_Grade,
+	Third_Grade,
+	Fourth_Grade,
+	Fifth_Grade,
+	Sixth_Grade,
+	Seventh_Grade,
+	Eighth_Grade,
+	Ninth_Grade,
+	Tenth_Grade,
+	Eleveneth_Grade,
+	Twelfth_Grade
+}
+
 ## File path for the user settings 
 const DATABASE_PATH = "/cm_database.tres"
 
 ## Base path for the user's folder
 static var cm_database_path : String =  OS.get_user_data_dir()
+
+static var is_mobile : bool = false
 
 
 ## Called when the node enters the scene tree for the first time
@@ -27,8 +46,19 @@ func _ready() -> void:
 		family_student.is_active = true
 		
 		db.student_list.append(family_student)
-				
+		
 		ResourceSaver.save(db, get_database_filepath())
+	pass
+
+
+## Returns the value for is_mobile
+static func get_is_mobile() -> bool:
+	return is_mobile
+
+
+## Sets the value for is_mobile
+static func set_is_mobile(value : bool) -> void:
+	is_mobile = value
 	pass
 
 
@@ -108,6 +138,7 @@ static func remove_resource_item(p_resource : ResourceItem) -> void:
 #endregion
 
 
+#region Subject and Assignment Functions
 ## Saves the subject to the database
 static func add_subject(p_subject : Subject) -> void:
 	var db = get_database()
@@ -169,7 +200,10 @@ static func update_selected_resource_assignments(p_resource : ResourceItem) -> A
 			assignment_list.append(assignment)
 			
 	return assignment_list
+#endregion
 
+
+#region Database functions
 ## Retreives the database file
 static func get_database() -> CMDatabase:
 	var db : CMDatabase = ResourceLoader.load(get_database_filepath())
@@ -185,3 +219,4 @@ static func overwrite_database(p_file : CMDatabase) -> void:
 ## The user file path to the user settings
 static func get_database_filepath() -> String:
 	return cm_database_path + DATABASE_PATH
+#endregion

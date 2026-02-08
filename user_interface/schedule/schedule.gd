@@ -6,18 +6,17 @@
 ################################################################################
 extends Control
 
-## Group name for all the students in the table view
-const STUDENT_ROW_GROUP = "student_row"
-
 ## Path to the Panel subject scene
 const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
 
 ## Path to the sutdent lesson info scene
 const STUDENT_LESSON_INFO = preload("uid://chj1la6p3ou7h")
 
+const STUDENT_LESSON_INFO_MOBILE = preload("uid://dji3o6xmi2iym")
 
-## Access to the hbox to add all available students as a checkbox
-@onready var h_box_students_checkbox: HBoxContainer = %HBoxStudents
+
+## Access to the item list of students
+@onready var item_list_students: ItemList = %ItemListStudents
 
 ## Access to the weekly overview table of assignments
 @onready var vbox_weekly_overview_table: VBoxContainer = %VBoxWeeklyOverviewTable
@@ -49,26 +48,22 @@ const STUDENT_LESSON_INFO = preload("uid://chj1la6p3ou7h")
 ## Access to column8 header for the Schedule overview table
 @onready var lbl_header_8: RichTextLabel = %LblHeader8
 
-## Used to alternate view changes if the application is running on mobile
-var is_mobile : bool = false
 
 #TODO create mobile functions
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
 	# If the application is running on mobile, shorthand the table header
-	if OS.has_feature("mobile"):
-		is_mobile = true
+	if CMDatabaseUtilities.get_is_mobile():
 		mobile_shorthand_table_header()
-		
-	
+		item_list_students.max_columns = 1
 	
 	# Create a row for each student and add all active, associated subjects
 	create_schedule_overview_table()
 	
 	# Create the Subject overview for all active subjects and their 
 	# corresponding student assignments
-	create_subject_overview()
+	create_subject_assignment_overview()
 	
 	# Signals the Schedule page to refresh
 	SignalBus.connect("refresh_scheduled_subject_view", refresh_page)
@@ -78,18 +73,16 @@ func _ready() -> void:
 ## Refreshes the schedule page
 func refresh_page() -> void:
 	remove_children_from_scene()
-	
 	create_schedule_overview_table()
-	create_subject_overview()
+	create_subject_assignment_overview()
 	pass
 
 
 ## Removes the children views from the schedule view
 func remove_children_from_scene() -> void:
 	# Remove all students
-	var student_row = h_box_students_checkbox.get_children()
-	for row in student_row:
-		row.call_deferred("queue_free")
+	for index in range(item_list_students.get_item_count()):
+		item_list_students.remove_item(index)
 	
 	# Need to remove all students (except the header) from the table
 	var table_rows = vbox_weekly_overview_table.get_children()
@@ -108,15 +101,18 @@ func remove_children_from_scene() -> void:
 	pass
 
 
-## Creates the checkboxes for all active students, 
-## and the table row for each student and any assigned subjects
+#region Table Schedule functions
+## Creates a row for each student in the database
+## Adds any corresponding, active subjects for the student
 func create_schedule_overview_table() -> void:
 	# Add the "Filter by student" and student rows to the weekly overview
 	var student_list = CMDatabaseUtilities.get_student_list()
 	var assignment_list = CMDatabaseUtilities.get_subject_list()
 		
 	for student in student_list:
-		create_student_checkbox(student.name)
+		var index = item_list_students.add_item(student.name)
+		item_list_students.set_item_metadata(index, student)
+		
 		create_student_weekly_overview_row(student)
 		
 		var assignments = get_all_student_assignments(student, assignment_list)
@@ -124,17 +120,61 @@ func create_schedule_overview_table() -> void:
 	pass
 
 
+## Creates a row for each student in the weekly overview table
+func create_student_weekly_overview_row(p_student : Student) -> void:
+	var hbox : HBoxContainer = HBoxContainer.new()
+	hbox.name = p_student.name
+	hbox.set_meta("student_id", p_student.resource_path)
+	
+	# Create column 1 with the student label
+	var panel : PanelContainer = create_panel_container()
+	var margin : MarginContainer = MarginContainer.new()
+	var label1 : RichTextLabel = RichTextLabel.new()
+	label1.text = p_student.name
+	label1.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	label1.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	label1.fit_content = true
+	label1.mouse_filter = Control.MOUSE_FILTER_PASS
+	
+	margin.add_child(label1)
+	panel.add_child(margin)
+	hbox.add_child(panel)
+	
+	for column in 7:
+		var column_container : PanelContainer = create_panel_container()
+		var column_margin : MarginContainer = MarginContainer.new()
+		var column_vbox : VBoxContainer = VBoxContainer.new()
+		column_margin.add_child(column_vbox)
+		column_container.add_child(column_margin)
+		hbox.add_child(column_container)
+	
+	vbox_weekly_overview_table.add_child(hbox)
+	pass
+
+
+## Creates the panel container for the table cell
+func create_panel_container() -> PanelContainer:
+	var container : PanelContainer = PanelContainer.new()
+	container.add_theme_stylebox_override("panel", preload("uid://ckpswvy11b8mw"))
+	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	container.custom_minimum_size = Vector2(0, 100)
+	container.mouse_filter = Control.MOUSE_FILTER_PASS
+	return container
+#endregion
+
+
+#region Subject Overview Functions
 ## Creates the subject assignment overview
-func create_subject_overview() -> void:
+func create_subject_assignment_overview() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
 	var subject_list = ResourceData.Subjects
 	
 	if student_subject_list.is_empty():
 		return
 	
-	for item in subject_list:
+	for title in subject_list:
 		var panel_scene = PANEL_SUBJECT.instantiate()
-		panel_scene.get_child(0).get_child(0).text = item
+		panel_scene.get_child(0).get_child(0).text = title
 		panel_scene.visible = false
 		vbox_subject_overview.add_child(panel_scene)
 	
@@ -157,7 +197,14 @@ func add_assignment_to_subject_overview(p_assignment : Subject) -> void:
 
 ## Creates the assignments for the specified subject for all students
 func create_subject_assignment(p_assignment : Subject, p_container : Node) -> void:
-	var student_lesson_info_scene = STUDENT_LESSON_INFO.instantiate()
+	var student_lesson_info_scene
+	
+	if CMDatabaseUtilities.get_is_mobile():
+		student_lesson_info_scene = STUDENT_LESSON_INFO_MOBILE.instantiate()
+	else:
+		student_lesson_info_scene = STUDENT_LESSON_INFO.instantiate()
+
+	
 	p_container.get_child(0).add_child(student_lesson_info_scene)
 	
 	# TODO Turn into a link to view the resource?
@@ -226,47 +273,6 @@ func get_all_student_assignments(p_student : Student, p_assignment_list : Array[
 	return assignments
 
 
-## Creates a row for each student in the weekly overview table
-func create_student_weekly_overview_row(p_student : Student) -> void:
-	var hbox : HBoxContainer = HBoxContainer.new()
-	hbox.name = p_student.name
-	hbox.set_meta("student_id", p_student.resource_path)
-	hbox.add_to_group(STUDENT_ROW_GROUP)
-	
-	# Create column 1 with the student label
-	var panel : PanelContainer = create_panel_container()
-	var margin : MarginContainer = MarginContainer.new()
-	var label1 : RichTextLabel = RichTextLabel.new()
-	label1.text = p_student.name
-	label1.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	label1.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	label1.fit_content = true
-	
-	margin.add_child(label1)
-	panel.add_child(margin)
-	hbox.add_child(panel)
-	
-	for column in 7:
-		var column_container : PanelContainer = create_panel_container()
-		var column_margin : MarginContainer = MarginContainer.new()
-		var column_vbox : VBoxContainer = VBoxContainer.new()
-		column_margin.add_child(column_vbox)
-		column_container.add_child(column_margin)
-		hbox.add_child(column_container)
-	
-	vbox_weekly_overview_table.add_child(hbox)
-	pass
-
-
-## Creates the panel container for a cell
-func create_panel_container() -> PanelContainer:
-	var container : PanelContainer = PanelContainer.new()
-	container.add_theme_stylebox_override("panel", preload("uid://ckpswvy11b8mw"))
-	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	container.custom_minimum_size = Vector2(0, 100)
-	return container
-
-
 ## Displays an overview of the weekly assignments for each student for the table view
 func create_weekly_assignment_overview(p_student : Student, p_assignment_list : Array[Subject]) -> void:
 	var student_rows = vbox_weekly_overview_table.get_children()
@@ -309,62 +315,32 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 func create_weekly_assignment_label(p_subject : ResourceData.Subjects, p_title : String) -> RichTextLabel:
 	var label : RichTextLabel = RichTextLabel.new()
 	label.text = ResourceData.Subjects.keys()[p_subject]
-	label.text += " - " + p_title if !is_mobile else ""
+	label.text += " - " + p_title if !CMDatabaseUtilities.get_is_mobile() else ""
 	label.fit_content = true
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_FILL
 	return label
-
-
-## Creates a checkbox for each student
-func create_student_checkbox(p_name) -> void:
-	var margin_container : MarginContainer = MarginContainer.new()
-	
-	var checkbox : CheckBox = CheckBox.new()
-	checkbox.text = p_name
-	checkbox.text_overrun_behavior = TextServer.OVERRUN_TRIM_WORD_ELLIPSIS
-	checkbox.custom_minimum_size = Vector2(100,10)
-	checkbox.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
-	checkbox.pressed.connect(_on_student_checkbox_pressed.bind())
-	checkbox.add_to_group(STUDENT_ROW_GROUP)
-	
-	var control_spacer : Control = Control.new()
-	control_spacer.custom_minimum_size = Vector2(100, 10)
-	
-	margin_container.add_child(checkbox)
-	h_box_students_checkbox.add_child(margin_container)
-	h_box_students_checkbox.add_child(control_spacer)
-	pass
-
-
-func _on_student_checkbox_pressed() -> void:
-	var checkboxes : Array[CheckBox] = []
-	var rows : Array[HBoxContainer] = []
-	var group = get_tree().get_nodes_in_group(STUDENT_ROW_GROUP)	
-	
-	# Separate the checkboxes from the rows
-	for row in group:
-		if row.is_class("CheckBox"):
-			checkboxes.append(row)
-		else:
-			rows.append(row)
-			pass
-	
-	# Show the selected students 
-	for check in checkboxes:
-		if check.button_pressed == true:
-			for row in rows:
-				if row.name.begins_with(check.text):
-					row.visible = true
-		else:
-			for row in rows:
-				if row.name.begins_with(check.text):
-					row.visible = false
-	pass
+#endregion
 
 
 ## Displays the schedule resource page
 func _on_btn_schedule_resource_pressed() -> void:
 	SignalBus.display_resource_schedule_page.emit()
+	pass 
+
+
+## Displays the table row associated with the selected student
+func _on_item_list_students_multi_selected(index: int, selected: bool) -> void:
+	var student_rows = vbox_weekly_overview_table.get_children()
+	print(item_list_students.get_item_count())
+	for i in range(item_list_students.get_item_count()):
+		if item_list_students.is_selected(i):
+			for row in student_rows:
+				if row.get_meta("student_id") == item_list_students.get_item_metadata(i).resource_path:
+					row.visible = true
+		else:
+			for row in student_rows:
+				if row.get_meta("student_id") == item_list_students.get_item_metadata(i).resource_path:
+					row.visible = false
 	pass 
 
 
