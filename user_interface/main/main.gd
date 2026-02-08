@@ -29,7 +29,10 @@ const SCHEDULE_SCENE_PATH : String = "res://user_interface/schedule/schedule.tsc
 func _ready() -> void:
 	# Set the screen scale factor 
 	if OS.has_feature("mobile"):
-		get_window().content_scale_factor = 4
+		#get_window().content_scale_factor = 4
+		get_window().content_scale_size = Vector2i(600,600)
+		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+		pass
 	
 	#region signals
 	# Displays a selected resources information 

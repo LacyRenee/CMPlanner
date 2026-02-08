@@ -95,7 +95,6 @@ fit_content = true
 [node name="VBoxWeeklyOverviewTable" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="HBoxWeeklyOverviewHeader" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable"]
 unique_name_in_owner = true
@@ -110,12 +109,14 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 layout_mode = 2
 
 [node name="LblHeader1" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader1/MarginContainerHeader1"]
+unique_name_in_owner = true
+clip_contents = false
 layout_mode = 2
-size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Student"
 fit_content = true
-autowrap_mode = 0
+autowrap_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -128,9 +129,11 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 layout_mode = 2
 
 [node name="LblHeader2" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader2/MarginContainerHeader2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Sunday"
 fit_content = true
 autowrap_mode = 0
@@ -146,9 +149,11 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 layout_mode = 2
 
 [node name="LblHeader3" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader3/MarginContainerHeader3"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Monday"
 fit_content = true
 autowrap_mode = 0
@@ -163,10 +168,12 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 [node name="MarginContainerColumn4" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader4"]
 layout_mode = 2
 
-[node name="LblColumn4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader4/MarginContainerColumn4"]
+[node name="LblHeader4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader4/MarginContainerColumn4"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Tuesday"
 fit_content = true
 autowrap_mode = 0
@@ -182,9 +189,11 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 layout_mode = 2
 
 [node name="LblHeader5" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader5/MarginContainerHeader5"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Wednesday"
 fit_content = true
 autowrap_mode = 0
@@ -200,9 +209,11 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 layout_mode = 2
 
 [node name="LblHeader6" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader6/MarginContainerHeader6"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Thursday"
 fit_content = true
 autowrap_mode = 0
@@ -218,9 +229,11 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 layout_mode = 2
 
 [node name="LblHeader7" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader7/MarginContainerHeader7"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Friday"
 fit_content = true
 autowrap_mode = 0
@@ -236,9 +249,11 @@ theme_override_styles/panel = ExtResource("2_frsvj")
 layout_mode = 2
 
 [node name="LblHeader8" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/VBoxWeeklyOverviewTable/HBoxWeeklyOverviewHeader/PanelContainerHeader8/MarginContainerHeader8"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabelLight"
+theme_override_font_sizes/normal_font_size = 16
 text = "Saturday"
 fit_content = true
 autowrap_mode = 0

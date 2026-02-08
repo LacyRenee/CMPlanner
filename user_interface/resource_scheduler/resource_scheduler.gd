@@ -1,5 +1,8 @@
 ################################################################################
 ### ResourceScheduler
+## Allows a ResourceItem to be scheduled for students
+## ResourceItems with a DivisionType that is not NONE will have assignments
+## automatically created for them
 ################################################################################
 extends Control
 ## Access to the Student container for error checking
@@ -284,8 +287,8 @@ func _on_btn_save_schedule_pressed() -> void:
 	pass 
 
 
-## Searches through the resource item lists, and selects the searched for
-## ResourceItem
+## Incrementally searches through the resource item lists, 
+## and selects the searched for ResourceItem
 func _on_le_search_resource_text_changed(new_text: String) -> void:
 	var search_value = new_text.to_lower()
 	item_list_resource.clear()

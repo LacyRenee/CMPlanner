@@ -25,9 +25,44 @@ const STUDENT_LESSON_INFO = preload("uid://chj1la6p3ou7h")
 ## Access to the vbox to display an overview of all the active subjects
 @onready var vbox_subject_overview : VBoxContainer = %VBoxSubjectView
 
+## Access to column1 header for the Schedule overview table
+@onready var lbl_header_1: RichTextLabel = %LblHeader1
 
+## Access to column2 header for the Schedule overview table
+@onready var lbl_header_2: RichTextLabel = %LblHeader2
+
+## Access to column3 header for the Schedule overview table
+@onready var lbl_header_3: RichTextLabel = %LblHeader3
+
+## Access to column4 header for the Schedule overview table
+@onready var lbl_header_4: RichTextLabel = %LblHeader4
+
+## Access to column5 header for the Schedule overview table
+@onready var lbl_header_5: RichTextLabel = %LblHeader5
+
+## Access to column6 header for the Schedule overview table
+@onready var lbl_header_6: RichTextLabel = %LblHeader6
+
+## Access to column7 header for the Schedule overview table
+@onready var lbl_header_7: RichTextLabel = %LblHeader7
+
+## Access to column8 header for the Schedule overview table
+@onready var lbl_header_8: RichTextLabel = %LblHeader8
+
+## Used to alternate view changes if the application is running on mobile
+var is_mobile : bool = false
+
+#TODO create mobile functions
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
+	# If the application is running on mobile, shorthand the table header
+	if OS.has_feature("mobile"):
+		is_mobile = true
+		mobile_shorthand_table_header()
+		
+	
+	
 	# Create a row for each student and add all active, associated subjects
 	create_schedule_overview_table()
 	
@@ -273,7 +308,8 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 ## Creates the assignment label to be displayed under the day
 func create_weekly_assignment_label(p_subject : ResourceData.Subjects, p_title : String) -> RichTextLabel:
 	var label : RichTextLabel = RichTextLabel.new()
-	label.text = ResourceData.Subjects.keys()[p_subject] + " - " + p_title
+	label.text = ResourceData.Subjects.keys()[p_subject]
+	label.text += " - " + p_title if !is_mobile else ""
 	label.fit_content = true
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_FILL
 	return label
@@ -285,6 +321,7 @@ func create_student_checkbox(p_name) -> void:
 	
 	var checkbox : CheckBox = CheckBox.new()
 	checkbox.text = p_name
+	checkbox.text_overrun_behavior = TextServer.OVERRUN_TRIM_WORD_ELLIPSIS
 	checkbox.custom_minimum_size = Vector2(100,10)
 	checkbox.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
 	checkbox.pressed.connect(_on_student_checkbox_pressed.bind())
@@ -329,3 +366,19 @@ func _on_student_checkbox_pressed() -> void:
 func _on_btn_schedule_resource_pressed() -> void:
 	SignalBus.display_resource_schedule_page.emit()
 	pass 
+
+
+#region Mobile Functions
+## Changes the table overview header to the shorthand day
+func mobile_shorthand_table_header():
+	lbl_header_1.text = ""
+	lbl_header_2.text = "Sun"
+	lbl_header_3.text = "Mon"
+	lbl_header_4.text = "Tue"
+	lbl_header_5.text = "Wed"
+	lbl_header_6.text = "Thu"
+	lbl_header_7.text = "Fri"
+	lbl_header_8.text = "Sat"
+	pass
+
+#endregion

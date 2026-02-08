@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=12 format=3 uid="uid://y251c6k3e2gq"]
+[gd_resource type="Theme" load_steps=14 format=3 uid="uid://y251c6k3e2gq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65s4e"]
 bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
@@ -6,11 +6,17 @@ bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7bkw8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7bkw8"]
+content_margin_left = 10.0
+content_margin_right = 10.0
 bg_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5oghf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_arqld"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tj68n"]
 bg_color = Color(0.87058824, 0.87058824, 0.87058824, 1)
@@ -66,6 +72,8 @@ CheckBox/colors/font_focus_color = Color(0.039215688, 0.039215688, 0.23529412, 1
 CheckBox/colors/font_hover_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 CheckBox/colors/font_hover_pressed_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 CheckBox/colors/font_pressed_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_5oghf")
+CheckBox/styles/hover = SubResource("StyleBoxEmpty_arqld")
 CheckBox/styles/normal = SubResource("StyleBoxFlat_tj68n")
 FoldableContainer/font_sizes/font_size = 18
 FoldableContainer/styles/panel = SubResource("StyleBoxFlat_v2xin")
