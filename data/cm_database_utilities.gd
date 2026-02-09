@@ -75,6 +75,12 @@ static func parse_json_data() -> void:
 	if json_library != null:
 		var resource_item_count : int = 0
 		for item in json_library:
+			# Check to see if the title already exists in the database
+			if does_resource_item_exist(item.TITLE):
+				print(item.TITLE + " already exists")
+				continue
+			
+			
 			var resource : ResourceItem = ResourceItem.new()
 			resource.title = item.TITLE
 			resource.isbn = item.ISBN if item.ISBN != "NA" else ""
@@ -215,6 +221,20 @@ static func remove_resource_item(p_resource : ResourceItem) -> void:
 	db.resource_list.remove_at(index)
 	overwrite_database(db)
 	pass
+
+
+## Returns true if the ResourceItem exists else false
+static func does_resource_item_exist(p_title : String) -> bool:
+	var is_exist : bool = false
+	
+	var resource_list = get_all_resources()
+	
+	for item in resource_list:
+		if item.title.to_lower() == p_title.to_lower():
+			is_exist = true
+			return is_exist
+	
+	return is_exist
 #endregion
 
 
