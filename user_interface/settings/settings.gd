@@ -56,3 +56,8 @@ func _on_popup_btn_save_pressed() -> void:
 	
 	SignalBus.refresh_student_table.emit()
 	pass
+
+## Calls the function to load JSON objects in as ResourceItems
+func _on_button_pressed() -> void:
+	CMDatabaseUtilities.parse_json_data()
+	pass 

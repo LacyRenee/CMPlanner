@@ -24,6 +24,8 @@ enum GRADES {
 	Twelfth_Grade
 }
 
+const USER_LIBRARY_PATH = "res://data/library.json"
+
 ## File path for the user settings 
 const DATABASE_PATH = "/cm_database.tres"
 
@@ -46,8 +48,86 @@ func _ready() -> void:
 		family_student.is_active = true
 		
 		db.student_list.append(family_student)
-		
+
 		ResourceSaver.save(db, get_database_filepath())
+	
+	pass
+	
+
+## Parses through JSON objects of ResourceItems and adds them to the database file
+static func parse_json_data() -> void:
+	var file_string = FileAccess.get_file_as_string(USER_LIBRARY_PATH)
+	
+	# Verify the contents
+	if file_string.is_empty():
+		print(FileAccess.get_open_error())
+		return
+	
+	var json_data = JSON.parse_string(file_string)
+	
+	if json_data == null:
+		print("Json data is null - aborting import")
+		return 
+		
+	var json_library = json_data.Library
+	var json_divisions = json_data.Divisions
+		
+	if json_library != null:
+		var resource_item_count : int = 0
+		for item in json_library:
+			var resource : ResourceItem = ResourceItem.new()
+			resource.title = item.TITLE
+			resource.isbn = item.ISBN if item.ISBN != "NA" else ""
+			resource.contributor_name = item.CONTRIBUTOR_NAME if item.CONTRIBUTOR_NAME != "NA" else ""
+			resource.web_url = item.WEB_URL if item.WEB_URL != "NA" else ""
+			resource.publisher = item.PUBLISHER if item.PUBLISHER != "NA" else ""
+			resource.copyright_date = str(item.COPYRIGHT_DATE) if str(item.COPYRIGHT_DATE) != "NA" else null
+			resource.year_written = str(item.YEAR_WRITTEN) if str(item.YEAR_WRITTEN) != "NA" else ""
+			resource.number_of_pages = item.NUMBER_OF_PAGES if str(item.NUMBER_OF_PAGES) != "NA" else ""
+			resource.edition = item.EDITION if item.EDITION != "NA" else ""
+			resource.description = item.DESCRIPTION if item.DESCRIPTION != "NA" else ""
+			
+			if item.RESOURCE_TYPE != "NA":
+				for r in ResourceData.ResourceType:
+					if r == item.RESOURCE_TYPE:
+						resource.resource_type = r
+					
+			if item.CONTRIBUTOR != "NA":
+				for c in ResourceData.Contributors:
+					if c == item.CONTRIBUTOR:
+						resource.contributor = c
+					pass
+			
+			if item.SUBJECT != "NA":
+				for s in ResourceData.Subjects:
+					if s == item.SUBJECT:
+						resource.subject = s
+					pass
+			
+			match item.DIVISION_TYPE:
+				"None":
+					resource.division_type = ResourceData.DivisionType
+				"Assignment":
+					resource.division_type = ResourceData.DivisionType.Assignment
+				"Chapter":
+					resource.division_type = ResourceData.DivisionType.Chapter
+				"Lesson":
+					resource.division_type = ResourceData.DivisionType.Lesson
+				"Poem":
+					resource.division_type = ResourceData.DivisionType.Poem
+				_:
+					resource.division_type = ResourceData.DivisionType.None
+				
+			if resource.division_type != ResourceData.DivisionType.None:
+				for division in json_divisions:
+					if division.TITLE == resource.title:
+						var count : int = 0 
+						for i in division.keys():
+							if count > 1:
+								resource.division_list.append(division[i])
+							
+							count += 1
+				CMDatabaseUtilities.save_resource_item(resource)
 	pass
 
 
