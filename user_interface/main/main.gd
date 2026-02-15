@@ -24,6 +24,8 @@ const SETTINGS_SCENE_PATH : String = "res://user_interface/settings/settings.tsc
 ## Scene path for the schedule page
 const SCHEDULE_SCENE_PATH : String = "res://user_interface/schedule/schedule.tscn"
 
+const DAILY_PLAN_SCENE_PATH : String = "res://user_interface/daily_plan/daily_plan.tscn"
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -35,6 +37,8 @@ func _ready() -> void:
 		get_window().content_scale_size = Vector2i(600,600)
 		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 		pass
+	
+	display_daily_plan_page()
 	
 	#region signals
 	# Displays a selected resources information 
@@ -60,6 +64,15 @@ func _ready() -> void:
 	#endregion
 	pass
 
+
+## Displays the daily plan page
+func display_daily_plan_page() -> void:
+	remove_scene_from_attacher()
+	
+	var daily_plan_page = load(DAILY_PLAN_SCENE_PATH)
+	var instance = daily_plan_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	pass
 
 ## Displays the generic resource scheduler page
 func display_resource_schedule_page() -> void:
@@ -176,6 +189,8 @@ func _on_btn_resources_pressed() -> void:
 ## Displays the home page
 func _on_btn_home_pressed() -> void:
 	remove_scene_from_attacher()
+	
+	display_daily_plan_page()
 	pass
 
 

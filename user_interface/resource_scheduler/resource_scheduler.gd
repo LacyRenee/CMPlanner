@@ -349,31 +349,25 @@ func _on_btn_update_schedule_pressed() -> void:
 	# to see if an assignment is already created for the selected student AND 
 	# resource. If there is no assignment created for the student, a new 
 	# assignment will be created
-	var student_list = get_tree().get_nodes_in_group("student_selected")
-	var student_count : int = 0
-	var selected_students : Array[Student] = []
-	for student in student_list:
-		if student.is_pressed():
-			student_count += 1
-			selected_students.append(student.get_meta("student_id"))
+	var selected_student_list = item_list_students.get_selected_items()
 	
-	if student_count > 1:
-		for student in selected_students:
+	if selected_student_list.size() > 1:
+		for index in selected_student_list:
 			var assignment_list = CMDatabaseUtilities.get_subject_list()
 			for assignment in assignment_list:
 				var new_subject : Subject = save_data()
-				new_subject.student = student
+				new_subject.student = item_list_students.get_item_metadata(index)
 				
 				# Student assignment found! Update it
-				if assignment.student == student:
-					CMDatabaseUtilities.update_assignment(new_subject)
+				if assignment.student == item_list_students.get_item_metadata(index):
+					CMDatabaseUtilities.update_subject(new_subject)
 				else:
 					CMDatabaseUtilities.add_subject(new_subject)
 			pass
 	else:
 		var new_subject : Subject = save_data()
-		new_subject.student = selected_students[0]
-		CMDatabaseUtilities.update_assignment(new_subject)
+		new_subject.student = item_list_students.get_item_metadata(0)
+		CMDatabaseUtilities.update_subject(new_subject)
 		
 		SignalBus.display_schedule_page.emit()
 	pass

@@ -88,7 +88,7 @@ layout_mode = 2
 
 [node name="LblColumn1" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn1/MarginContainerColumn1"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderSmallLabelLight"
 text = "Sunday"
 fit_content = true
 horizontal_alignment = 1
@@ -103,7 +103,7 @@ layout_mode = 2
 
 [node name="LblColumn2" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn2/MarginContainerColumn2"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderSmallLabelLight"
 text = "Monday"
 fit_content = true
 horizontal_alignment = 1
@@ -118,7 +118,7 @@ layout_mode = 2
 
 [node name="LblColumn3" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn3/MarginContainerColumn3"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderSmallLabelLight"
 text = "Tuesday"
 fit_content = true
 horizontal_alignment = 1
@@ -133,7 +133,7 @@ layout_mode = 2
 
 [node name="LblColumn4" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn4/MarginContainerColumn4"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderSmallLabelLight"
 text = "Wednesday"
 fit_content = true
 horizontal_alignment = 1
@@ -148,7 +148,7 @@ layout_mode = 2
 
 [node name="LblColumn5" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn5/MarginContainerColumn5"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderSmallLabelLight"
 text = "Thursday"
 fit_content = true
 horizontal_alignment = 1
@@ -163,7 +163,7 @@ layout_mode = 2
 
 [node name="LblColumn6" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn6/MarginContainerColumn6"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderSmallLabelLight"
 text = "Friday"
 fit_content = true
 horizontal_alignment = 1
@@ -178,7 +178,7 @@ layout_mode = 2
 
 [node name="LblColumn7" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/GridCalendarWeekHeader/PanelContainerColumn7/MarginContainerColumn7"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
+theme_type_variation = &"HeaderSmallLabelLight"
 text = "Saturday"
 fit_content = true
 horizontal_alignment = 1

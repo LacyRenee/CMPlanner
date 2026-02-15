@@ -237,25 +237,25 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 		background_color.bg_color = Color.CADET_BLUE
 		
 		match day:
-			0:
+			ResourceData.week_day.Sunday:
 				student_lesson_info_scene.lbl_day_1.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_1.add_theme_stylebox_override("normal", background_color)
-			1:
+			ResourceData.week_day.Monday:
 				student_lesson_info_scene.lbl_day_2.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_2.add_theme_stylebox_override("normal", background_color)
-			2: 
+			ResourceData.week_day.Tuesday: 
 				student_lesson_info_scene.lbl_day_3.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_3.add_theme_stylebox_override("normal", background_color)
-			3:
+			ResourceData.week_day.Wednesday:
 				student_lesson_info_scene.lbl_day_4.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_4.add_theme_stylebox_override("normal", background_color)
-			4:
+			ResourceData.week_day.Thursday:
 				student_lesson_info_scene.lbl_day_5.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_5.add_theme_stylebox_override("normal", background_color)
-			5:
+			ResourceData.week_day.Friday:
 				student_lesson_info_scene.lbl_day_6.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_6.add_theme_stylebox_override("normal", background_color)
-			6:
+			ResourceData.week_day.Saturday:
 				student_lesson_info_scene.lbl_day_7.add_theme_color_override("default_color", Color.WHITE)
 				student_lesson_info_scene.lbl_day_7.add_theme_stylebox_override("normal", background_color)
 	p_container.visible = true
@@ -315,7 +315,7 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 func create_weekly_assignment_label(p_subject : ResourceData.Subjects, p_title : String) -> RichTextLabel:
 	var label : RichTextLabel = RichTextLabel.new()
 	label.text = ResourceData.Subjects.keys()[p_subject]
-	label.text += " - " + p_title if !CMDatabaseUtilities.get_is_mobile() else ""
+	#label.text += " - " + p_title if !CMDatabaseUtilities.get_is_mobile() else ""
 	label.fit_content = true
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_FILL
 	return label

@@ -451,7 +451,7 @@ func confirm_delete_dialog_canceled() -> void:
 ## Deletes all assignments associated with the resource and the 
 ## selected ResourceItem
 func confirm_delete_dialog_ok()-> void:
-	CMDatabaseUtilities.remove_selected_resource_assignments(resource_item)
+	CMDatabaseUtilities.remove_selected_resource_subjects(resource_item)
 	CMDatabaseUtilities.remove_resource_item(resource_item)
 	SignalBus.display_all_resource_page.emit()
 

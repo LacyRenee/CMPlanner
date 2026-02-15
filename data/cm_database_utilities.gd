@@ -7,6 +7,7 @@
 class_name CMDatabaseUtilities
 extends Node
 
+## List of all grades
 enum GRADES {
 	Preschool,
 	Kindergarten,
@@ -24,6 +25,7 @@ enum GRADES {
 	Twelfth_Grade
 }
 
+## Path to the custom user data to be imported
 const USER_LIBRARY_PATH = "res://data/library.json"
 
 ## File path for the user settings 
@@ -32,7 +34,11 @@ const DATABASE_PATH = "/cm_database.tres"
 ## Base path for the user's folder
 static var cm_database_path : String =  OS.get_user_data_dir()
 
+## Toggles mobile settings
 static var is_mobile : bool = false
+
+## Active subjects
+static var active_subjects : Array[ResourceData.Subjects] = []
 
 
 ## Called when the node enters the scene tree for the first time
@@ -50,6 +56,8 @@ func _ready() -> void:
 		db.student_list.append(family_student)
 
 		ResourceSaver.save(db, get_database_filepath())
+		
+	update_active_subjects()
 	
 	pass
 	
@@ -137,6 +145,9 @@ static func parse_json_data() -> void:
 	pass
 
 
+
+
+#region Mobile functions
 ## Returns the value for is_mobile
 static func get_is_mobile() -> bool:
 	return is_mobile
@@ -146,6 +157,7 @@ static func get_is_mobile() -> bool:
 static func set_is_mobile(value : bool) -> void:
 	is_mobile = value
 	pass
+#endregion
 
 
 #region Student functions
@@ -238,12 +250,22 @@ static func does_resource_item_exist(p_title : String) -> bool:
 #endregion
 
 
-#region Subject and Assignment Functions
+#region Subject Functions
+static func update_active_subjects() -> void:
+	var subject_list : Array[Subject] = get_subject_list()
+	
+	for subject in subject_list:
+		if not active_subjects.has(subject.subject):
+			active_subjects.append(subject.subject)
+	
+	pass
+
 ## Saves the subject to the database
 static func add_subject(p_subject : Subject) -> void:
 	var db = get_database()
 	db.subject_list.append(p_subject)
 	overwrite_database(db)
+	update_active_subjects()
 	pass
 
 
@@ -259,25 +281,30 @@ static func remove_subject_from_schedule(p_subject : Subject) -> void:
 	var index = db.subject_list.find(p_subject)
 	db.subject_list.remove_at(index)
 	overwrite_database(db)
+	update_active_subjects()
 	pass
 
 
-## Updates the selected assignment
-static func update_assignment(p_assignment : Subject) -> void:
+## Updates the selected subject
+static func update_subject(p_subject : Subject) -> void:
 	var db = get_database()
-	var index = db.subject_list.find(p_assignment)
-	db.subject_list[index] = p_assignment
+	var index = db.subject_list.find(p_subject)
+	db.subject_list[index] = p_subject
 	overwrite_database(db)
+	update_active_subjects()
+
 	pass
 
 
-## Removes all assignments associated with the selected ResourceItem
-static func remove_selected_resource_assignments(p_resource : ResourceItem) -> void:
-	var assignment_list : Array[Subject] = get_subject_list()
+## Removes all subjects associated with the selected ResourceItem
+static func remove_selected_resource_subjects(p_resource : ResourceItem) -> void:
+	var subject_list : Array[Subject] = get_subject_list()
 	
-	for assignment in assignment_list:
-		if assignment.resource == p_resource:
-			remove_subject_from_schedule(assignment)
+	for subject in subject_list:
+		if subject.resource == p_resource:
+			remove_subject_from_schedule(subject)
+	
+	update_active_subjects()
 	pass
 
 
@@ -298,8 +325,59 @@ static func update_selected_resource_assignments(p_resource : ResourceItem) -> A
 				assignment.assignments = new_assignment_list
 		else:
 			assignment_list.append(assignment)
-			
+	
+	update_active_subjects()
+
 	return assignment_list
+#endregion
+
+
+#region Assignment Functions
+## Save the note for the selected assignment
+static func save_assignment_note(p_subject : Subject, p_assignment : Assignment, p_note : String) -> void:
+	var db = get_database()
+	
+	var assignment_index = p_subject.assignments.find(p_assignment)
+	p_subject.assignments[assignment_index].notes = p_note
+	
+	var subject_index = db.subject_list.find(p_subject)
+	db.subject_list[subject_index] = p_subject
+	
+	overwrite_database(db)
+	pass 
+
+
+## Save the start date for the selected assignment
+static func save_assignment_start_date(p_subject : Subject, p_assignment : Assignment, p_start_date : String) -> void:
+	var db = get_database()
+	
+	var assignment_index = p_subject.assignments.find(p_assignment)
+	p_subject.assignments[assignment_index].start_date = p_start_date
+	
+	var subject_index = db.subject_list.find(p_subject)
+	db.subject_list[subject_index] = p_subject
+	
+	overwrite_database(db)
+	pass
+
+
+## Save the assignment progress
+static func save_assignment_progress(p_subject : Subject, p_assignment : Assignment, p_index : int) -> void:
+	var db = get_database()
+	
+	var assignment_index = p_subject.assignments.find(p_assignment)
+	p_subject.assignments[assignment_index].progress = p_index
+	
+	# Save end date progress complete or omit
+	if p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
+		p_subject.assignments[assignment_index].end_date = Calendar.Date.today().to_string()
+	
+	var subject_index = db.subject_list.find(p_subject)
+	db.subject_list[subject_index] = p_subject
+	
+	overwrite_database(db)
+
+	pass
 #endregion
 
 
