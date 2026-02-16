@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://buta3ts5akipn"]
+
+[ext_resource type="Script" uid="uid://dk2xwd5qgjk2a" path="res://user_interface/schedule/panel_student.gd" id="1_rmuvy"]
+
+[node name="PanelStudent" type="PanelContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 312.0
+grow_horizontal = 2
+theme_type_variation = &"BackgroundPanel"
+script = ExtResource("1_rmuvy")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="VBoxStudent" type="VBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LblStudent" type="RichTextLabel" parent="MarginContainer/VBoxStudent"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Student Name"
+fit_content = true

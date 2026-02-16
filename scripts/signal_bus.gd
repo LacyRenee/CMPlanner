@@ -59,3 +59,7 @@ signal display_edited_resource_schedule_page(assignment)
 ## Emitted to display the selected assignment to be edited
 @warning_ignore("unused_signal")
 signal edit_selected_assignment(assignment)
+
+## Emitted when an assignment is completed or omitted to show the next assignment
+@warning_ignore("unused_signal")
+signal display_next_assignment

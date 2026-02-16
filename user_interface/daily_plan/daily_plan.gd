@@ -18,14 +18,18 @@ const DAILY_ASSIGNMENT = preload("uid://bdbbx365itqk1")
 ## Access to the list of subjects
 @onready var vbox_subject_panels: VBoxContainer = %VBoxSubjectPanels
 
-
+## Today's date
 var today : Calendar.Date = Calendar.Date.today()
+
+## Holds the day for the current date
 var day_of_week : Time.Weekday = today.get_weekday()
+
+## Holds the subjects to be displayed for today
+var todays_subjects : Array[ResourceData.Subjects] = []
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
-	
 	# Add the student filter to the view
 	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
 	for student in student_list:
@@ -33,13 +37,15 @@ func _ready() -> void:
 			var index = item_list_student_filter.add_item(student.name)
 			item_list_student_filter.set_item_metadata(index, student)
 	
-	# Add the list of active subjects
-	for subject in CMDatabaseUtilities.active_subjects:
-		item_list_subject_filter.add_item(ResourceData.Subjects.keys()[subject])
-	
 	# Add the subject and assignments
 	create_subject_panels()
 	
+	# Add the list of active subjects to the subject filter
+	for subject in todays_subjects:
+		item_list_subject_filter.add_item(ResourceData.Subjects.keys()[subject])
+	
+	# Signal Functions
+	SignalBus.connect("display_next_assignment", display_next_assignment, 0)
 	pass
 
 
@@ -73,6 +79,7 @@ func add_assignment_to_subject_overview(p_subject : Subject) -> void:
 		if n.get_child(0).get_child(0).text == subject:
 			create_assignment_view(p_subject, n)
 			n.visible = true
+			todays_subjects.append(p_subject.subject)
 	pass
 
 
@@ -101,7 +108,20 @@ func create_assignment(p_subject : Subject, p_assignment : Assignment, p_contain
 
 	assignment_scene.set_meta("subject", p_subject)
 	assignment_scene.set_meta("assignment", p_assignment)
-	assignment_scene.title = p_subject.resource.title
+	
+	# Specify title and collapisble based on progress state
+	if p_assignment.progress == ResourceData.progress.Completed:
+		assignment_scene.title = p_subject.resource.title +\
+		" - " + str(ResourceData.progress.keys()[p_assignment.progress]) +\
+		" on " + p_assignment.end_date
+		
+		assignment_scene.fold()
+	elif p_assignment.progress == ResourceData.progress.Omit_assignment:
+			assignment_scene.title = p_subject.resource.title +\
+			 " - Assignment Omitted on " + p_assignment.end_date 
+			assignment_scene.fold()
+	else:
+		assignment_scene.title = p_subject.resource.title
 	
 	# Format the assignment label based on the number of divisions there are
 	if p_subject.division_type != ResourceData.DivisionType.None:
@@ -117,4 +137,22 @@ func create_assignment(p_subject : Subject, p_assignment : Assignment, p_contain
 	
 	if p_assignment.progress == ResourceData.progress.Incomplete:
 		CMDatabaseUtilities.save_assignment_start_date(p_subject, p_assignment, today.to_string())
+	pass
+
+
+## Remove the assignment view
+func refresh_page() -> void:
+	var nodes = vbox_subject_panels.get_children()
+	
+	for n in nodes:
+		n.call_deferred("queue_free")
+	pass
+
+
+## Display a new assignment when the previous assignment is either 
+## completed or omitted 
+func display_next_assignment() -> void:
+	refresh_page()
+	
+	create_subject_panels()
 	pass

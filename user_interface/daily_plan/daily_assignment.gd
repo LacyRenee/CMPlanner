@@ -34,10 +34,16 @@ func _ready() -> void:
 
 ## Save the progress state
 func _on_option_button_progress_item_selected(index: int) -> void:
+	# Save progress state
 	CmDatabaseUtilities.save_assignment_progress(self.get_meta("subject"), self.get_meta("assignment"), index)
+	
+	# Display completion status in the title of the assignment
 	if index == ResourceData.progress.Completed or index == ResourceData.progress.Omit_assignment:
 		self.title += " - " + ResourceData.progress.keys()[index] + " on " + Calendar.Date.today().to_string()
 		self.fold()
+
+		# Display the next assignment 
+		SignalBus.display_next_assignment.emit() 
 	pass
 
 

@@ -244,7 +244,7 @@ func save_data() -> Subject:
 	var new_subject : Subject = Subject.new()
 	
 	# Add the selected resource
-	new_subject.resource = item_list_resource.get_item_metadata(0)
+	new_subject.resource = item_list_resource.get_item_metadata(item_list_resource.get_selected_items()[0])
 	
 	## Create the assignments if the ResourceItem has a division type
 	if new_subject.resource.division_type != ResourceData.DivisionType.None:

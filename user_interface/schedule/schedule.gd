@@ -9,10 +9,20 @@ extends Control
 ## Path to the Panel subject scene
 const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
 
-## Path to the sutdent lesson info scene
+## Path to the Panel student scene
+const PANEL_STUDENT = preload("uid://buta3ts5akipn")
+
+## Path to the student lesson info scene
 const STUDENT_LESSON_INFO = preload("uid://chj1la6p3ou7h")
 
+## Path to the mobile student lesson info mobile scene
 const STUDENT_LESSON_INFO_MOBILE = preload("uid://dji3o6xmi2iym")
+
+## Group name for the student overview panel
+const STUDENT_PANEL_GROUP = "student_panel"
+
+# Student ID Meta data
+const STUDENT_ID = "student_id"
 
 
 ## Access to the item list of students
@@ -124,7 +134,7 @@ func create_schedule_overview_table() -> void:
 func create_student_weekly_overview_row(p_student : Student) -> void:
 	var hbox : HBoxContainer = HBoxContainer.new()
 	hbox.name = p_student.name
-	hbox.set_meta("student_id", p_student.resource_path)
+	hbox.set_meta(STUDENT_ID, p_student.resource_path)
 	
 	# Create column 1 with the student label
 	var panel : PanelContainer = create_panel_container()
@@ -167,31 +177,32 @@ func create_panel_container() -> PanelContainer:
 ## Creates the subject assignment overview
 func create_subject_assignment_overview() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
-	var subject_list = ResourceData.Subjects
+	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
 	
 	if student_subject_list.is_empty():
 		return
 	
-	for title in subject_list:
-		var panel_scene = PANEL_SUBJECT.instantiate()
-		panel_scene.get_child(0).get_child(0).text = title
-		panel_scene.visible = false
-		vbox_subject_overview.add_child(panel_scene)
-	
-	# Add the student subject assignments to the subject view
-	for subject_assignment in student_subject_list:
-		add_assignment_to_subject_overview(subject_assignment)
-	pass
-
-
-## For each students, the assignment is added to the correct subject overview
-func add_assignment_to_subject_overview(p_assignment : Subject) -> void:
-	var subject = ResourceData.Subjects.keys()[p_assignment.subject]
-	var nodes = vbox_subject_overview.get_children()
-	
-	for n in nodes:
-		if n.get_child(0).get_child(0).text == subject:
-			create_subject_assignment(p_assignment, n)
+	# Add the subject panel
+	for index in CmDatabaseUtilities.active_subjects:
+		var panel_subject_scene = PANEL_SUBJECT.instantiate()
+		vbox_subject_overview.add_child(panel_subject_scene)
+		panel_subject_scene.set_subject(ResourceData.Subjects.keys()[index])
+		
+		# Add each student to the subject
+		for student in student_list:
+			var panel_student_scene = PANEL_STUDENT.instantiate()
+			panel_subject_scene.v_box_subject.add_child(panel_student_scene)
+			panel_student_scene.set_student_name(student.name)
+			panel_student_scene.set_meta(STUDENT_ID, student.resource_path)
+			panel_student_scene.add_to_group(STUDENT_PANEL_GROUP)
+			panel_student_scene.visible = false
+		
+			# Add the student subject assignments to the subject view
+			for subject_assignment in student_subject_list:
+				if subject_assignment.student == student and\
+				   str(ResourceData.Subjects.keys()[subject_assignment.subject]) == panel_subject_scene.get_subject():
+					panel_student_scene.visible = true
+					create_subject_assignment(subject_assignment, panel_student_scene)
 	pass
 
 
@@ -205,11 +216,9 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 		student_lesson_info_scene = STUDENT_LESSON_INFO.instantiate()
 
 	
-	p_container.get_child(0).add_child(student_lesson_info_scene)
+	p_container.vbox_student.add_child(student_lesson_info_scene)
 	
-	# TODO Turn into a link to view the resource?
-	student_lesson_info_scene.lbl_student_name.text = p_assignment.student.name
-	
+	# TODO Turn into a link to view the resource?	
 	student_lesson_info_scene.lbl_subject_title.text = p_assignment.resource.title
 	student_lesson_info_scene.lbl_lesson_method.text = \
 			ResourceData.study_method.keys()[p_assignment.study_method].replace("_", " ")
@@ -279,8 +288,8 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 	var student_row : HBoxContainer
 	
 	for row in student_rows:
-		if row.has_meta("student_id"):
-			if row.get_meta("student_id") == p_student.resource_path:
+		if row.has_meta(STUDENT_ID):
+			if row.get_meta(STUDENT_ID) == p_student.resource_path:
 				student_row = row
 	
 	for assignment in p_assignment_list:
@@ -322,26 +331,39 @@ func create_weekly_assignment_label(p_subject : ResourceData.Subjects, p_title :
 #endregion
 
 
+#region Signal functions
 ## Displays the schedule resource page
 func _on_btn_schedule_resource_pressed() -> void:
 	SignalBus.display_resource_schedule_page.emit()
 	pass 
 
 
-## Displays the table row associated with the selected student
+## Displays the table row and subject overview associated with the selected student
 func _on_item_list_students_multi_selected(index: int, selected: bool) -> void:
+	# Student table rows
 	var student_rows = vbox_weekly_overview_table.get_children()
-	print(item_list_students.get_item_count())
+	
+	# Student overview panels
+	var student_panels = get_tree().get_nodes_in_group(STUDENT_PANEL_GROUP)
+	
+	# Select student in table and subject overview
 	for i in range(item_list_students.get_item_count()):
 		if item_list_students.is_selected(i):
 			for row in student_rows:
-				if row.get_meta("student_id") == item_list_students.get_item_metadata(i).resource_path:
+				if row.get_meta(STUDENT_ID) == item_list_students.get_item_metadata(i).resource_path:
 					row.visible = true
+			for panel in student_panels:
+				if panel.get_meta(STUDENT_ID) == item_list_students.get_item_metadata(i).resource_path:
+					panel.visible = true
 		else:
 			for row in student_rows:
-				if row.get_meta("student_id") == item_list_students.get_item_metadata(i).resource_path:
+				if row.get_meta(STUDENT_ID) == item_list_students.get_item_metadata(i).resource_path:
 					row.visible = false
+			for panel in student_panels:
+				if panel.get_meta(STUDENT_ID) == item_list_students.get_item_metadata(i).resource_path:
+					panel.visible = false
 	pass 
+#endregion
 
 
 #region Mobile Functions
