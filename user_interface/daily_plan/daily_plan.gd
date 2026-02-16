@@ -6,8 +6,18 @@ extends Control
 ## Path to the Panel subject scene
 const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
 
+## Path to the Panel Student scene
+const PANEL_STUDENT = preload("uid://buta3ts5akipn")
+
 ## Path to the Daily Assignment scene
 const DAILY_ASSIGNMENT = preload("uid://bdbbx365itqk1")
+
+## Student ID Meta data
+const STUDENT_ID = "student_id"
+
+## Group name for the student overview panel
+const STUDENT_PANEL_GROUP = "student_panel"
+
 
 ## Access to the item list of students
 @onready var item_list_student_filter: ItemList = %ItemListStudentFilter
@@ -36,9 +46,9 @@ func _ready() -> void:
 		if student.is_active:
 			var index = item_list_student_filter.add_item(student.name)
 			item_list_student_filter.set_item_metadata(index, student)
-	
+		
 	# Add the subject and assignments
-	create_subject_panels()
+	create_daily_plan_assignments()
 	
 	# Add the list of active subjects to the subject filter
 	for subject in todays_subjects:
@@ -49,24 +59,36 @@ func _ready() -> void:
 	pass
 
 
-## Creates the panel header for each subject 
-func create_subject_panels() -> void:
+## Creates the panel header for each subject
+func create_daily_plan_assignments() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
 	var subject_list = ResourceData.Subjects
+	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
 	
 	if student_subject_list.is_empty():
 		return
 	
-	for title in subject_list:
-		var panel_scene = PANEL_SUBJECT.instantiate()
-		panel_scene.get_child(0).get_child(0).text = title
-		panel_scene.visible = false
-		vbox_subject_panels.add_child(panel_scene)
-	
-	# Add the student subject assignments for the day to the subject view
-	for subject_assignment in student_subject_list:
-		if subject_assignment.week_days.has(day_of_week):
-			add_assignment_to_subject_overview(subject_assignment)
+	for index in CmDatabaseUtilities.active_subjects:
+		var panel_subject_scene = PANEL_SUBJECT.instantiate()
+		vbox_subject_panels.add_child(panel_subject_scene)
+		panel_subject_scene.get_child(0).get_child(0).text = ResourceData.Subjects.keys()[index]
+		panel_subject_scene.visible = false
+		
+		for student in student_list:
+			var panel_student_scene = PANEL_STUDENT.instantiate()
+			panel_subject_scene.v_box_subject.add_child(panel_student_scene)
+			panel_student_scene.set_student_name(student.name)
+			panel_student_scene.set_meta(STUDENT_ID, student.resource_path)
+			panel_student_scene.add_to_group(STUDENT_PANEL_GROUP)
+			panel_student_scene.visible = false
+			
+			# Add the student subject assignments for the day to the subject view
+			for subject_assignment in student_subject_list:
+				if subject_assignment.week_days.has(day_of_week) and \
+				   student == subject_assignment.student and \
+					str(ResourceData.Subjects.keys()[subject_assignment.subject]) == panel_subject_scene.get_subject():
+					panel_student_scene.visible = true
+					add_assignment_to_subject_overview(subject_assignment)
 	pass
 
 
@@ -79,7 +101,9 @@ func add_assignment_to_subject_overview(p_subject : Subject) -> void:
 		if n.get_child(0).get_child(0).text == subject:
 			create_assignment_view(p_subject, n)
 			n.visible = true
-			todays_subjects.append(p_subject.subject)
+			
+			if !todays_subjects.has(p_subject.subject):
+				todays_subjects.append(p_subject.subject)
 	pass
 
 
@@ -97,8 +121,6 @@ func create_assignment_view(p_subject : Subject, p_container : Node) -> void:
 			
 		create_assignment(p_subject, first_incomplete, p_container)
 		return
-			
-		assignment_number += 1
 	pass
 
 
@@ -154,5 +176,5 @@ func refresh_page() -> void:
 func display_next_assignment() -> void:
 	refresh_page()
 	
-	create_subject_panels()
+	create_daily_plan_assignments()
 	pass

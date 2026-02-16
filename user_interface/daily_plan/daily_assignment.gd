@@ -41,6 +41,8 @@ func _on_option_button_progress_item_selected(index: int) -> void:
 	if index == ResourceData.progress.Completed or index == ResourceData.progress.Omit_assignment:
 		self.title += " - " + ResourceData.progress.keys()[index] + " on " + Calendar.Date.today().to_string()
 		self.fold()
+	else:
+		self.title = self.get_meta("subject").resource.title
 
 		# Display the next assignment 
 		SignalBus.display_next_assignment.emit() 
