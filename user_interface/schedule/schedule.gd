@@ -243,7 +243,7 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 	# Highlight the selected week days for the assignment 
 	for day in p_assignment.week_days:
 		var background_color : StyleBoxFlat = StyleBoxFlat.new()
-		background_color.bg_color = Color.CADET_BLUE
+		background_color.bg_color = Color("#08457e")
 		
 		match day:
 			ResourceData.week_day.Sunday:

@@ -70,7 +70,6 @@ size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_x06om")
 
 [node name="PanelContainerFooter" type="PanelContainer" parent="PanelContainerMain/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 8
 
@@ -88,14 +87,12 @@ size_flags_horizontal = 3
 
 [node name="VSeparator5" type="VSeparator" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 5
 
 [node name="PanelContainer2" type="PanelContainer" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnSchedule" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer2"]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Schedule"
@@ -109,7 +106,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnHome" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer3"]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Home"
@@ -123,7 +119,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnResources" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer4"]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Resources"
@@ -137,7 +132,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BtnSettings" type="Button" parent="PanelContainerMain/VBoxContainer/PanelContainerFooter/HBoxContainer/PanelContainer5"]
-custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Settings"

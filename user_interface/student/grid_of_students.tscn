@@ -42,8 +42,9 @@ fit_content = true
 autowrap_mode = 0
 
 [node name="LblActions" type="RichTextLabel" parent="VBoxContainer/TableHeader"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
 bbcode_enabled = true

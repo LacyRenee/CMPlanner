@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://bief8m6ssaabc" path="res://user_interface/student/student.gd" id="1_5tjls"]
 
 [node name="TableRow" type="HBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 34.0
+grow_horizontal = 2
+size_flags_horizontal = 3
 script = ExtResource("1_5tjls")
 
 [node name="LeName" type="LineEdit" parent="."]
@@ -21,24 +26,30 @@ editable = false
 
 [node name="HBoxButtonContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
 
 [node name="BtnSave" type="Button" parent="HBoxButtonContainer"]
 unique_name_in_owner = true
 visible = false
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
+theme_type_variation = &"AccentButton"
 text = "Save"
 
 [node name="BtnEdit" type="Button" parent="HBoxButtonContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
+theme_type_variation = &"AccentButton"
 text = "Edit"
 
 [node name="BtnDelete" type="Button" parent="HBoxButtonContainer"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
+theme_type_variation = &"DeleteButton"
 text = "Delete"
 
 [connection signal="pressed" from="HBoxButtonContainer/BtnSave" to="." method="_on_btn_save_pressed"]

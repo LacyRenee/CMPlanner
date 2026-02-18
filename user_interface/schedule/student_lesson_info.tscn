@@ -5,7 +5,10 @@
 [node name="VBoxStudentLessonInfo" type="VBoxContainer"]
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 353.0
+offset_left = 710.0
+offset_top = 28.0
+offset_right = 710.0
+offset_bottom = 381.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 script = ExtResource("1_h7fwo")
@@ -116,21 +119,24 @@ size_flags_horizontal = 3
 text = "Study Method"
 fit_content = true
 
-[node name="BtnRemoveFromSchedule" type="Button" parent="HBoxLesson"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_vertical = 4
-text = "Remove From Schedule"
-
 [node name="BtnEditSchedule" type="Button" parent="HBoxLesson"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 4
+theme_type_variation = &"AccentButton"
 text = "Edit Schedule"
 
 [node name="BtnViewSchedule" type="Button" parent="HBoxLesson"]
 layout_mode = 2
+theme_type_variation = &"AccentButton"
 text = "View all Assignments"
+
+[node name="BtnRemoveFromSchedule" type="Button" parent="HBoxLesson"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"DeleteButton"
+text = "Remove From Schedule"
 
 [node name="ControlSpacer2" type="Control" parent="HBoxLesson"]
 custom_minimum_size = Vector2(50, 0)
@@ -149,5 +155,5 @@ fit_content = true
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[connection signal="pressed" from="HBoxLesson/BtnRemoveFromSchedule" to="." method="_on_btn_remove_from_schedule_pressed"]
 [connection signal="pressed" from="HBoxLesson/BtnEditSchedule" to="." method="_on_btn_edit_schedule_pressed"]
+[connection signal="pressed" from="HBoxLesson/BtnRemoveFromSchedule" to="." method="_on_btn_remove_from_schedule_pressed"]
