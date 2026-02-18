@@ -9,6 +9,7 @@ extends Node
 
 ## List of all grades
 enum GRADES {
+	NA,
 	Preschool,
 	Kindergarten,
 	First_Grade,
@@ -50,7 +51,7 @@ func _ready() -> void:
 		# Family student required
 		var family_student : Student = Student.new()
 		family_student.name = "Family"
-		family_student.grade = "NA"
+		family_student.grade = GRADES.NA
 		family_student.is_active = true
 		
 		db.student_list.append(family_student)
@@ -168,7 +169,7 @@ static func get_student_list() -> Array[Student]:
 
 
 ## Adds a student to the student list file
-static func add_student(p_student) -> void:
+static func add_student(p_student : Student) -> void:
 	var db = get_database()
 	db.student_list.append(p_student)
 	
@@ -176,10 +177,18 @@ static func add_student(p_student) -> void:
 	pass
 
 
-## Removes the selected student from the database
-static func remove_student(p_student) -> void:
+## Removes the selected student and all associated assignments from the database
+static func remove_student(p_student : Student) -> void:
 	var db = get_database()
+	var assignment_list = db.subject_list
 	var index = db.student_list.find(p_student)
+	
+	# Remove assignments associated with the student
+	for assignment in assignment_list:
+		if assignment.student == p_student:
+			remove_subject_from_schedule(assignment)
+	
+	# Remove the student
 	db.student_list.remove_at(index)
 	overwrite_database(db)
 	pass

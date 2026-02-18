@@ -3,6 +3,17 @@
 ################################################################################
 extends Control
 
+
+## Access to the item list of students
+@onready var item_list_student_filter: ItemList = %ItemListStudentFilter
+
+## Access to the item list of subjects
+@onready var item_list_subject_filter: ItemList = %ItemListSubjectFilter
+
+## Access to the list of subjects
+@onready var vbox_subject_panels: VBoxContainer = %VBoxSubjectPanels
+
+
 ## Path to the Panel subject scene
 const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
 
@@ -18,15 +29,6 @@ const STUDENT_ID = "student_id"
 ## Group name for the student overview panel
 const STUDENT_PANEL_GROUP = "student_panel"
 
-
-## Access to the item list of students
-@onready var item_list_student_filter: ItemList = %ItemListStudentFilter
-
-## Access to the item list of subjects
-@onready var item_list_subject_filter: ItemList = %ItemListSubjectFilter
-
-## Access to the list of subjects
-@onready var vbox_subject_panels: VBoxContainer = %VBoxSubjectPanels
 
 ## Today's date
 var today : Calendar.Date = Calendar.Date.today()
@@ -58,7 +60,8 @@ func _ready() -> void:
 	SignalBus.connect("display_next_assignment", display_next_assignment, 0)
 	pass
 
-
+#region Daily Assignment Functions
+#TODO Add in logic to only add assignments based on start date
 ## Creates the panel header for each subject
 func create_daily_plan_assignments() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
@@ -160,7 +163,7 @@ func create_assignment(p_subject : Subject, p_assignment : Assignment, p_contain
 	if p_assignment.progress == ResourceData.progress.Incomplete:
 		CMDatabaseUtilities.save_assignment_start_date(p_subject, p_assignment, today.to_string())
 	pass
-
+#endregion
 
 ## Remove the assignment view
 func refresh_page() -> void:
@@ -178,3 +181,18 @@ func display_next_assignment() -> void:
 	
 	create_daily_plan_assignments()
 	pass
+
+
+#region SIgnal Functions
+## Displays the following dates assignment plans
+func _on_btn_next_daily_plan_pressed() -> void:
+	pass
+
+## Displays today's assignment plans
+func _on_btn_today_plan_pressed() -> void:
+	pass
+
+## Displays yesterday's assignments
+func _on_btn_previous_daily_plan_pressed() -> void:
+	pass 
+#endregion

@@ -33,6 +33,7 @@ layout_mode = 2
 [node name="PanelContainerHeader" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
+theme_type_variation = &"BackgroundPanel"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader"]
 layout_mode = 2
@@ -40,6 +41,7 @@ layout_mode = 2
 [node name="BtnPreviousDailyPlan" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"AccentTwoButton"
 theme_override_font_sizes/font_size = 24
 text = "<"
 
@@ -47,11 +49,13 @@ text = "<"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+theme_type_variation = &"AccentTwoButton"
 text = "Today's Plan: February 9, 2026"
 
 [node name="BtnNextDailyPlan" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"AccentTwoButton"
 theme_override_font_sizes/font_size = 24
 text = ">"
 
@@ -77,6 +81,7 @@ fit_content = true
 
 [node name="BtnSaveNote" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerDailyNote/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_type_variation = &"AccentTwoButton"
 text = "Save Daily Note"
 
 [node name="TextEditDailyNote" type="TextEdit" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerDailyNote/VBoxContainer"]
@@ -150,3 +155,7 @@ theme_type_variation = &"BackgroundPanel"
 [node name="VBoxSubjectPanels" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/PanelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer/BtnPreviousDailyPlan" to="." method="_on_btn_previous_daily_plan_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer/BtnTodayPlan" to="." method="_on_btn_today_plan_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer/BtnNextDailyPlan" to="." method="_on_btn_next_daily_plan_pressed"]

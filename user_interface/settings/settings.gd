@@ -7,8 +7,8 @@ extends Control
 ## Access to the new student's name
 @onready var popup_le_name: LineEdit = %PopupLeName
 
-## Access to the new student's grade
-@onready var popup_le_grade: LineEdit = %PopupLeGrade
+## Access to the grade options
+@onready var option_grade: OptionButton = %OptionGrade
 
 ## Access to the student table
 @onready var student_table: PanelContainer = %GridOfStudents
@@ -29,12 +29,18 @@ func _ready() -> void:
 		student_table.visible = false
 	else:
 		student_table.visible = true
+	
+	
 	pass
 
 
 ## Shows the popup panel to add a student
 func _on_btn_add_student_pressed() -> void:
 	popup_panel.show()
+	
+	# Populate the grade options
+	for grade in CMDatabaseUtilities.GRADES:
+		option_grade.add_item(grade)
 	pass 
 
 
@@ -48,7 +54,7 @@ func _on_popup_btn_cancel_pressed() -> void:
 func _on_popup_btn_save_pressed() -> void:
 	var new_student : Student = Student.new()
 	new_student.name = popup_le_name.text
-	new_student.grade =  popup_le_grade.text
+	new_student.grade =  option_grade.selected
 	new_student.is_active = true
 	
 	CMDatabaseUtilities.add_student(new_student)

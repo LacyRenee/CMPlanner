@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=32 format=3 uid="uid://y251c6k3e2gq"]
+[gd_resource type="Theme" load_steps=34 format=3 uid="uid://y251c6k3e2gq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qtq35"]
 content_margin_left = 10.0
@@ -12,7 +12,25 @@ corner_radius_bottom_left = 10
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0bb0u"]
 content_margin_left = 10.0
 content_margin_right = 10.0
-bg_color = Color(0.011764706, 0.29803923, 0.29803923, 1)
+bg_color = Color(0.011764706, 0.29761627, 0.29761627, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kyak0"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.0029411765, 0.06390395, 0.14313656, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sh37e"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.008318903, 0.12837495, 0.25056836, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -165,6 +183,9 @@ border_width_right = 1
 AccentButton/base_type = &"Button"
 AccentButton/styles/hover = SubResource("StyleBoxFlat_qtq35")
 AccentButton/styles/normal = SubResource("StyleBoxFlat_0bb0u")
+AccentTwoButton/base_type = &"Button"
+AccentTwoButton/styles/hover = SubResource("StyleBoxFlat_kyak0")
+AccentTwoButton/styles/normal = SubResource("StyleBoxFlat_sh37e")
 BackgroundPanel/base_type = &"PanelContainer"
 BackgroundPanel/styles/panel = SubResource("StyleBoxFlat_65s4e")
 Button/font_sizes/font_size = 18
@@ -245,6 +266,8 @@ PopupMenu/styles/panel = SubResource("StyleBoxFlat_yjt00")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_8sn20")
 RichTextLabel/colors/default_color = Color(0, 0, 0, 1)
 RichTextLabel/font_sizes/normal_font_size = 18
+TextEdit/colors/caret_color = Color(0, 0, 0, 1)
+TextEdit/colors/font_color = Color(0, 0, 0, 1)
 TextEdit/styles/normal = SubResource("StyleBoxFlat_pxdp8")
 VSeparator/constants/separation = 0
 VSeparator/styles/separator = SubResource("StyleBoxFlat_gt6hk")

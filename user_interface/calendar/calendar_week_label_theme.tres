@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=2 format=3 uid="uid://cjgk2ordqhpri"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drefp"]
-bg_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
+bg_color = Color(0.023529412, 0.3372549, 0.30588236, 1)
 expand_margin_left = 2.0
 expand_margin_top = 2.0
 expand_margin_right = 2.0
