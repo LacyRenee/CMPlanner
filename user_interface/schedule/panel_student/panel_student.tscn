@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://buta3ts5akipn"]
 
-[ext_resource type="Script" uid="uid://dk2xwd5qgjk2a" path="res://user_interface/schedule/panel_student.gd" id="1_rmuvy"]
+[ext_resource type="Script" uid="uid://dk2xwd5qgjk2a" path="res://user_interface/schedule/panel_student/panel_student.gd" id="1_rmuvy"]
 
 [node name="PanelStudent" type="PanelContainer"]
 anchors_preset = 10

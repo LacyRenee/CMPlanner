@@ -138,12 +138,12 @@ func create_assignment(p_subject : Subject, p_assignment : Assignment, p_contain
 	if p_assignment.progress == ResourceData.progress.Completed:
 		assignment_scene.title = p_subject.resource.title +\
 		" - " + str(ResourceData.progress.keys()[p_assignment.progress]) +\
-		" on " + p_assignment.end_date
+		" on " + p_assignment.completed_date
 		
 		assignment_scene.fold()
 	elif p_assignment.progress == ResourceData.progress.Omit_assignment:
 			assignment_scene.title = p_subject.resource.title +\
-			 " - Assignment Omitted on " + p_assignment.end_date 
+			 " - Assignment Omitted on " + p_assignment.completed_date 
 			assignment_scene.fold()
 	else:
 		assignment_scene.title = p_subject.resource.title

@@ -67,3 +67,9 @@ func _on_btn_remove_from_schedule_pressed() -> void:
 func _on_btn_edit_schedule_pressed() -> void:
 	SignalBus.display_edited_resource_schedule_page.emit(subject)
 	pass 
+
+
+## Changes the scene to the resource_assignment view
+func _on_btn_view_schedule_pressed() -> void:
+	SignalBus.display_resource_assignments_page.emit(subject)
+	pass

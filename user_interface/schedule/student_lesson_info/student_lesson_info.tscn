@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://chj1la6p3ou7h"]
 
-[ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info.gd" id="1_h7fwo"]
+[ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info/student_lesson_info.gd" id="1_v2cj1"]
 
 [node name="VBoxStudentLessonInfo" type="VBoxContainer"]
 anchors_preset = 10
@@ -11,7 +11,7 @@ offset_right = 710.0
 offset_bottom = 381.0
 grow_horizontal = 2
 size_flags_horizontal = 3
-script = ExtResource("1_h7fwo")
+script = ExtResource("1_v2cj1")
 
 [node name="HBoxSubjectTitle" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -156,4 +156,5 @@ custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [connection signal="pressed" from="HBoxLesson/BtnEditSchedule" to="." method="_on_btn_edit_schedule_pressed"]
+[connection signal="pressed" from="HBoxLesson/BtnViewSchedule" to="." method="_on_btn_view_schedule_pressed"]
 [connection signal="pressed" from="HBoxLesson/BtnRemoveFromSchedule" to="." method="_on_btn_remove_from_schedule_pressed"]

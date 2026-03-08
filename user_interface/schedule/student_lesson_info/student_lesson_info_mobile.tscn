@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dji3o6xmi2iym"]
 
-[ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info.gd" id="1_xdwgj"]
+[ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info/student_lesson_info.gd" id="1_xdwgj"]
 
 [node name="VBoxStudentLessonInfo" type="VBoxContainer"]
 anchors_preset = 10

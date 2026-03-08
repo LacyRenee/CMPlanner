@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bv6p480uv7ng2"]
 
-[ext_resource type="Script" uid="uid://dmxux3nk22elp" path="res://user_interface/schedule/panel_subject.gd" id="1_rk0ln"]
+[ext_resource type="Script" uid="uid://dmxux3nk22elp" path="res://user_interface/schedule/panel_subject/panel_subject.gd" id="1_rk0ln"]
 
 [node name="PanelSubject" type="PanelContainer"]
 anchors_preset = 15

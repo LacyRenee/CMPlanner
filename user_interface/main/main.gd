@@ -24,7 +24,11 @@ const SETTINGS_SCENE_PATH : String = "res://user_interface/settings/settings.tsc
 ## Scene path for the schedule page
 const SCHEDULE_SCENE_PATH : String = "res://user_interface/schedule/schedule.tscn"
 
+## Scene path to the daily plan page
 const DAILY_PLAN_SCENE_PATH : String = "res://user_interface/daily_plan/daily_plan.tscn"
+
+## Scene path to the resource's scheduled assignments page
+const RESOURCE_ASSIGNMENTS_PATH : String = "res://user_interface/schedule/resource_assignments/resource_assignments.tscn"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -61,8 +65,23 @@ func _ready() -> void:
 	
 	# Displays the resource schedule page with an assignment to be edited
 	SignalBus.connect("display_edited_resource_schedule_page", display_editable_resource_schedule_view, 0)
+	
+	# Displays the scheduled resource assignments page
+	SignalBus.connect("display_resource_assignments_page", display_assignments_page, 0)
 	#endregion
 	pass
+
+
+func display_assignments_page(p_subject : Subject) -> void:
+	remove_scene_from_attacher()
+	
+	var resource_assignment_page = load(RESOURCE_ASSIGNMENTS_PATH)
+	var instance = resource_assignment_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	
+	SignalBus.display_resource_assignments.emit(p_subject)
+	pass
+
 
 
 ## Displays the daily plan page
@@ -73,6 +92,7 @@ func display_daily_plan_page() -> void:
 	var instance = daily_plan_page.instantiate()
 	panel_container_attacher.add_child(instance)
 	pass
+
 
 ## Displays the generic resource scheduler page
 func display_resource_schedule_page() -> void:

@@ -40,7 +40,7 @@ func _on_btn_add_student_pressed() -> void:
 	
 	# Populate the grade options
 	for grade in CMDatabaseUtilities.GRADES:
-		option_grade.add_item(grade)
+		option_grade.add_item(grade.replace("_", " "))
 	pass 
 
 
