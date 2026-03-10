@@ -41,6 +41,9 @@ static var is_mobile : bool = false
 ## Active subjects
 static var active_subjects : Array[ResourceData.Subjects] = []
 
+## Calendar
+static var _calendar : Calendar = Calendar.new()
+
 
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
@@ -146,6 +149,12 @@ static func parse_json_data() -> void:
 	pass
 
 
+#region Date Functions
+static func get_formatted_date(p_date : Calendar.Date) -> String:
+	var pattern : String = "%m-%d-%Y"
+	var formatted_date = _calendar.get_date_formatted(p_date.year, p_date.month, p_date.day, pattern)
+	return formatted_date
+#endregion
 
 
 #region Mobile functions
@@ -261,13 +270,14 @@ static func does_resource_item_exist(p_title : String) -> bool:
 
 #region Subject Functions
 static func update_active_subjects() -> void:
+	active_subjects.clear()
 	var subject_list : Array[Subject] = get_subject_list()
 	
 	for subject in subject_list:
 		if not active_subjects.has(subject.subject):
 			active_subjects.append(subject.subject)
-	
 	pass
+
 
 ## Saves the subject to the database
 static func add_subject(p_subject : Subject) -> void:
@@ -298,10 +308,10 @@ static func remove_subject_from_schedule(p_subject : Subject) -> void:
 static func update_subject(p_subject : Subject) -> void:
 	var db = get_database()
 	var index = db.subject_list.find(p_subject)
+	
 	db.subject_list[index] = p_subject
 	overwrite_database(db)
 	update_active_subjects()
-
 	pass
 
 

@@ -13,6 +13,9 @@ const ASSIGNMENT_ROW : String = "res://user_interface/schedule/resource_assignme
 ## Access to the table of assignments
 @onready var v_box_assignment_table: VBoxContainer = %VBoxAssignmentTable
 
+## Access to the table of assignment rows
+@onready var vbox_assignment_rows: VBoxContainer = %VBoxAssignmentRows
+
 
 # Holds the original assignment date
 var old_date : String = ""
@@ -50,7 +53,7 @@ func display_assignments(p_subject : Subject) -> void:
 	for assignment in p_subject.assignments:
 		var assignment_row = load(ASSIGNMENT_ROW)
 		var instance = assignment_row.instantiate()
-		v_box_assignment_table.add_child(instance)
+		vbox_assignment_rows.add_child(instance)
 		
 		instance.set_label_count(str(count) + ". ")
 		instance.set_label_title(assignment.title)
@@ -79,7 +82,7 @@ func update_assignments(index : int, p_date : String, p_progress : ResourceData.
 		   p_progress == ResourceData.progress.Omit_assignment:
 			if p_date == "NA":
 				p_date = Calendar.Date.today().to_string()
-				v_box_assignment_table.get_child(index + 1).get_child(2).text = p_date
+				vbox_assignment_rows.get_child(index + 1).get_child(2).text = p_date
 			
 		subject.assignments[index].completed_date = p_date
 		subject.assignments[index].progress = p_progress

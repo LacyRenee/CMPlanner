@@ -22,10 +22,7 @@ extends Resource
 @export var start_date : String
 
 ## Use after a specified resource
-@export var start_after : ResourceItem
-
-## Use in conjunction with the selected resource
-@export var use_with : ResourceItem
+@export var start_after : Subject
 
 ## Specifies whether the Subject is scheduled or not
 @export var is_active : bool = true
@@ -35,3 +32,17 @@ extends Resource
 
 ## Assignments to be scheduled for the student
 @export var assignments : Array[Assignment] = []  
+
+## Daily notes
+@export var daily_notes : Array[DailyNotes] = []
+
+
+## Built-in class to hold the daily notes
+class DailyNotes:
+	extends Resource
+	
+	## Date the note was made
+	var date : String = ""
+	
+	## Note information for the daily assignment
+	var note : String = ""

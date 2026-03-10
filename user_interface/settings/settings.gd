@@ -46,6 +46,8 @@ func _on_btn_add_student_pressed() -> void:
 
 ## Hides the add student popup panel
 func _on_popup_btn_cancel_pressed() -> void:
+	popup_le_name.text = ""
+	option_grade.selected = 0
 	popup_panel.hide()
 	pass 
 
@@ -58,6 +60,8 @@ func _on_popup_btn_save_pressed() -> void:
 	new_student.is_active = true
 	
 	CMDatabaseUtilities.add_student(new_student)
+	popup_le_name.text = ""
+	option_grade.selected = -1
 	popup_panel.hide()
 	
 	SignalBus.refresh_student_table.emit()

@@ -128,6 +128,8 @@ text = "Edit Schedule"
 
 [node name="BtnViewSchedule" type="Button" parent="HBoxLesson"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_type_variation = &"AccentButton"
 text = "View all Assignments"
 

@@ -49,7 +49,6 @@ func _ready() -> void:
 	set_calendar_header()
 	
 	populate_calendar_month()
-	
 	pass 
 
 
@@ -180,7 +179,6 @@ func _on_btn_next_month_pressed() -> void:
 func _on_date_pressed(date: Calendar.Date, date_label: Label):
 	set_selected_state(date_label)
 	selected_date = date
-	print("Date selected")
 	SignalBus.date_selected.emit(date)
 	pass
 

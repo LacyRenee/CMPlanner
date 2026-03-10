@@ -58,23 +58,22 @@ const STUDENT_ID = "student_id"
 ## Access to column8 header for the Schedule overview table
 @onready var lbl_header_8: RichTextLabel = %LblHeader8
 
+## Access to the popup menu that redirects the user to the new ResourceItem page
+@onready var popup_panel: PopupPanel = %PopupPanel
+
 
 #TODO create mobile functions
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	# If the application is running on mobile, shorthand the table header
 	if CMDatabaseUtilities.get_is_mobile():
 		mobile_shorthand_table_header()
 		item_list_students.max_columns = 1
 	
-	# Create a row for each student and add all active, associated subjects
 	create_schedule_overview_table()
 	
-	# Create the Subject overview for all active subjects and their 
-	# corresponding student assignments
 	create_subject_assignment_overview()
-	
+		
 	# Signals the Schedule page to refresh
 	SignalBus.connect("refresh_scheduled_subject_view", refresh_page)
 	pass
@@ -89,25 +88,20 @@ func refresh_page() -> void:
 
 
 ## Removes the children views from the schedule view
-func remove_children_from_scene() -> void:
+func remove_children_from_scene() -> void:	
 	# Remove all students
-	for index in range(item_list_students.get_item_count()):
-		item_list_students.remove_item(index)
+	item_list_students.clear()
 	
 	# Need to remove all students (except the header) from the table
-	var table_rows = vbox_weekly_overview_table.get_children()
-	var table_row_count = 0
-	for row in table_rows:
+	for i in vbox_weekly_overview_table.get_child_count():
 		# Don't remove the header!
-		if table_row_count != 0:
-			row.call_deferred("queue_free")
+		if i != 0:
+			vbox_weekly_overview_table.get_child(i).call_deferred("queue_free")
 		
-		table_row_count += 1
 		
 	# Remove all assignments from the Subject Overview
-	var overview_row = vbox_subject_overview.get_children()
-	for row in overview_row:
-		row.call_deferred("queue_free")
+	for i in vbox_subject_overview.get_child_count():
+		vbox_subject_overview.get_child(i).call_deferred("queue_free")
 	pass
 
 
@@ -170,6 +164,70 @@ func create_panel_container() -> PanelContainer:
 	container.custom_minimum_size = Vector2(0, 100)
 	container.mouse_filter = Control.MOUSE_FILTER_PASS
 	return container
+
+
+## Displays an overview of the weekly assignments for each student for the table view
+func create_weekly_assignment_overview(p_student : Student, p_assignment_list : Array[Subject]) -> void:
+	var student_rows = vbox_weekly_overview_table.get_children()
+	var student_row : HBoxContainer
+	
+	for row in student_rows:
+		if row.has_meta(STUDENT_ID):
+			if row.get_meta(STUDENT_ID) == p_student.resource_path:
+				student_row = row
+	var count : int = 0
+	# Adds the assignment to each day it's assigned
+	for assignment in p_assignment_list:
+		print(assignment.week_days)
+		
+		for day in assignment.week_days:
+			count += 1
+			print(count)
+			match day:
+				ResourceData.week_day.Sunday:
+					var label = create_weekly_assignment_label(assignment.subject)
+					student_row.get_child(1).get_child(0).get_child(0).add_child(label)
+				ResourceData.week_day.Monday:
+					var label = create_weekly_assignment_label(assignment.subject)
+					student_row.get_child(2).get_child(0).get_child(0).add_child(label)
+				ResourceData.week_day.Tuesday:
+					var label = create_weekly_assignment_label(assignment.subject)
+					student_row.get_child(3).get_child(0).get_child(0).add_child(label)
+				ResourceData.week_day.Wednesday:
+					var label = create_weekly_assignment_label(assignment.subject)
+					student_row.get_child(4).get_child(0).get_child(0).add_child(label)
+				ResourceData.week_day.Thursday:
+					var label = create_weekly_assignment_label(assignment.subject)
+					student_row.get_child(5).get_child(0).get_child(0).add_child(label)
+				ResourceData.week_day.Friday:
+					var label = create_weekly_assignment_label(assignment.subject)
+					student_row.get_child(6).get_child(0).get_child(0).add_child(label)
+				ResourceData.week_day.Saturday:
+					var label = create_weekly_assignment_label(assignment.subject)
+					student_row.get_child(7).get_child(0).get_child(0).add_child(label)
+	
+	print(count)
+	pass
+
+
+## Creates the assignment label to be displayed under the day
+func create_weekly_assignment_label(p_subject : ResourceData.Subjects) -> RichTextLabel:
+	var label : RichTextLabel = RichTextLabel.new()
+	label.text = ResourceData.Subjects.keys()[p_subject].replace("_", " ")
+	label.fit_content = true
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	return label
+
+
+## Creates an array of all assignments for each student
+func get_all_student_assignments(p_student : Student, p_assignment_list : Array[Subject]) -> Array[Subject]:
+	var assignments : Array[Subject] = []
+	
+	for assignment in p_assignment_list:
+		if assignment.student.name == p_student.name:
+			assignments.append(assignment)
+	
+	return assignments
 #endregion
 
 
@@ -186,7 +244,7 @@ func create_subject_assignment_overview() -> void:
 	for index in CmDatabaseUtilities.active_subjects:
 		var panel_subject_scene = PANEL_SUBJECT.instantiate()
 		vbox_subject_overview.add_child(panel_subject_scene)
-		panel_subject_scene.set_subject(ResourceData.Subjects.keys()[index])
+		panel_subject_scene.set_subject(ResourceData.Subjects.keys()[index].replace("_", " "))
 		
 		# Add each student to the subject
 		for student in student_list:
@@ -200,7 +258,7 @@ func create_subject_assignment_overview() -> void:
 			# Add the student subject assignments to the subject view
 			for subject_assignment in student_subject_list:
 				if subject_assignment.student == student and\
-				   str(ResourceData.Subjects.keys()[subject_assignment.subject]) == panel_subject_scene.get_subject():
+				   str(ResourceData.Subjects.keys()[subject_assignment.subject]).replace("_", " ") == str(panel_subject_scene.get_subject()):
 					panel_student_scene.visible = true
 					create_subject_assignment(subject_assignment, panel_student_scene)
 	pass
@@ -215,7 +273,6 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 	else:
 		student_lesson_info_scene = STUDENT_LESSON_INFO.instantiate()
 
-	
 	p_container.vbox_student.add_child(student_lesson_info_scene)
 	
 	# TODO Turn into a link to view the resource?	
@@ -224,11 +281,14 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 			ResourceData.study_method.keys()[p_assignment.study_method].replace("_", " ")
 	student_lesson_info_scene.set_subject(p_assignment)
 	
+	
 	# Format the "Start label" text
-	var start_title = "Start: " if !p_assignment.start_date.is_empty() else "Start After: "
-	student_lesson_info_scene.lbl_start.text = start_title + p_assignment.start_date \
-			if !p_assignment.start_date.is_empty() \
-			else p_assignment.start_after
+	var start_title : String = ""
+	if p_assignment.start_date.is_empty():
+		start_title = "Start After: " + p_assignment.start_after.resource.title
+	else:
+		start_title = "Start: " + p_assignment.start_date
+	student_lesson_info_scene.lbl_start.text = start_title
 	
 	# Format the division type text (e.g., Chapter 1 - 10)
 	if student_lesson_info_scene.lbl_division_type.text == ResourceData.DivisionType.keys()[ResourceData.DivisionType.None]:
@@ -269,77 +329,36 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 				student_lesson_info_scene.lbl_day_7.add_theme_stylebox_override("normal", background_color)
 	p_container.visible = true
 	pass
-
-
-## Creates an array of all assignments for each student
-func get_all_student_assignments(p_student : Student, p_assignment_list : Array[Subject]) -> Array[Subject]:
-	var assignments : Array[Subject] = []
-	
-	for assignment in p_assignment_list:
-		if assignment.student.name == p_student.name:
-			assignments.append(assignment)
-	
-	return assignments
-
-
-## Displays an overview of the weekly assignments for each student for the table view
-func create_weekly_assignment_overview(p_student : Student, p_assignment_list : Array[Subject]) -> void:
-	var student_rows = vbox_weekly_overview_table.get_children()
-	var student_row : HBoxContainer
-	
-	for row in student_rows:
-		if row.has_meta(STUDENT_ID):
-			if row.get_meta(STUDENT_ID) == p_student.resource_path:
-				student_row = row
-	
-	for assignment in p_assignment_list:
-		for day in assignment.week_days:
-			var label = create_weekly_assignment_label(assignment.subject, assignment.resource.title)
-			match day:
-				ResourceData.week_day.Sunday:
-					student_row.get_child(1).get_child(0).get_child(0).add_child(label)
-					pass
-				ResourceData.week_day.Monday:
-					student_row.get_child(2).get_child(0).get_child(0).add_child(label)
-					pass
-				ResourceData.week_day.Tuesday:
-					student_row.get_child(3).get_child(0).get_child(0).add_child(label)
-					pass
-				ResourceData.week_day.Wednesday:
-					student_row.get_child(4).get_child(0).get_child(0).add_child(label)
-					pass
-				ResourceData.week_day.Thursday:
-					student_row.get_child(5).get_child(0).get_child(0).add_child(label)
-					pass
-				ResourceData.week_day.Friday:
-					student_row.get_child(6).get_child(0).get_child(0).add_child(label)
-					pass
-				ResourceData.week_day.Saturday:
-					student_row.get_child(7).get_child(0).get_child(0).add_child(label)
-					pass
-	pass
-
-
-## Creates the assignment label to be displayed under the day
-func create_weekly_assignment_label(p_subject : ResourceData.Subjects, p_title : String) -> RichTextLabel:
-	var label : RichTextLabel = RichTextLabel.new()
-	label.text = ResourceData.Subjects.keys()[p_subject]
-	#label.text += " - " + p_title if !CMDatabaseUtilities.get_is_mobile() else ""
-	label.fit_content = true
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_FILL
-	return label
 #endregion
 
 
 #region Signal functions
+
+## Directs the user to the ResourceItem page
+func _on_btn_yes_create_resource_pressed() -> void:
+	SignalBus.display_new_resource_page.emit()
+	pass
+
+
+## Hides the popup panel
+func _on_btn_cancel_popup_pressed() -> void:
+	popup_panel.hide()
+	pass
+
+
 ## Displays the schedule resource page
 func _on_btn_schedule_resource_pressed() -> void:
-	SignalBus.display_resource_schedule_page.emit()
+	
+	# Navigate the user to the resource page if no ResourceItems exist
+	if CMDatabaseUtilities.get_all_resources().is_empty():
+		popup_panel.show()
+	else:
+		SignalBus.display_resource_schedule_page.emit()
 	pass 
 
 
 ## Displays the table row and subject overview associated with the selected student
-func _on_item_list_students_multi_selected(index: int, selected: bool) -> void:
+func _on_item_list_students_multi_selected(_index : int, _selected : bool) -> void:
 	# Student table rows
 	var student_rows = vbox_weekly_overview_table.get_children()
 	

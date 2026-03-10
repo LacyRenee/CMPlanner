@@ -74,3 +74,12 @@ fit_content = true
 [node name="ControlSpacer" type="Control" parent="MarginContainer/VBoxContainer/PanelAssignments/VBoxAssignmentTable/HBoxContainerHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelAssignments/VBoxAssignmentTable"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxAssignmentRows" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelAssignments/VBoxAssignmentTable/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3

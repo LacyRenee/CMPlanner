@@ -99,15 +99,10 @@ layout_mode = 2
 text = " Assign to Student:"
 fit_content = true
 
-[node name="ItemListStudents" type="ItemList" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents/VBoxStudents"]
+[node name="OptionsStudentList" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents/VBoxStudents"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-select_mode = 2
-auto_width = true
-auto_height = true
-max_columns = 5
-same_column_width = true
 
 [node name="ControlSpacer" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
@@ -158,15 +153,16 @@ theme_type_variation = &"BackgroundPanel"
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate"]
 layout_mode = 2
 
-[node name="LblStartDate" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+[node name="CheckStartDate" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
+button_pressed = true
 text = "Start Date:"
-fit_content = true
 
 [node name="BtnTodaysDate" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(370, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
@@ -195,6 +191,29 @@ offset_right = 0.0
 offset_bottom = 0.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="PanelContainerStartAfter" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartAfter"]
+layout_mode = 2
+
+[node name="CheckStartAfter" type="CheckBox" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartAfter/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+text = "Start After:"
+
+[node name="OptionsResources" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartAfter/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(370, 0)
+layout_mode = 2
+disabled = true
+fit_to_longest_item = false
 
 [node name="PanelContainerUseOn" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -297,7 +316,10 @@ theme_type_variation = &"DeleteButton"
 text = "Cancel"
 
 [connection signal="text_changed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer/LeSearchResource" to="." method="_on_le_search_resource_text_changed"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/CheckStartDate" to="." method="_on_check_start_date_pressed"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/BtnTodaysDate" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartAfter/HBoxContainer/CheckStartAfter" to="." method="_on_check_start_after_pressed"]
+[connection signal="item_selected" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartAfter/HBoxContainer/OptionsResources" to="." method="_on_options_resources_item_selected"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnUpdateSchedule" to="." method="_on_btn_update_schedule_pressed"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnSaveSchedule" to="." method="_on_btn_save_schedule_pressed"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/BtnCancelSchedule" to="." method="_on_btn_cancel_schedule_pressed"]

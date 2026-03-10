@@ -33,6 +33,9 @@ const STUDENT_PANEL_GROUP = "student_panel"
 ## Today's date
 var today : Calendar.Date = Calendar.Date.today()
 
+## Holds the selected date
+var selected_date = today
+
 ## Holds the day for the current date
 var day_of_week : Time.Weekday = today.get_weekday()
 
@@ -54,18 +57,18 @@ func _ready() -> void:
 	
 	# Add the list of active subjects to the subject filter
 	for subject in todays_subjects:
-		item_list_subject_filter.add_item(ResourceData.Subjects.keys()[subject])
+		item_list_subject_filter.add_item(ResourceData.Subjects.keys()[subject].replace("_", " "))
 	
 	# Signal Functions
 	SignalBus.connect("display_next_assignment", display_next_assignment, 0)
 	pass
+
 
 #region Daily Assignment Functions
 #TODO Add in logic to only add assignments based on start date
 ## Creates the panel header for each subject
 func create_daily_plan_assignments() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
-	var subject_list = ResourceData.Subjects
 	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
 	
 	if student_subject_list.is_empty():
@@ -74,7 +77,11 @@ func create_daily_plan_assignments() -> void:
 	for index in CmDatabaseUtilities.active_subjects:
 		var panel_subject_scene = PANEL_SUBJECT.instantiate()
 		vbox_subject_panels.add_child(panel_subject_scene)
-		panel_subject_scene.get_child(0).get_child(0).text = ResourceData.Subjects.keys()[index]
+		
+		
+		panel_subject_scene.set_subject(ResourceData.Subjects.keys()[index].replace("_", " "))
+		
+		
 		panel_subject_scene.visible = false
 		
 		for student in student_list:
@@ -89,15 +96,35 @@ func create_daily_plan_assignments() -> void:
 			for subject_assignment in student_subject_list:
 				if subject_assignment.week_days.has(day_of_week) and \
 				   student == subject_assignment.student and \
-					str(ResourceData.Subjects.keys()[subject_assignment.subject]) == panel_subject_scene.get_subject():
-					panel_student_scene.visible = true
-					add_assignment_to_subject_overview(subject_assignment)
+					str(ResourceData.Subjects.keys()[subject_assignment.subject]).replace("_", " ") == str(panel_subject_scene.get_subject()):
+					
+					# Only add the assignment if the start date is the same as today or after
+					if !subject_assignment.start_date.is_empty():
+						var split_date = subject_assignment.start_date.split("-")
+						var year : int = int(split_date[2])
+						var month : int = int(split_date[0])
+						var day : int  = int(split_date[1])
+						var formatted_date = CMDatabaseUtilities._calendar.Date.new(year, month, day)
+					
+						if formatted_date.is_equal(today) or formatted_date.is_after(today):
+							panel_student_scene.visible = true
+							add_assignment_to_subject_overview(subject_assignment)
+					
+					# Only add the assignment if the start after ResourceItem has all assignments completed
+					if subject_assignment.start_after != null:
+						for i in subject_assignment.start_after.assignments.size():
+							if subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Completed or\
+							   subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Omit_assignment:
+								return
+							else:
+								panel_student_scene.visible = true
+								add_assignment_to_subject_overview(subject_assignment)
 	pass
 
 
 ## For each students, the assignment is added to the correct subject overview
 func add_assignment_to_subject_overview(p_subject : Subject) -> void:
-	var subject = ResourceData.Subjects.keys()[p_subject.subject]
+	var subject = ResourceData.Subjects.keys()[p_subject.subject].replace("_", " ")
 	var nodes = vbox_subject_panels.get_children()
 	
 	for n in nodes:
@@ -112,8 +139,6 @@ func add_assignment_to_subject_overview(p_subject : Subject) -> void:
 
 ## Creates the progress view for the first selected assignment that is not complete
 func create_assignment_view(p_subject : Subject, p_container : Node) -> void:
-	# Keeps track of the number of assignments completed
-	var assignment_number : int = 0
 	
 	for first_incomplete in p_subject.assignments:
 		if first_incomplete.start_date == today.to_string() and \

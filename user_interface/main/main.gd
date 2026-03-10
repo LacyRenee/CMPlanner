@@ -30,6 +30,9 @@ const DAILY_PLAN_SCENE_PATH : String = "res://user_interface/daily_plan/daily_pl
 ## Scene path to the resource's scheduled assignments page
 const RESOURCE_ASSIGNMENTS_PATH : String = "res://user_interface/schedule/resource_assignments/resource_assignments.tscn"
 
+## Scene path to the welcome page
+const WELCOME_SCENE_PATH : String = "res://user_interface/main/welcome_page.tscn"
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -42,7 +45,11 @@ func _ready() -> void:
 		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 		pass
 	
-	display_daily_plan_page()
+	if CMDatabaseUtilities.get_subject_list().is_empty():
+		display_welcome_message()
+	else:
+		display_daily_plan_page()
+	
 	
 	#region signals
 	# Displays a selected resources information 
@@ -72,6 +79,17 @@ func _ready() -> void:
 	pass
 
 
+## Displays a welcome message if there are no assignments in the database
+func display_welcome_message() -> void:
+	remove_scene_from_attacher()
+	
+	var welcome_page = load(WELCOME_SCENE_PATH)
+	var instance = welcome_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	pass
+
+
+## Displays the assignments for the selected ResourceItem page
 func display_assignments_page(p_subject : Subject) -> void:
 	remove_scene_from_attacher()
 	
@@ -210,7 +228,10 @@ func _on_btn_resources_pressed() -> void:
 func _on_btn_home_pressed() -> void:
 	remove_scene_from_attacher()
 	
-	display_daily_plan_page()
+	if CMDatabaseUtilities.get_subject_list().is_empty():
+		display_welcome_message()
+	else:
+		display_daily_plan_page()
 	pass
 
 

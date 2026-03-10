@@ -324,5 +324,53 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="PopupPanel" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(450, 250)
+max_size = Vector2i(450, 250)
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 445.0
+offset_bottom = 2837.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PopupPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Currently, there are no resources in the database to be scheduled. Would you like to create a resource?"
+fit_content = true
+
+[node name="ControlSpacer" type="Control" parent="PopupPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="BtnCancel" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"DeleteButton"
+text = "Cancel"
+
+[node name="BtnYes" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"AccentButton"
+text = "Yes!"
+
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/BtnScheduleResource" to="." method="_on_btn_schedule_resource_pressed"]
 [connection signal="multi_selected" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/PanelContainerWeeklyViewOptions/VBoxContainer/ItemListStudents" to="." method="_on_item_list_students_multi_selected"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/BtnCancel" to="." method="_on_btn_cancel_popup_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/BtnYes" to="." method="_on_btn_yes_create_resource_pressed"]

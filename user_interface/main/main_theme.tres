@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=34 format=3 uid="uid://y251c6k3e2gq"]
+[gd_resource type="Theme" load_steps=35 format=3 uid="uid://y251c6k3e2gq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qtq35"]
 content_margin_left = 10.0
@@ -172,6 +172,11 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 20
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_auipe"]
+content_margin_bottom = 50.0
+bg_color = Color(0.95686275, 0.96862745, 0.9843137, 1)
+expand_margin_bottom = 50.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pxdp8"]
 bg_color = Color(0.8745098, 0.88235295, 0.8980392, 1)
 
@@ -266,6 +271,7 @@ PopupMenu/styles/panel = SubResource("StyleBoxFlat_yjt00")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_8sn20")
 RichTextLabel/colors/default_color = Color(0, 0, 0, 1)
 RichTextLabel/font_sizes/normal_font_size = 18
+ScrollContainer/styles/panel = SubResource("StyleBoxFlat_auipe")
 TextEdit/colors/caret_color = Color(0, 0, 0, 1)
 TextEdit/colors/font_color = Color(0, 0, 0, 1)
 TextEdit/styles/normal = SubResource("StyleBoxFlat_pxdp8")
