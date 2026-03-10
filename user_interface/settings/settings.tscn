@@ -75,6 +75,7 @@ unique_name_in_owner = true
 oversampling_override = 1.0
 initial_position = 1
 size = Vector2i(450, 250)
+visible = true
 
 [node name="MarginContainer" type="MarginContainer" parent="PopupPanel"]
 offset_left = 5.0
@@ -132,19 +133,19 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="PopupBtnCancel" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_type_variation = &"AccentButton"
-text = "Cancel"
-
 [node name="PopupBtnSave" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_type_variation = &"AccentButton"
 text = "Save"
 
+[node name="PopupBtnCancel" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"DeleteButton"
+text = "Cancel"
+
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnAddStudent" to="." method="_on_btn_add_student_pressed"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnCancel" to="." method="_on_popup_btn_cancel_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnSave" to="." method="_on_popup_btn_save_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnCancel" to="." method="_on_popup_btn_cancel_pressed"]

@@ -175,14 +175,10 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 		if row.has_meta(STUDENT_ID):
 			if row.get_meta(STUDENT_ID) == p_student.resource_path:
 				student_row = row
-	var count : int = 0
+
 	# Adds the assignment to each day it's assigned
-	for assignment in p_assignment_list:
-		print(assignment.week_days)
-		
+	for assignment in p_assignment_list:		
 		for day in assignment.week_days:
-			count += 1
-			print(count)
 			match day:
 				ResourceData.week_day.Sunday:
 					var label = create_weekly_assignment_label(assignment.subject)
@@ -205,8 +201,6 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 				ResourceData.week_day.Saturday:
 					var label = create_weekly_assignment_label(assignment.subject)
 					student_row.get_child(7).get_child(0).get_child(0).add_child(label)
-	
-	print(count)
 	pass
 
 

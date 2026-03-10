@@ -358,19 +358,19 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="BtnCancel" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_type_variation = &"DeleteButton"
-text = "Cancel"
-
 [node name="BtnYes" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_type_variation = &"AccentButton"
 text = "Yes!"
 
+[node name="BtnCancel" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"DeleteButton"
+text = "Cancel"
+
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainer/BtnScheduleResource" to="." method="_on_btn_schedule_resource_pressed"]
 [connection signal="multi_selected" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/PanelContainerWeeklyViewOptions/VBoxContainer/ItemListStudents" to="." method="_on_item_list_students_multi_selected"]
-[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/BtnCancel" to="." method="_on_btn_cancel_popup_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/BtnYes" to="." method="_on_btn_yes_create_resource_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer/BtnCancel" to="." method="_on_btn_cancel_popup_pressed"]
