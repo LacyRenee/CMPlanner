@@ -1,0 +1,123 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdbbx365itqk1"]
+
+[ext_resource type="Script" uid="uid://eqvgdm8f52dd" path="res://user_interface/daily_plan/daily_assignment.gd" id="1_exm1a"]
+
+[node name="FoldableContainer" type="FoldableContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 166.0
+grow_horizontal = 2
+size_flags_vertical = 2
+theme_type_variation = &"BackgroundPanel"
+script = ExtResource("1_exm1a")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="PanelHeader" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelHeader"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelHeader/MarginContainer"]
+layout_mode = 2
+
+[node name="LblDate" type="RichTextLabel" parent="VBoxContainer/PanelHeader/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderSmallLabelLight"
+text = "Today: 01/30/2026"
+fit_content = true
+
+[node name="OptionButtonProgress" type="OptionButton" parent="VBoxContainer/PanelHeader/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LblDivisionTitle" type="RichTextLabel" parent="VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Division title"
+fit_content = true
+
+[node name="LblStudyMethod" type="RichTextLabel" parent="VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Study Method: "
+fit_content = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblNotes" type="RichTextLabel" parent="VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Notes"
+fit_content = true
+
+[node name="BtnSaveNotes" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Save Note"
+
+[node name="TextEditNotes" type="TextEdit" parent="VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PopupPanelSaveNote" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+oversampling_override = 1.0
+size = Vector2i(150, 50)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PopupPanelSaveNote"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 145.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Note Saved"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerSaveNote" type="Timer" parent="PopupPanelSaveNote"]
+unique_name_in_owner = true
+one_shot = true
+
+[connection signal="item_selected" from="VBoxContainer/PanelHeader/MarginContainer/HBoxContainer/OptionButtonProgress" to="." method="_on_option_button_progress_item_selected"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/BtnSaveNotes" to="." method="_on_btn_save_notes_pressed"]

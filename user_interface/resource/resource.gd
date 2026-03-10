@@ -75,6 +75,9 @@ const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division
 ## Access to the delete button
 @onready var btn_delete: Button = %BtnDelete
 
+## Access to the confirmation popup to delete a resource
+@onready var popup_delete_resource_confirmation: PopupPanel = %PopupDeleteResourceConfirmation
+
 
 #endregion
 
@@ -349,6 +352,7 @@ func remove_format_themes() -> void:
 func _on_btn_division_pressed() -> void:
 	var instance = division_line_item.instantiate()
 	division_list.add_child(instance)
+	
 	renumber_divisions()
 	pass 
 
@@ -422,37 +426,23 @@ func _on_ob_divistion_type_item_selected(index: int) -> void:
 
 ## Deletes the selected resource from the database
 func _on_btn_delete_pressed() -> void:
-	# Create confirmation delete dialog
-	var confirm_delete_dialog = ConfirmationDialog.new()
-	confirm_delete_dialog.title = "Please confirm"
-	confirm_delete_dialog.dialog_text = "Are you sure you want to delete " + resource_item.title + "?" \
-										+ "\nDeleting the resource will also delete all student assignments"
-	confirm_delete_dialog.cancel_button_text = "Cancel"
-	confirm_delete_dialog.ok_button_text = "Ok"
-	
-	# connect signals
-	confirm_delete_dialog.canceled.connect (confirm_delete_dialog_canceled)
-	confirm_delete_dialog.confirmed.connect (confirm_delete_dialog_ok)
-		
-	# show dialog
-	add_child(confirm_delete_dialog)	
-	confirm_delete_dialog.keep_title_visible = true
-	confirm_delete_dialog.popup_centered() # center on screen
-	confirm_delete_dialog.show()
+	popup_delete_resource_confirmation.show()
+	pass
 
 
-## Cancelled button for the confirm delete dialog
-func confirm_delete_dialog_canceled() -> void:
-	print("Nothing happens - yay!")
+## Closes the delete ResourceItem confirmation popup
+func _on_btn_cancel_pressed() -> void:
+	popup_delete_resource_confirmation.hide()
+	pass 
 
 
-## Ok button for the confirm delete dialog
-## Deletes all assignments associated with the resource and the 
-## selected ResourceItem
-func confirm_delete_dialog_ok()-> void:
-	CMDatabaseUtilities.remove_selected_resource_assignments(resource_item)
+## Confirms the process of deleting the selected ResourceItem 
+## and all associated assignments
+func _on_btn_okay_pressed() -> void:
+	CMDatabaseUtilities.remove_selected_resource_subjects(resource_item)
 	CMDatabaseUtilities.remove_resource_item(resource_item)
 	SignalBus.display_all_resource_page.emit()
+	pass 
 
 
 ## Changes the view to the ResourceSceduler view

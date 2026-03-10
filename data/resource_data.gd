@@ -36,18 +36,18 @@ enum DivisionType {
 enum Subjects {
 	Art,
 	Bible,
-	ForeignLanguage,
+	Foreign_Language,
 	Geography,
 	Grammar,
 	Handicrafts,
 	Handwriting,
 	History,
-	LanguageArts,
+	Language_Arts,
 	Literature,
 	Math,
 	Music,
-	NatureStudy, 
-	PersonalDevelopment,
+	Nature_Study, 
+	Personal_Development,
 	Poetry,
 	Reading,
 	Science,
@@ -94,5 +94,5 @@ enum progress {
 	Incomplete,
 	In_progress,
 	Completed,
-	Finished
+	Omit_assignment
 }

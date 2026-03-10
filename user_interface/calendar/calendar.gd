@@ -8,7 +8,7 @@ extends Control
 @onready var panel_container: PanelContainer = %PanelContainer
 
 ## Access to the calendar header label
-@onready var lbl_calendar_header: Label = %LblCalendarHeader
+@onready var lbl_calendar_header: RichTextLabel = %LblCalendarHeader
 
 ## Access to the grid calendar header labels
 @onready var grid_calendar_week_header: GridContainer = %GridCalendarWeekHeader
@@ -49,7 +49,6 @@ func _ready() -> void:
 	set_calendar_header()
 	
 	populate_calendar_month()
-	
 	pass 
 
 
@@ -75,15 +74,12 @@ func populate_calendar_month() -> void:
 			
 			if date.month == month:
 				if date.is_equal(todays_date):
-					date_label.label_settings.font_color = Color.BLUE
+					date_label.label_settings.font_color = Color("#4c0328")
 					set_selected_state(date_label)
 				else:
 					date_label.label_settings.font_color = Color.BLACK
 			else:
 				date_label.label_settings.font_color = Color.GRAY
-			
-			
-			
 			
 			# Attach to the scene tree
 			date_margin_container.add_child(date_label)
@@ -120,7 +116,7 @@ func set_selected_state(date_label : Label) -> void:
 		
 	var selected_rect: ColorRect = ColorRect.new()
 	selected_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
-	selected_rect.color = Color.SLATE_GRAY
+	selected_rect.color = Color("#066a6a")
 	selected_rect.show_behind_parent = true
 	date_label.add_child(selected_rect)
 	
@@ -140,7 +136,7 @@ func clear_calendar() -> void:
 	selected_date_label = null
 	
 	for child in grid_calendar_dates.get_children():
-		child.queue_free()	
+		child.queue_free()
 	pass
 
 
@@ -183,7 +179,6 @@ func _on_btn_next_month_pressed() -> void:
 func _on_date_pressed(date: Calendar.Date, date_label: Label):
 	set_selected_state(date_label)
 	selected_date = date
-	print("Date selected")
 	SignalBus.date_selected.emit(date)
 	pass
 

@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1cbpyxpdpww8"]
+
+[ext_resource type="Script" uid="uid://cjpvai6w0cgsk" path="res://user_interface/schedule/resource_assignments/hbox_assignment_row.gd" id="1_ec3rv"]
+
+[node name="HBoxAssignmentRow" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_ec3rv")
+
+[node name="LabelCount" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "1."
+fit_content = true
+
+[node name="LabelTitle" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Moses the Kitten"
+fit_content = true
+
+[node name="LabelDate" type="LineEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="OptionProgress" type="OptionButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+
+[node name="TextEditNotes" type="TextEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="ButtonEdit" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Edit"
+
+[node name="ButtonSave" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AccentButton"
+text = "Save"
+
+[connection signal="pressed" from="ButtonEdit" to="." method="_on_button_edit_pressed"]
+[connection signal="pressed" from="ButtonSave" to="." method="_on_button_save_pressed"]

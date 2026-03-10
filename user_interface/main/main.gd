@@ -24,9 +24,33 @@ const SETTINGS_SCENE_PATH : String = "res://user_interface/settings/settings.tsc
 ## Scene path for the schedule page
 const SCHEDULE_SCENE_PATH : String = "res://user_interface/schedule/schedule.tscn"
 
+## Scene path to the daily plan page
+const DAILY_PLAN_SCENE_PATH : String = "res://user_interface/daily_plan/daily_plan.tscn"
+
+## Scene path to the resource's scheduled assignments page
+const RESOURCE_ASSIGNMENTS_PATH : String = "res://user_interface/schedule/resource_assignments/resource_assignments.tscn"
+
+## Scene path to the welcome page
+const WELCOME_SCENE_PATH : String = "res://user_interface/main/welcome_page.tscn"
+
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:	
+func _ready() -> void:
+	# Set the screen scale factor 
+	if OS.has_feature("mobile"):
+		CMDatabaseUtilities.is_mobile = true
+		
+		#get_window().content_scale_factor = 4
+		get_window().content_scale_size = Vector2i(600,600)
+		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+		pass
+	
+	if CMDatabaseUtilities.get_subject_list().is_empty():
+		display_welcome_message()
+	else:
+		display_daily_plan_page()
+	
+	
 	#region signals
 	# Displays a selected resources information 
 	SignalBus.connect("display_resource_info",display_resource_info_page, 0)
@@ -48,7 +72,43 @@ func _ready() -> void:
 	
 	# Displays the resource schedule page with an assignment to be edited
 	SignalBus.connect("display_edited_resource_schedule_page", display_editable_resource_schedule_view, 0)
+	
+	# Displays the scheduled resource assignments page
+	SignalBus.connect("display_resource_assignments_page", display_assignments_page, 0)
 	#endregion
+	pass
+
+
+## Displays a welcome message if there are no assignments in the database
+func display_welcome_message() -> void:
+	remove_scene_from_attacher()
+	
+	var welcome_page = load(WELCOME_SCENE_PATH)
+	var instance = welcome_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	pass
+
+
+## Displays the assignments for the selected ResourceItem page
+func display_assignments_page(p_subject : Subject) -> void:
+	remove_scene_from_attacher()
+	
+	var resource_assignment_page = load(RESOURCE_ASSIGNMENTS_PATH)
+	var instance = resource_assignment_page.instantiate()
+	panel_container_attacher.add_child(instance)
+	
+	SignalBus.display_resource_assignments.emit(p_subject)
+	pass
+
+
+
+## Displays the daily plan page
+func display_daily_plan_page() -> void:
+	remove_scene_from_attacher()
+	
+	var daily_plan_page = load(DAILY_PLAN_SCENE_PATH)
+	var instance = daily_plan_page.instantiate()
+	panel_container_attacher.add_child(instance)
 	pass
 
 
@@ -72,6 +132,7 @@ func display_selected_resource_schedule_view(p_resource : ResourceItem) -> void:
 	
 	SignalBus.schedule_selected_resource.emit(p_resource)
 	pass
+
 
 ## Displays the resource scheduler page with an assignment to be edited
 func display_editable_resource_schedule_view(p_assignment) -> void:
@@ -148,7 +209,6 @@ func display_schedule_page() -> void:
 ## Remove current container from the PanelContainerAttacher
 func remove_scene_from_attacher() -> void:
 	if panel_container_attacher.get_child_count() > 0:
-		#panel_container_attacher.remove_child(panel_container_attacher.get_child(0))
 		panel_container_attacher.get_child(0).call_deferred("queue_free")
 	pass
 
@@ -157,15 +217,21 @@ func remove_scene_from_attacher() -> void:
 func _on_btn_resources_pressed() -> void:
 	# Remove any child nodes
 	remove_scene_from_attacher()
-	
 	display_resource_page()
 	
+	# TODO remove focus box over buttons?
+	 #btn_start.release_focus()
 	pass 
 
 
 ## Displays the home page
 func _on_btn_home_pressed() -> void:
 	remove_scene_from_attacher()
+	
+	if CMDatabaseUtilities.get_subject_list().is_empty():
+		display_welcome_message()
+	else:
+		display_daily_plan_page()
 	pass
 
 

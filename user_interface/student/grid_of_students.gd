@@ -1,5 +1,6 @@
 ################################################################################
-### Students Table - displays all of the students
+### Students Table
+### Displays all of the students in table format
 ################################################################################
 extends Control
 
@@ -45,6 +46,8 @@ func refresh_student_list() -> void:
 			instance.set_student_resource(student)
 			
 		family_count += 1
+	
+	self.visible = true
 	pass
 
 

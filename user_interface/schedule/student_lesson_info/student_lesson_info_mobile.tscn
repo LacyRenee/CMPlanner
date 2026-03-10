@@ -1,0 +1,218 @@
+[gd_scene load_steps=2 format=3 uid="uid://dji3o6xmi2iym"]
+
+[ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info/student_lesson_info.gd" id="1_xdwgj"]
+
+[node name="VBoxStudentLessonInfo" type="VBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 353.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+script = ExtResource("1_xdwgj")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LblStudentName" type="RichTextLabel" parent="HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Wayne"
+fit_content = true
+
+[node name="HBoxSubjectTitle" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxSubjectTitle"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LblSubjectTitle" type="RichTextLabel" parent="HBoxSubjectTitle"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "A is for Art"
+fit_content = true
+
+[node name="HBoxDivisionType" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxDivisionType"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LblDivisionType" type="RichTextLabel" parent="HBoxDivisionType"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Division Type"
+fit_content = true
+
+[node name="ControlSpacer2" type="Control" parent="HBoxDivisionType"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 1
+
+[node name="HBoxStudyMethod" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxStudyMethod"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LblLessonMethod" type="RichTextLabel" parent="HBoxStudyMethod"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Study Method"
+fit_content = true
+
+[node name="HBoxStartDate" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxStartDate"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="LblStart" type="RichTextLabel" parent="HBoxStartDate"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Start:"
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="PanelWeekDays" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+mouse_filter = 1
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxWeekDays" type="HBoxContainer" parent="HBoxContainer/PanelWeekDays"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="LblDay1" type="RichTextLabel" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "S"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay2" type="RichTextLabel" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "M"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay3" type="RichTextLabel" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "T"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay4" type="RichTextLabel" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "W"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay5" type="RichTextLabel" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "R"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay6" type="RichTextLabel" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "F"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LblDay7" type="RichTextLabel" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "S"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlSpacer" type="Control" parent="HBoxContainer/PanelWeekDays/HBoxWeekDays"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HBoxActions" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="HBoxActions"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="BtnRemoveFromSchedule" type="Button" parent="HBoxActions"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Remove From Schedule"
+
+[node name="BtnEditSchedule" type="Button" parent="HBoxActions"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Edit Schedule"
+
+[node name="ControlSpacer" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+mouse_filter = 1
+
+[connection signal="pressed" from="HBoxActions/BtnRemoveFromSchedule" to="." method="_on_btn_remove_from_schedule_pressed"]
+[connection signal="pressed" from="HBoxActions/BtnEditSchedule" to="." method="_on_btn_edit_schedule_pressed"]

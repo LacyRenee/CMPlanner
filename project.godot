@@ -38,7 +38,8 @@ CmDatabaseUtilities="*res://data/cm_database_utilities.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep_width"
+window/handheld/orientation=6
 
 [editor]
 
@@ -56,6 +57,7 @@ day_selected="Resource Scheduler's week day checkboxes"
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true
+theme/default_font_generate_mipmaps=true
 theme/custom="uid://y251c6k3e2gq"
 
 [rendering]

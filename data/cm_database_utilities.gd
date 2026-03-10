@@ -7,11 +7,42 @@
 class_name CMDatabaseUtilities
 extends Node
 
+## List of all grades
+enum GRADES {
+	NA,
+	Preschool,
+	Kindergarten,
+	First_Grade,
+	Second_Grade,
+	Third_Grade,
+	Fourth_Grade,
+	Fifth_Grade,
+	Sixth_Grade,
+	Seventh_Grade,
+	Eighth_Grade,
+	Ninth_Grade,
+	Tenth_Grade,
+	Eleveneth_Grade,
+	Twelfth_Grade
+}
+
+## Path to the custom user data to be imported
+const USER_LIBRARY_PATH = "res://data/library.json"
+
 ## File path for the user settings 
 const DATABASE_PATH = "/cm_database.tres"
 
 ## Base path for the user's folder
 static var cm_database_path : String =  OS.get_user_data_dir()
+
+## Toggles mobile settings
+static var is_mobile : bool = false
+
+## Active subjects
+static var active_subjects : Array[ResourceData.Subjects] = []
+
+## Calendar
+static var _calendar : Calendar = Calendar.new()
 
 
 ## Called when the node enters the scene tree for the first time
@@ -23,13 +54,120 @@ func _ready() -> void:
 		# Family student required
 		var family_student : Student = Student.new()
 		family_student.name = "Family"
-		family_student.grade = "NA"
+		family_student.grade = GRADES.NA
 		family_student.is_active = true
 		
 		db.student_list.append(family_student)
-				
+
 		ResourceSaver.save(db, get_database_filepath())
+		
+	update_active_subjects()
+	
 	pass
+	
+
+## Parses through JSON objects of ResourceItems and adds them to the database file
+static func parse_json_data() -> void:
+	var file_string = FileAccess.get_file_as_string(USER_LIBRARY_PATH)
+	
+	# Verify the contents
+	if file_string.is_empty():
+		print(FileAccess.get_open_error())
+		return
+	
+	var json_data = JSON.parse_string(file_string)
+	
+	if json_data == null:
+		print("Json data is null - aborting import")
+		return 
+		
+	var json_library = json_data.Library
+	var json_divisions = json_data.Divisions
+		
+	if json_library != null:
+		var resource_item_count : int = 0
+		for item in json_library:
+			# Check to see if the title already exists in the database
+			if does_resource_item_exist(item.TITLE):
+				print(item.TITLE + " already exists")
+				continue
+			
+			
+			var resource : ResourceItem = ResourceItem.new()
+			resource.title = item.TITLE
+			resource.isbn = item.ISBN if item.ISBN != "NA" else ""
+			resource.contributor_name = item.CONTRIBUTOR_NAME if item.CONTRIBUTOR_NAME != "NA" else ""
+			resource.web_url = item.WEB_URL if item.WEB_URL != "NA" else ""
+			resource.publisher = item.PUBLISHER if item.PUBLISHER != "NA" else ""
+			resource.copyright_date = str(item.COPYRIGHT_DATE) if str(item.COPYRIGHT_DATE) != "NA" else null
+			resource.year_written = str(item.YEAR_WRITTEN) if str(item.YEAR_WRITTEN) != "NA" else ""
+			resource.number_of_pages = item.NUMBER_OF_PAGES if str(item.NUMBER_OF_PAGES) != "NA" else ""
+			resource.edition = item.EDITION if item.EDITION != "NA" else ""
+			resource.description = item.DESCRIPTION if item.DESCRIPTION != "NA" else ""
+			
+			if item.RESOURCE_TYPE != "NA":
+				for r in ResourceData.ResourceType:
+					if r == item.RESOURCE_TYPE:
+						resource.resource_type = r
+					
+			if item.CONTRIBUTOR != "NA":
+				for c in ResourceData.Contributors:
+					if c == item.CONTRIBUTOR:
+						resource.contributor = c
+					pass
+			
+			if item.SUBJECT != "NA":
+				for s in ResourceData.Subjects:
+					if s == item.SUBJECT:
+						resource.subject = s
+					pass
+			
+			match item.DIVISION_TYPE:
+				"None":
+					resource.division_type = ResourceData.DivisionType
+				"Assignment":
+					resource.division_type = ResourceData.DivisionType.Assignment
+				"Chapter":
+					resource.division_type = ResourceData.DivisionType.Chapter
+				"Lesson":
+					resource.division_type = ResourceData.DivisionType.Lesson
+				"Poem":
+					resource.division_type = ResourceData.DivisionType.Poem
+				_:
+					resource.division_type = ResourceData.DivisionType.None
+				
+			if resource.division_type != ResourceData.DivisionType.None:
+				for division in json_divisions:
+					if division.TITLE == resource.title:
+						var count : int = 0 
+						for i in division.keys():
+							if count > 1:
+								resource.division_list.append(division[i])
+							
+							count += 1
+				CMDatabaseUtilities.save_resource_item(resource)
+	pass
+
+
+#region Date Functions
+static func get_formatted_date(p_date : Calendar.Date) -> String:
+	var pattern : String = "%m-%d-%Y"
+	var formatted_date = _calendar.get_date_formatted(p_date.year, p_date.month, p_date.day, pattern)
+	return formatted_date
+#endregion
+
+
+#region Mobile functions
+## Returns the value for is_mobile
+static func get_is_mobile() -> bool:
+	return is_mobile
+
+
+## Sets the value for is_mobile
+static func set_is_mobile(value : bool) -> void:
+	is_mobile = value
+	pass
+#endregion
 
 
 #region Student functions
@@ -40,7 +178,7 @@ static func get_student_list() -> Array[Student]:
 
 
 ## Adds a student to the student list file
-static func add_student(p_student) -> void:
+static func add_student(p_student : Student) -> void:
 	var db = get_database()
 	db.student_list.append(p_student)
 	
@@ -48,10 +186,18 @@ static func add_student(p_student) -> void:
 	pass
 
 
-## Removes the selected student from the database
-static func remove_student(p_student) -> void:
+## Removes the selected student and all associated assignments from the database
+static func remove_student(p_student : Student) -> void:
 	var db = get_database()
+	var assignment_list = db.subject_list
 	var index = db.student_list.find(p_student)
+	
+	# Remove assignments associated with the student
+	for assignment in assignment_list:
+		if assignment.student == p_student:
+			remove_subject_from_schedule(assignment)
+	
+	# Remove the student
 	db.student_list.remove_at(index)
 	overwrite_database(db)
 	pass
@@ -105,7 +251,32 @@ static func remove_resource_item(p_resource : ResourceItem) -> void:
 	db.resource_list.remove_at(index)
 	overwrite_database(db)
 	pass
+
+
+## Returns true if the ResourceItem exists else false
+static func does_resource_item_exist(p_title : String) -> bool:
+	var is_exist : bool = false
+	
+	var resource_list = get_all_resources()
+	
+	for item in resource_list:
+		if item.title.to_lower() == p_title.to_lower():
+			is_exist = true
+			return is_exist
+	
+	return is_exist
 #endregion
+
+
+#region Subject Functions
+static func update_active_subjects() -> void:
+	active_subjects.clear()
+	var subject_list : Array[Subject] = get_subject_list()
+	
+	for subject in subject_list:
+		if not active_subjects.has(subject.subject):
+			active_subjects.append(subject.subject)
+	pass
 
 
 ## Saves the subject to the database
@@ -113,6 +284,7 @@ static func add_subject(p_subject : Subject) -> void:
 	var db = get_database()
 	db.subject_list.append(p_subject)
 	overwrite_database(db)
+	update_active_subjects()
 	pass
 
 
@@ -128,25 +300,30 @@ static func remove_subject_from_schedule(p_subject : Subject) -> void:
 	var index = db.subject_list.find(p_subject)
 	db.subject_list.remove_at(index)
 	overwrite_database(db)
+	update_active_subjects()
 	pass
 
 
-## Updates the selected assignment
-static func update_assignment(p_assignment : Subject) -> void:
+## Updates the selected subject
+static func update_subject(p_subject : Subject) -> void:
 	var db = get_database()
-	var index = db.subject_list.find(p_assignment)
-	db.subject_list[index] = p_assignment
+	var index = db.subject_list.find(p_subject)
+	
+	db.subject_list[index] = p_subject
 	overwrite_database(db)
+	update_active_subjects()
 	pass
 
 
-## Removes all assignments associated with the selected ResourceItem
-static func remove_selected_resource_assignments(p_resource : ResourceItem) -> void:
-	var assignment_list : Array[Subject] = get_subject_list()
+## Removes all subjects associated with the selected ResourceItem
+static func remove_selected_resource_subjects(p_resource : ResourceItem) -> void:
+	var subject_list : Array[Subject] = get_subject_list()
 	
-	for assignment in assignment_list:
-		if assignment.resource == p_resource:
-			remove_subject_from_schedule(assignment)
+	for subject in subject_list:
+		if subject.resource == p_resource:
+			remove_subject_from_schedule(subject)
+	
+	update_active_subjects()
 	pass
 
 
@@ -167,9 +344,63 @@ static func update_selected_resource_assignments(p_resource : ResourceItem) -> A
 				assignment.assignments = new_assignment_list
 		else:
 			assignment_list.append(assignment)
-			
-	return assignment_list
+	
+	update_active_subjects()
 
+	return assignment_list
+#endregion
+
+
+#region Assignment Functions
+## Save the note for the selected assignment
+static func save_assignment_note(p_subject : Subject, p_assignment : Assignment, p_note : String) -> void:
+	var db = get_database()
+	
+	var assignment_index = p_subject.assignments.find(p_assignment)
+	p_subject.assignments[assignment_index].notes = p_note
+	
+	var subject_index = db.subject_list.find(p_subject)
+	db.subject_list[subject_index] = p_subject
+	
+	overwrite_database(db)
+	pass 
+
+
+## Save the start date for the selected assignment
+static func save_assignment_start_date(p_subject : Subject, p_assignment : Assignment, p_start_date : String) -> void:
+	var db = get_database()
+	
+	var assignment_index = p_subject.assignments.find(p_assignment)
+	p_subject.assignments[assignment_index].start_date = p_start_date
+	
+	var subject_index = db.subject_list.find(p_subject)
+	db.subject_list[subject_index] = p_subject
+	
+	overwrite_database(db)
+	pass
+
+
+## Save the assignment progress
+static func save_assignment_progress(p_subject : Subject, p_assignment : Assignment, p_index : int) -> void:
+	var db = get_database()
+	
+	var assignment_index = p_subject.assignments.find(p_assignment)
+	p_subject.assignments[assignment_index].progress = p_index
+	
+	# Save end date progress complete or omit
+	if p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
+		p_subject.assignments[assignment_index].end_date = Calendar.Date.today().to_string()
+	
+	var subject_index = db.subject_list.find(p_subject)
+	db.subject_list[subject_index] = p_subject
+	
+	overwrite_database(db)
+
+	pass
+#endregion
+
+
+#region Database functions
 ## Retreives the database file
 static func get_database() -> CMDatabase:
 	var db : CMDatabase = ResourceLoader.load(get_database_filepath())
@@ -185,3 +416,4 @@ static func overwrite_database(p_file : CMDatabase) -> void:
 ## The user file path to the user settings
 static func get_database_filepath() -> String:
 	return cm_database_path + DATABASE_PATH
+#endregion

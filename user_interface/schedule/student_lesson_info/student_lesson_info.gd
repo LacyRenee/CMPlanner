@@ -1,7 +1,10 @@
+################################################################################
+## Student Lesson Info
+## Displays a general overview of the lesson for a designated subject
+## Highlights the days of the week the lesson is done
+## Allows the user to edit, remove, and view all assignments
+################################################################################
 extends VBoxContainer
-
-## Access to the student name
-@onready var lbl_student_name: RichTextLabel = %LblStudentName
 
 ## Access to the title of the assigned subject
 @onready var lbl_subject_title: RichTextLabel = %LblSubjectTitle
@@ -58,8 +61,15 @@ func _on_btn_remove_from_schedule_pressed() -> void:
 	SignalBus.refresh_scheduled_subject_view.emit()
 	pass 
 
+
 ## Changes the scene to the ResourceScheduler view
 ## allowing the assignmnet to be edited
 func _on_btn_edit_schedule_pressed() -> void:
 	SignalBus.display_edited_resource_schedule_page.emit(subject)
 	pass 
+
+
+## Changes the scene to the resource_assignment view
+func _on_btn_view_schedule_pressed() -> void:
+	SignalBus.display_resource_assignments_page.emit(subject)
+	pass

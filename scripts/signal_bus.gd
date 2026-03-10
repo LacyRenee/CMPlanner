@@ -1,10 +1,13 @@
-## Event bus for signaling between nodes 
+################################################################################
+### Event bus for signaling between nodes 
+################################################################################
 extends Node
+
 
 ## Emitted when a new resource page should be displayed
 @warning_ignore("unused_signal")
 signal display_new_resource_page
-
+ 
 ## Emitted when the all resource page should be displayed
 @warning_ignore("unused_signal")
 signal display_all_resource_page
@@ -24,7 +27,6 @@ signal schedule_selected_resource(resource)
 ## Emitted when the ResourceScheduler view should be displayed
 @warning_ignore("unused_signal")
 signal display_resource_schedule_page()
-
 
 ## Emitted when the Schedule Page should be displayed
 @warning_ignore("unused_signal")
@@ -50,12 +52,27 @@ signal student_filter_checked(checkbox)
 @warning_ignore("unused_signal")
 signal refresh_scheduled_subject_view
 
-
 ## Emitted when an assignment is to be edited
 @warning_ignore("unused_signal")
 signal display_edited_resource_schedule_page(assignment)
 
-
 ## Emitted to display the selected assignment to be edited
 @warning_ignore("unused_signal")
 signal edit_selected_assignment(assignment)
+
+## Emitted when an assignment is completed or omitted to show the next assignment
+@warning_ignore("unused_signal")
+signal display_next_assignment
+
+## Emitted when all of the assignments for a scheduled resource is to be viewed
+@warning_ignore("unused_signal")
+signal display_resource_assignments_page(assignment)
+
+## Emitted to pass the resource information to display all of the assignments
+@warning_ignore("unused_signal")
+signal display_resource_assignments(assignment)
+
+
+## Emitted when the editted assignments should be saved
+@warning_ignore("unused_signal")
+signal update_resource_assignments(index, date, progress, notes)

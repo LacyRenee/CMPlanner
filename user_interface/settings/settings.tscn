@@ -12,121 +12,140 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_aioaw")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_type_variation = &"BackgroundPanel"
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="LblSettingsHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Settings"
-fit_content = true
-horizontal_alignment = 1
-
-[node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LblStudents" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+[node name="LblStudents" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
 text = "List of Students"
 fit_content = true
+autowrap_mode = 0
 
-[node name="BtnAddStudent" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="ControlSpacer" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="BtnAddStudent" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_type_variation = &"AccentButton"
 text = "Add Student
 "
 
-[node name="GridOfStudents" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_de3xg")]
+[node name="VSeparator" type="VSeparator" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GridOfStudents" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_de3xg")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 2
 
-[node name="PopupPanel" type="PopupPanel" parent="PanelContainer"]
+[node name="Button" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Load Data"
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 oversampling_override = 1.0
 initial_position = 1
-size = Vector2i(500, 270)
+size = Vector2i(450, 250)
+visible = true
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/PopupPanel"]
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 496.0
-offset_bottom = 266.0
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 445.0
+offset_bottom = 245.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/PopupPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PopupPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="PopupLblName" type="RichTextLabel" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.5
-text = "Name"
-fit_content = true
-
-[node name="PopupLeName" type="LineEdit" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="PopupLblGrade" type="RichTextLabel" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="PopupLblName" type="RichTextLabel" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
-text = "Grade"
+text = "Name: "
 fit_content = true
+autowrap_mode = 0
 
-[node name="PopupLeGrade" type="LineEdit" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="PopupLeName" type="LineEdit" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PopupControlSpacer" type="Control" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="PopupPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblGrade" type="RichTextLabel" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+text = "Grade: "
+fit_content = true
+autowrap_mode = 0
+
+[node name="OptionGrade" type="OptionButton" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PopupControlSpacer" type="Control" parent="PopupPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="PopupPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 8
 
-[node name="PopupBtnCancel" type="Button" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+[node name="PopupBtnSave" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-text = "Cancel"
-
-[node name="PopupBtnSave" type="Button" parent="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
+theme_type_variation = &"AccentButton"
 text = "Save"
 
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnAddStudent" to="." method="_on_btn_add_student_pressed"]
-[connection signal="pressed" from="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnCancel" to="." method="_on_popup_btn_cancel_pressed"]
-[connection signal="pressed" from="PanelContainer/PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnSave" to="." method="_on_popup_btn_save_pressed"]
+[node name="PopupBtnCancel" type="Button" parent="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_type_variation = &"DeleteButton"
+text = "Cancel"
+
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnAddStudent" to="." method="_on_btn_add_student_pressed"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnSave" to="." method="_on_popup_btn_save_pressed"]
+[connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnCancel" to="." method="_on_popup_btn_cancel_pressed"]

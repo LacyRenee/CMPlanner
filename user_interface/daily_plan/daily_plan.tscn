@@ -1,0 +1,161 @@
+[gd_scene load_steps=2 format=3 uid="uid://c818eyfog0xhe"]
+
+[ext_resource type="Script" uid="uid://mmjnnb8ji8qd" path="res://user_interface/daily_plan/daily_plan.gd" id="1_02lio"]
+
+[node name="DailyPlan" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_02lio")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="PanelContainerHeader" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"BackgroundPanel"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader"]
+layout_mode = 2
+
+[node name="BtnPreviousDailyPlan" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AccentTwoButton"
+theme_override_font_sizes/font_size = 24
+text = "<"
+
+[node name="BtnTodayPlan" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_type_variation = &"AccentTwoButton"
+text = "Today's Plan: February 9, 2026"
+
+[node name="BtnNextDailyPlan" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"AccentTwoButton"
+theme_override_font_sizes/font_size = 24
+text = ">"
+
+[node name="ControlSpacer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="PanelContainerDailyNote" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerDailyNote"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerDailyNote/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblDailyNote" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerDailyNote/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add a Daily Note:"
+fit_content = true
+
+[node name="BtnSaveNote" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerDailyNote/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"AccentTwoButton"
+text = "Save Daily Note"
+
+[node name="TextEditDailyNote" type="TextEdit" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerDailyNote/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PanelContainerFilters" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters"]
+layout_mode = 2
+
+[node name="ControlSpacer2" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="LblStudentHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+layout_mode = 2
+text = "Filter by Students:"
+fit_content = true
+
+[node name="ItemListStudentFilter" type="ItemList" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+select_mode = 2
+max_columns = 5
+
+[node name="ControlSpacer3" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="LblSubjectHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+layout_mode = 2
+text = "Filter by Subjects:"
+fit_content = true
+
+[node name="ItemListSubjectFilter" type="ItemList" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+auto_width = true
+max_columns = 5
+same_column_width = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainerFilters/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxSubjectPanels" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer/BtnPreviousDailyPlan" to="." method="_on_btn_previous_daily_plan_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer/BtnTodayPlan" to="." method="_on_btn_today_plan_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/PanelContainerHeader/HBoxContainer/BtnNextDailyPlan" to="." method="_on_btn_next_daily_plan_pressed"]
