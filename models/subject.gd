@@ -24,9 +24,6 @@ extends Resource
 ## Use after a specified resource
 @export var start_after : Subject
 
-## Specifies whether the Subject is scheduled or not
-@export var is_active : bool = true
-
 ## Selected division type used for assignments
 @export var division_type : ResourceData.DivisionType
 

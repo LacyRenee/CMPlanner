@@ -59,7 +59,6 @@ func _on_btn_save_notes_pressed() -> void:
 		
 		timer_save_note.start()
 		timer_save_note.connect("timeout", _on_timer_save_note_timeout)
-		
 	pass 
 
 

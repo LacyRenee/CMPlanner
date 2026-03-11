@@ -34,6 +34,9 @@ const STUDENT_ID = "student_id"
 ## Access to the vbox to display an overview of all the active subjects
 @onready var vbox_subject_overview : VBoxContainer = %VBoxSubjectView
 
+## Access to the vbox to display an overview of all completed subjects
+@onready var vbox_completed_subject_view: VBoxContainer = %VBoxCompletedSubjectView
+
 ## Access to column1 header for the Schedule overview table
 @onready var lbl_header_1: RichTextLabel = %LblHeader1
 
@@ -99,9 +102,13 @@ func remove_children_from_scene() -> void:
 			vbox_weekly_overview_table.get_child(i).call_deferred("queue_free")
 		
 		
-	# Remove all assignments from the Subject Overview
+	# Remove all assignments from the Active Subject Overview
 	for i in vbox_subject_overview.get_child_count():
 		vbox_subject_overview.get_child(i).call_deferred("queue_free")
+	
+	# Remove all assignments from the Completed Subject View
+	for i in vbox_completed_subject_view.get_child_count():
+		vbox_completed_subject_view.get_child(i).call_deferred("queue_free")
 	pass
 
 
@@ -177,7 +184,7 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 				student_row = row
 
 	# Adds the assignment to each day it's assigned
-	for assignment in p_assignment_list:		
+	for assignment in p_assignment_list:
 		for day in assignment.week_days:
 			match day:
 				ResourceData.week_day.Sunday:
@@ -231,30 +238,53 @@ func create_subject_assignment_overview() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
 	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
 	
-	if student_subject_list.is_empty():
+	if student_subject_list.is_empty() or student_subject_list.is_empty():
 		return
 	
 	# Add the subject panel
-	for index in CmDatabaseUtilities.active_subjects:
-		var panel_subject_scene = PANEL_SUBJECT.instantiate()
-		vbox_subject_overview.add_child(panel_subject_scene)
-		panel_subject_scene.set_subject(ResourceData.Subjects.keys()[index].replace("_", " "))
+	for index in ResourceData.Subjects:
+		# Add the subject panel to the active container
+		var panel_active_subject_scene = PANEL_SUBJECT.instantiate()
+		vbox_subject_overview.add_child(panel_active_subject_scene)
+		panel_active_subject_scene.set_subject(index)
+		panel_active_subject_scene.visible = false
+		
+		# Add the subject panel to the completed container
+		var panel_completed_subject_scene = PANEL_SUBJECT.instantiate()
+		vbox_completed_subject_view.add_child(panel_completed_subject_scene)
+		panel_completed_subject_scene.set_subject(index)
+		panel_completed_subject_scene.visible = false
 		
 		# Add each student to the subject
 		for student in student_list:
-			var panel_student_scene = PANEL_STUDENT.instantiate()
-			panel_subject_scene.v_box_subject.add_child(panel_student_scene)
-			panel_student_scene.set_student_name(student.name)
-			panel_student_scene.set_meta(STUDENT_ID, student.resource_path)
-			panel_student_scene.add_to_group(STUDENT_PANEL_GROUP)
-			panel_student_scene.visible = false
+			# Add the student panel to the active subject panel
+			var panel_active_student_scene = PANEL_STUDENT.instantiate()
+			panel_active_subject_scene.v_box_subject.add_child(panel_active_student_scene)
+			panel_active_student_scene.set_student_name(student.name)
+			panel_active_student_scene.set_meta(STUDENT_ID, student.resource_path)
+			panel_active_student_scene.add_to_group(STUDENT_PANEL_GROUP)
+			panel_active_student_scene.visible = false
+			
+			# Add the student panel to the completed subject panel
+			var panel_completed_student_scene = PANEL_STUDENT.instantiate()
+			panel_completed_subject_scene.v_box_subject.add_child(panel_completed_student_scene)
+			panel_completed_student_scene.set_student_name(student.name)
+			panel_completed_student_scene.set_meta(STUDENT_ID, student.resource_path)
+			panel_completed_student_scene.add_to_group(STUDENT_PANEL_GROUP)
+			panel_completed_student_scene.visible = false
 		
-			# Add the student subject assignments to the subject view
+			# Add the student subject assignments to the cvorresponding active/inactive subject tabs
 			for subject_assignment in student_subject_list:
 				if subject_assignment.student == student and\
-				   CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_subject_scene.get_subject()):
-					panel_student_scene.visible = true
-					create_subject_assignment(subject_assignment, panel_student_scene)
+				   subject_assignment.is_finished == false and\
+				   CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_active_subject_scene.get_subject()):
+						panel_active_subject_scene.visible = true
+						create_subject_assignment(subject_assignment, panel_active_student_scene)
+				elif subject_assignment.student == student and\
+					 subject_assignment.is_finished == true and\
+					 CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_completed_subject_scene.get_subject()):
+					panel_completed_subject_scene.visible = true
+					create_subject_assignment(subject_assignment, panel_completed_student_scene)
 	pass
 
 
@@ -269,7 +299,7 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 
 	p_container.vbox_student.add_child(student_lesson_info_scene)
 	
-	# TODO Turn into a link to view the resource?	
+	# TODO Turn into a link to view the resource?
 	student_lesson_info_scene.lbl_subject_title.text = p_assignment.resource.title
 	student_lesson_info_scene.lbl_lesson_method.text = \
 			ResourceData.study_method.keys()[p_assignment.study_method].replace("_", " ")

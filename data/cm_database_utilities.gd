@@ -274,8 +274,9 @@ static func update_active_subjects() -> void:
 	var subject_list : Array[Subject] = get_subject_list()
 	
 	for subject in subject_list:
-		if not active_subjects.has(subject.subject):
-			active_subjects.append(subject.subject)
+		if subject.is_finished == false:
+			if not active_subjects.has(subject.subject):
+				active_subjects.append(subject.subject)
 	pass
 
 
@@ -394,12 +395,18 @@ static func save_assignment_progress(p_subject : Subject, p_assignment : Assignm
 	if p_index == ResourceData.progress.Complete_and_finish:
 		p_subject.assignments[assignment_index].completed_date = Calendar.Date.today().to_string()
 		p_subject.is_finished =  true
-	elif p_index == ResourceData.progress.Completed:
+	elif p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
 		p_subject.assignments[assignment_index].completed_date = Calendar.Date.today().to_string()
-		p_subject.is_finished =  false
+		
+		if  p_subject.division_type != ResourceData.DivisionType.None and\
+			assignment_index == p_subject.assignments.size() - 1:
+			p_subject.is_finished =  true
+		else:
+			p_subject.is_finished =  false
 	else:
 		p_subject.assignments[assignment_index].completed_date = ""
 		p_subject.is_finished =  false
+
 	
 	var subject_index = db.subject_list.find(p_subject)
 	db.subject_list[subject_index] = p_subject

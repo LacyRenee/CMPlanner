@@ -400,19 +400,16 @@ func _on_btn_update_schedule_pressed() -> void:
 		add_error_formats(errors)
 		return
 	
-	# Verify that the assignment already exists
-	var assignment_list = CMDatabaseUtilities.get_subject_list()
-	for assignment in assignment_list:
-		updated_subject.week_days.clear()
-		save_data(updated_subject)
-		
-		# Student assignment found! Update it
-		if assignment.student == updated_subject.student and assignment.resource == updated_subject.resource:
-			CMDatabaseUtilities.update_subject(updated_subject)
-		else:
-			CMDatabaseUtilities.add_subject(updated_subject)
+	# Clear the week days so they aren't duplicated
+	updated_subject.week_days.clear()
 	
+	# Save the new data
+	save_data(updated_subject)
 	
+	# Update the database
+	CMDatabaseUtilities.update_subject(updated_subject)
+	
+	# Signal the schedulge page to be displayed
 	SignalBus.display_schedule_page.emit()
 	pass
 

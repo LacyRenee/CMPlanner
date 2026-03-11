@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://chj1la6p3ou7h"]
+[gd_scene load_steps=3 format=3 uid="uid://chj1la6p3ou7h"]
 
 [ext_resource type="Script" uid="uid://da7nybe7i665e" path="res://user_interface/schedule/student_lesson_info/student_lesson_info.gd" id="1_v2cj1"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_v2cj1"]
+color = Color(0.8745098, 0.88235295, 0.8980392, 1)
 
 [node name="VBoxStudentLessonInfo" type="VBoxContainer"]
 anchors_preset = 10
@@ -156,6 +159,11 @@ fit_content = true
 [node name="ControlSpacer" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 1
+theme_override_styles/separator = SubResource("StyleBoxLine_v2cj1")
 
 [connection signal="pressed" from="HBoxLesson/BtnEditSchedule" to="." method="_on_btn_edit_schedule_pressed"]
 [connection signal="pressed" from="HBoxLesson/BtnViewSchedule" to="." method="_on_btn_view_schedule_pressed"]
