@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bv6p480uv7ng2"]
+[gd_scene load_steps=3 format=3 uid="uid://bv6p480uv7ng2"]
 
 [ext_resource type="Script" uid="uid://dmxux3nk22elp" path="res://user_interface/schedule/panel_subject/panel_subject.gd" id="1_rk0ln"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pqcqk"]
+content_margin_top = 20.0
+bg_color = Color(0.95686275, 0.96862745, 0.9843137, 1)
 
 [node name="PanelSubject" type="PanelContainer"]
 anchors_preset = 15
@@ -9,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"BackgroundPanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_pqcqk")
 script = ExtResource("1_rk0ln")
 
 [node name="VBoxSubject" type="VBoxContainer" parent="."]

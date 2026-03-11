@@ -102,6 +102,12 @@ func _on_button_save_pressed() -> void:
 	button_edit.visible = true
 	button_save.visible = false
 	
+	if option_progress.selected == ResourceData.progress.Incomplete or\
+	   option_progress.selected == ResourceData.progress.In_progress:
+		label_date.text = "NA"
+	else:
+		label_date.text = Calendar.Date.today().to_string()
+	
 	SignalBus.update_resource_assignments.emit(\
 		int(label_count.text) - 1,\
 		label_date.text,\

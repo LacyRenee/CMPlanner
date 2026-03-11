@@ -356,8 +356,11 @@ static func update_selected_resource_assignments(p_resource : ResourceItem) -> A
 static func save_assignment_note(p_subject : Subject, p_assignment : Assignment, p_note : String) -> void:
 	var db = get_database()
 	
-	var assignment_index = p_subject.assignments.find(p_assignment)
-	p_subject.assignments[assignment_index].notes = p_note
+	if p_subject.assignments.is_empty():
+		pass
+	else:
+		var assignment_index = p_subject.assignments.find(p_assignment)
+		p_subject.assignments[assignment_index].notes = p_note
 	
 	var subject_index = db.subject_list.find(p_subject)
 	db.subject_list[subject_index] = p_subject
@@ -383,19 +386,25 @@ static func save_assignment_start_date(p_subject : Subject, p_assignment : Assig
 ## Save the assignment progress
 static func save_assignment_progress(p_subject : Subject, p_assignment : Assignment, p_index : int) -> void:
 	var db = get_database()
-	
 	var assignment_index = p_subject.assignments.find(p_assignment)
-	p_subject.assignments[assignment_index].progress = p_index
 	
-	# Save end date progress complete or omit
-	if p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
-		p_subject.assignments[assignment_index].end_date = Calendar.Date.today().to_string()
+	p_subject.assignments[assignment_index].progress = p_index
+
+	# Save the completed date or finsihed complete date based on the progress
+	if p_index == ResourceData.progress.Complete_and_finish:
+		p_subject.assignments[assignment_index].completed_date = Calendar.Date.today().to_string()
+		p_subject.is_finished =  true
+	elif p_index == ResourceData.progress.Completed:
+		p_subject.assignments[assignment_index].completed_date = Calendar.Date.today().to_string()
+		p_subject.is_finished =  false
+	else:
+		p_subject.assignments[assignment_index].completed_date = ""
+		p_subject.is_finished =  false
 	
 	var subject_index = db.subject_list.find(p_subject)
 	db.subject_list[subject_index] = p_subject
 	
 	overwrite_database(db)
-
 	pass
 #endregion
 
@@ -416,4 +425,21 @@ static func overwrite_database(p_file : CMDatabase) -> void:
 ## The user file path to the user settings
 static func get_database_filepath() -> String:
 	return cm_database_path + DATABASE_PATH
+#endregion
+
+
+#region tools
+## Strips the strings and compares them
+static func compare_strings(p_string_one : String, p_string_two : String) -> bool:
+	var result : bool 
+	
+	var formatted_string_one = p_string_one.replace("_", " ").to_lower().strip_edges()
+	var formatted_string_two = p_string_two.replace("_", " ").to_lower().strip_edges()
+	
+	if formatted_string_one == formatted_string_two:
+		result = true
+	else:
+		result = false
+	
+	return result
 #endregion

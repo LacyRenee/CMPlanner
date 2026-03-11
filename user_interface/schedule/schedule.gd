@@ -252,7 +252,7 @@ func create_subject_assignment_overview() -> void:
 			# Add the student subject assignments to the subject view
 			for subject_assignment in student_subject_list:
 				if subject_assignment.student == student and\
-				   str(ResourceData.Subjects.keys()[subject_assignment.subject]).replace("_", " ") == str(panel_subject_scene.get_subject()):
+				   CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_subject_scene.get_subject()):
 					panel_student_scene.visible = true
 					create_subject_assignment(subject_assignment, panel_student_scene)
 	pass

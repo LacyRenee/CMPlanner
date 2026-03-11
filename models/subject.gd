@@ -36,6 +36,9 @@ extends Resource
 ## Daily notes
 @export var daily_notes : Array[DailyNotes] = []
 
+## True when all assignments have been completed/omitted
+@export var is_finished : bool = false
+
 
 ## Built-in class to hold the daily notes
 class DailyNotes:

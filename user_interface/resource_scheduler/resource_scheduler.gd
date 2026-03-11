@@ -223,11 +223,17 @@ func set_selected_date(p_date) -> void:
 func create_assignments(p_resource : ResourceItem) -> Array[Assignment]:
 	var assignment_list : Array[Assignment] = []
 	
-	for title in p_resource.division_list:
-		var assignment : Assignment = Assignment.new()
-		assignment.title = title
-		assignment.progress = ResourceData.progress.Incomplete
-		assignment_list.append(assignment)
+	if p_resource.division_type == ResourceData.DivisionType.None:
+		var new_assignment : Assignment = Assignment.new()
+		new_assignment.title = p_resource.title
+		new_assignment.progress = ResourceData.progress.Incomplete
+		assignment_list.append(new_assignment)
+	else:
+		for title in p_resource.division_list:
+			var new_assignment : Assignment = Assignment.new()
+			new_assignment.title = title
+			new_assignment.progress = ResourceData.progress.Incomplete
+			assignment_list.append(new_assignment)
 	
 	return assignment_list
 
@@ -292,10 +298,11 @@ func save_data(p_new_subject : Subject) -> Subject:
 	# Add the selected resource
 	p_new_subject.resource = item_list_resource.get_item_metadata(item_list_resource.get_selected_items()[0])
 	
-	## Create the assignments if the ResourceItem has a division type
-	if p_new_subject.resource.division_type != ResourceData.DivisionType.None:
-		p_new_subject.division_type = p_new_subject.resource.division_type
-		p_new_subject.assignments = create_assignments(p_new_subject.resource)
+	# Add the division type
+	p_new_subject.division_type = p_new_subject.resource.division_type
+	
+	# Create the assignments for the subject
+	p_new_subject.assignments = create_assignments(p_new_subject.resource)
 	
 	# Add the student
 	p_new_subject.student = options_student_list.get_item_metadata(options_student_list.selected)
@@ -351,7 +358,6 @@ func _on_btn_save_schedule_pressed() -> void:
 	if !errors.is_empty():
 		add_error_formats(errors)
 		return
-	
 	
 	# Create the new subject and add all the data
 	var new_subject : Subject = Subject.new()

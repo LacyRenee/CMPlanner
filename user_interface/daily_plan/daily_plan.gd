@@ -65,7 +65,6 @@ func _ready() -> void:
 
 
 #region Daily Assignment Functions
-#TODO Add in logic to only add assignments based on start date
 ## Creates the panel header for each subject
 func create_daily_plan_assignments() -> void:
 	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
@@ -78,10 +77,7 @@ func create_daily_plan_assignments() -> void:
 		var panel_subject_scene = PANEL_SUBJECT.instantiate()
 		vbox_subject_panels.add_child(panel_subject_scene)
 		
-		
 		panel_subject_scene.set_subject(ResourceData.Subjects.keys()[index].replace("_", " "))
-		
-		
 		panel_subject_scene.visible = false
 		
 		for student in student_list:
@@ -94,31 +90,33 @@ func create_daily_plan_assignments() -> void:
 			
 			# Add the student subject assignments for the day to the subject view
 			for subject_assignment in student_subject_list:
-				if subject_assignment.week_days.has(day_of_week) and \
-				   student == subject_assignment.student and \
-					str(ResourceData.Subjects.keys()[subject_assignment.subject]).replace("_", " ") == str(panel_subject_scene.get_subject()):
-					
-					# Only add the assignment if the start date is the same as today or after
-					if !subject_assignment.start_date.is_empty():
-						var split_date = subject_assignment.start_date.split("-")
-						var year : int = int(split_date[2])
-						var month : int = int(split_date[0])
-						var day : int  = int(split_date[1])
-						var formatted_date = CMDatabaseUtilities._calendar.Date.new(year, month, day)
-					
-						if formatted_date.is_equal(today) or formatted_date.is_after(today):
-							panel_student_scene.visible = true
-							add_assignment_to_subject_overview(subject_assignment)
-					
-					# Only add the assignment if the start after ResourceItem has all assignments completed
-					if subject_assignment.start_after != null:
-						for i in subject_assignment.start_after.assignments.size():
-							if subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Completed or\
-							   subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Omit_assignment:
-								return
-							else:
+				# Only add active assignments 
+				if subject_assignment.is_finished == false:
+					if subject_assignment.week_days.has(day_of_week) and \
+					   student == subject_assignment.student and \
+					   CMDatabaseUtilities.compare_strings(ResourceData.Subjects.keys()[subject_assignment.subject], panel_subject_scene.get_subject()):
+						
+						# Only add the assignment if the start date is the same as today or after
+						if !subject_assignment.start_date.is_empty():
+							var split_date = subject_assignment.start_date.split("-")
+							var year : int = int(split_date[2])
+							var month : int = int(split_date[0])
+							var day : int  = int(split_date[1])
+							var formatted_date = CMDatabaseUtilities._calendar.Date.new(year, month, day)
+						
+							if formatted_date.is_equal(today) or formatted_date.is_after(today):
 								panel_student_scene.visible = true
 								add_assignment_to_subject_overview(subject_assignment)
+						
+						# Only add the assignment if the start after ResourceItem has all assignments completed
+						if subject_assignment.start_after != null:
+							for i in subject_assignment.start_after.assignments.size():
+								if subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Completed or\
+								   subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Omit_assignment:
+									return
+								else:
+									panel_student_scene.visible = true
+									add_assignment_to_subject_overview(subject_assignment)
 	pass
 
 
@@ -139,28 +137,54 @@ func add_assignment_to_subject_overview(p_subject : Subject) -> void:
 
 ## Creates the progress view for the first selected assignment that is not complete
 func create_assignment_view(p_subject : Subject, p_container : Node) -> void:
-	
 	for first_incomplete in p_subject.assignments:
 		if first_incomplete.start_date == today.to_string() and \
 		   (first_incomplete.progress == ResourceData.progress.Completed or \
-		   first_incomplete.progress == ResourceData.progress.Omit_assignment) :
-			create_assignment(p_subject, first_incomplete, p_container)
+		   first_incomplete.progress == ResourceData.progress.Omit_assignment):
+			create_assignment(p_subject, p_container, first_incomplete)
 			continue
 			
-		create_assignment(p_subject, first_incomplete, p_container)
+		create_assignment(p_subject, p_container, first_incomplete)
 		return
 	pass
 
 
-func create_assignment(p_subject : Subject, p_assignment : Assignment, p_container : Node) -> void:
+## Creates the assignment view for a subject with no list of assignments
+func create_one_time_assignment(p_subject : Subject, p_container : Node) -> void:
 	var assignment_scene = DAILY_ASSIGNMENT.instantiate()
 	p_container.get_child(0).add_child(assignment_scene)
-
+	
 	assignment_scene.set_meta("subject", p_subject)
-	assignment_scene.set_meta("assignment", p_assignment)
+	assignment_scene.title = p_subject.resource.title
+	assignment_scene.lbl_division_title.visible = false
+	assignment_scene.lbl_date.text = Calendar.Date.today()._to_string()
+	assignment_scene.lbl_study_method.text = str(ResourceData.study_method.keys()[p_subject.study_method].replace("_", " "))
+	
+	pass
+
+
+## Create the assignment view for subjects with a list of assignments
+func create_assignment(p_subject : Subject, p_container : Node, p_assignment : Assignment = null) -> void:
+	# Create the assignment view
+	var assignment_scene = DAILY_ASSIGNMENT.instantiate()
+	p_container.get_child(0).add_child(assignment_scene)
+	
+	# Attach the subject for easy reference from the assignment scene
+	assignment_scene.set_meta("subject", p_subject)
+	
+	# Remove the "Finish and Complete" for assignments that do not contain a division type
+	if p_subject.resource.division_type != ResourceData.DivisionType.None:
+		assignment_scene.option_button_progress.set_item_disabled(4, true)
+		
+	# Attach the assignment for easy reference from the assignment scene
+	if p_assignment == null:
+		assignment_scene.title = p_subject.resource.title
+	else:
+		assignment_scene.set_meta("assignment", p_assignment)
 	
 	# Specify title and collapisble based on progress state
-	if p_assignment.progress == ResourceData.progress.Completed:
+	if p_assignment.progress == ResourceData.progress.Completed or\
+	   p_assignment.progress == ResourceData.progress.Complete_and_finish:
 		assignment_scene.title = p_subject.resource.title +\
 		" - " + str(ResourceData.progress.keys()[p_assignment.progress]) +\
 		" on " + p_assignment.completed_date
