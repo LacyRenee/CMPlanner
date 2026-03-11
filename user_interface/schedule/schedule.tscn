@@ -33,7 +33,6 @@ layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
@@ -84,7 +83,7 @@ layout_mode = 2
 [node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/PanelContainerWeeklyViewOptions/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
-text = "Students:"
+text = "Filter by Students:"
 fit_content = true
 
 [node name="ItemListStudents" type="ItemList" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/PanelContainerWeeklyViewOptions/VBoxContainer"]
@@ -332,13 +331,6 @@ layout_mode = 2
 [node name="VBoxCompletedSubjectView" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer/Completed Subjects/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="PanelContainerSubjectOverview" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 1
-theme_type_variation = &"BackgroundPanel"
 
 [node name="PopupPanel" type="PopupPanel" parent="."]
 unique_name_in_owner = true

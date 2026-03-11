@@ -73,11 +73,10 @@ func create_daily_plan_assignments() -> void:
 	if student_subject_list.is_empty():
 		return
 	
-	for index in CmDatabaseUtilities.active_subjects:
+	for index in ResourceData.Subjects:
 		var panel_subject_scene = PANEL_SUBJECT.instantiate()
 		vbox_subject_panels.add_child(panel_subject_scene)
-		
-		panel_subject_scene.set_subject(ResourceData.Subjects.keys()[index].replace("_", " "))
+		panel_subject_scene.set_subject(index)
 		panel_subject_scene.visible = false
 		
 		for student in student_list:
@@ -91,7 +90,12 @@ func create_daily_plan_assignments() -> void:
 			# Add the student subject assignments for the day to the subject view
 			for subject_assignment in student_subject_list:
 				# Only add active assignments 
-				if subject_assignment.is_finished == false:
+				if subject_assignment.student == student and\
+				   subject_assignment.is_finished == false and\
+				   CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_subject_scene.get_subject()):
+					panel_subject_scene.visible = true
+					
+					# Only add subjects that matches today
 					if subject_assignment.week_days.has(day_of_week) and \
 					   student == subject_assignment.student and \
 					   CMDatabaseUtilities.compare_strings(ResourceData.Subjects.keys()[subject_assignment.subject], panel_subject_scene.get_subject()):
@@ -106,7 +110,7 @@ func create_daily_plan_assignments() -> void:
 						
 							if formatted_date.is_equal(today) or formatted_date.is_after(today):
 								panel_student_scene.visible = true
-								add_assignment_to_subject_overview(subject_assignment)
+								create_assignment_view(subject_assignment, panel_student_scene)
 						
 						# Only add the assignment if the start after ResourceItem has all assignments completed
 						if subject_assignment.start_after != null:
@@ -116,22 +120,7 @@ func create_daily_plan_assignments() -> void:
 									return
 								else:
 									panel_student_scene.visible = true
-									add_assignment_to_subject_overview(subject_assignment)
-	pass
-
-
-## For each students, the assignment is added to the correct subject overview
-func add_assignment_to_subject_overview(p_subject : Subject) -> void:
-	var subject = ResourceData.Subjects.keys()[p_subject.subject].replace("_", " ")
-	var nodes = vbox_subject_panels.get_children()
-	
-	for n in nodes:
-		if n.get_child(0).get_child(0).text == subject:
-			create_assignment_view(p_subject, n)
-			n.visible = true
-			
-			if !todays_subjects.has(p_subject.subject):
-				todays_subjects.append(p_subject.subject)
+									create_assignment_view(subject_assignment, panel_student_scene)
 	pass
 
 
@@ -149,25 +138,11 @@ func create_assignment_view(p_subject : Subject, p_container : Node) -> void:
 	pass
 
 
-## Creates the assignment view for a subject with no list of assignments
-func create_one_time_assignment(p_subject : Subject, p_container : Node) -> void:
-	var assignment_scene = DAILY_ASSIGNMENT.instantiate()
-	p_container.get_child(0).add_child(assignment_scene)
-	
-	assignment_scene.set_meta("subject", p_subject)
-	assignment_scene.title = p_subject.resource.title
-	assignment_scene.lbl_division_title.visible = false
-	assignment_scene.lbl_date.text = Calendar.Date.today()._to_string()
-	assignment_scene.lbl_study_method.text = str(ResourceData.study_method.keys()[p_subject.study_method].replace("_", " "))
-	
-	pass
-
-
 ## Create the assignment view for subjects with a list of assignments
 func create_assignment(p_subject : Subject, p_container : Node, p_assignment : Assignment = null) -> void:
 	# Create the assignment view
 	var assignment_scene = DAILY_ASSIGNMENT.instantiate()
-	p_container.get_child(0).add_child(assignment_scene)
+	p_container.vbox_student.add_child(assignment_scene)
 	
 	# Attach the subject for easy reference from the assignment scene
 	assignment_scene.set_meta("subject", p_subject)
@@ -211,8 +186,11 @@ func create_assignment(p_subject : Subject, p_container : Node, p_assignment : A
 	
 	if p_assignment.progress == ResourceData.progress.Incomplete:
 		CMDatabaseUtilities.save_assignment_start_date(p_subject, p_assignment, today.to_string())
+	
+	p_container.visible = true
 	pass
 #endregion
+
 
 ## Remove the assignment view
 func refresh_page() -> void:
@@ -232,7 +210,7 @@ func display_next_assignment() -> void:
 	pass
 
 
-#region SIgnal Functions
+#region Signal Functions
 ## Displays the following dates assignment plans
 func _on_btn_next_daily_plan_pressed() -> void:
 	pass
@@ -244,4 +222,21 @@ func _on_btn_today_plan_pressed() -> void:
 ## Displays yesterday's assignments
 func _on_btn_previous_daily_plan_pressed() -> void:
 	pass 
+
+# Displays the selected student assignments
+func _on_item_list_student_filter_multi_selected(index: int, selected: bool) -> void:
+	# Student overview panels
+	var student_panels = get_tree().get_nodes_in_group(STUDENT_PANEL_GROUP)
+	
+	# Select student in table and subject overview
+	for i in range(item_list_student_filter.get_item_count()):
+		if item_list_student_filter.is_selected(i):
+			for panel in student_panels:
+				if panel.get_meta(STUDENT_ID) == item_list_student_filter.get_item_metadata(i).resource_path:
+					panel.visible = true
+		else:
+			for panel in student_panels:
+				if panel.get_meta(STUDENT_ID) == item_list_student_filter.get_item_metadata(i).resource_path:
+					panel.visible = false
+	pass
 #endregion

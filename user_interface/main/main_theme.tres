@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=35 format=3 uid="uid://y251c6k3e2gq"]
+[gd_resource type="Theme" load_steps=37 format=3 uid="uid://y251c6k3e2gq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qtq35"]
 content_margin_left = 10.0
@@ -173,9 +173,18 @@ corner_radius_bottom_left = 10
 corner_detail = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_auipe"]
-content_margin_bottom = 50.0
 bg_color = Color(0.95686275, 0.96862745, 0.9843137, 1)
 expand_margin_bottom = 50.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lfp3f"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.8745098, 0.88235295, 0.8980392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3p2bf"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.95686275, 0.96862745, 0.9843137, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pxdp8"]
 bg_color = Color(0.8745098, 0.88235295, 0.8980392, 1)
@@ -246,7 +255,7 @@ ItemList/styles/panel = SubResource("StyleBoxFlat_343ai")
 ItemList/styles/selected_focus = SubResource("StyleBoxFlat_b7vx4")
 LineEdit/colors/caret_color = Color(0.039215688, 0.039215688, 0.23529412, 1)
 LineEdit/colors/font_color = Color(0, 0, 0, 1)
-LineEdit/colors/font_placeholder_color = Color(0.6, 0.6, 0.6, 1)
+LineEdit/colors/font_placeholder_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_uneditable_color = Color(0, 0, 0, 1)
 LineEdit/constants/caret_width = 2
 LineEdit/font_sizes/font_size = 18
@@ -272,8 +281,14 @@ PopupPanel/styles/panel = SubResource("StyleBoxFlat_8sn20")
 RichTextLabel/colors/default_color = Color(0, 0, 0, 1)
 RichTextLabel/font_sizes/normal_font_size = 18
 ScrollContainer/styles/panel = SubResource("StyleBoxFlat_auipe")
+TabContainer/colors/font_selected_color = Color(0, 0, 0, 1)
+TabContainer/colors/font_unselected_color = Color(0, 0, 0, 1)
+TabContainer/constants/tab_separation = 10
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_lfp3f")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_3p2bf")
 TextEdit/colors/caret_color = Color(0, 0, 0, 1)
 TextEdit/colors/font_color = Color(0, 0, 0, 1)
+TextEdit/colors/font_readonly_color = Color(0, 0, 0, 1)
 TextEdit/styles/normal = SubResource("StyleBoxFlat_pxdp8")
 VSeparator/constants/separation = 0
 VSeparator/styles/separator = SubResource("StyleBoxFlat_gt6hk")
