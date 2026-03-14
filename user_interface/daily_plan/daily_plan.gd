@@ -157,7 +157,7 @@ func create_assignment_view(p_subject : Subject, p_container : Node) -> void:
 			create_assignment(p_subject, p_container, first_incomplete)
 			continue
 		
-		# OTherwise, display the next assignment
+		# Otherwise, display the next assignment
 		create_assignment(p_subject, p_container, first_incomplete)
 		return
 	pass
@@ -208,9 +208,6 @@ func create_assignment(p_subject : Subject, p_container : Node, p_assignment : A
 	assignment_scene.text_edit_notes.text = p_assignment.notes if !p_assignment.notes.is_empty() else ""
 	
 	assignment_scene.option_button_progress.selected = p_assignment.progress
-	
-	if p_assignment.progress == ResourceData.progress.Incomplete:
-		CMDatabaseUtilities.save_assignment_start_date(p_subject, p_assignment, today.to_string())
 	
 	p_container.visible = true
 	pass

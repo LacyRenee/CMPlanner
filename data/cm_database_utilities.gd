@@ -66,6 +66,48 @@ func _ready() -> void:
 	pass
 	
 
+
+
+#region Utility Functions
+## The mathematical formula used to calculate the day of the week for any given date
+static func zellers_congruence(day: int, month: int, year: int) -> Time.Weekday:
+	if month < 3:
+		month += 12
+		year -= 1
+
+	var q = day
+	var m = month
+	var K = year % 100
+	var C = year / 100
+	var h = (q + (13 * (m + 1)) / 5 + K + K / 4 + C / 4 - 2 * C) % 7
+	
+	# Adjusted Zeller's Congruence for Godot's Sunday = 0
+	return (h + 6) % 7 as Time.Weekday
+
+
+## Formats a date as MM/DD/YYYY
+static func get_formatted_date(p_date : Calendar.Date) -> String:
+	var pattern : String = "%m-%d-%Y"
+	var formatted_date = _calendar.get_date_formatted(p_date.year, p_date.month, p_date.day, pattern)
+	return formatted_date
+
+
+## Verifies the date format: MM-DD-YYYY or MM/DD/YYYY
+static func verify_date_format(p_date : String) -> bool:
+	var regex_date_dash = RegEx.new()
+	regex_date_dash.compile("^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])-\\d{4}$")
+	
+	var regex_format_slash = RegEx.new()
+	regex_format_slash.compile("^(0[1-9]|1[0-2])/(0[1-9]|[12]\\d|3[01])/\\d{4}$")
+	
+	if regex_date_dash.search(p_date) != null:
+		return true
+	elif regex_format_slash.search(p_date) != null:
+		return true
+	else:
+		return false
+
+
 ## Parses through JSON objects of ResourceItems and adds them to the database file
 static func parse_json_data() -> void:
 	var file_string = FileAccess.get_file_as_string(USER_LIBRARY_PATH)
@@ -147,31 +189,6 @@ static func parse_json_data() -> void:
 							count += 1
 				CMDatabaseUtilities.save_resource_item(resource)
 	pass
-
-
-
-#region Utility Functions
-## The mathematical formula used to calculate the day of the week for any given date
-static func zellers_congruence(day: int, month: int, year: int) -> Time.Weekday:
-	if month < 3:
-		month += 12
-		year -= 1
-
-	var q = day
-	var m = month
-	var K = year % 100
-	var C = year / 100
-	var h = (q + (13 * (m + 1)) / 5 + K + K / 4 + C / 4 - 2 * C) % 7
-	
-	# Adjusted Zeller's Congruence for Godot's Sunday = 0
-	return (h + 6) % 7 as Time.Weekday
-
-
-## Formats a date as DD/MM/YYYY
-static func get_formatted_date(p_date : Calendar.Date) -> String:
-	var pattern : String = "%m-%d-%Y"
-	var formatted_date = _calendar.get_date_formatted(p_date.year, p_date.month, p_date.day, pattern)
-	return formatted_date
 #endregion
 
 
@@ -411,10 +428,10 @@ static func save_assignment_progress(p_subject : Subject, p_assignment : Assignm
 
 	# Save the completed date or finsihed complete date based on the progress
 	if p_index == ResourceData.progress.Complete_and_finish:
-		p_subject.assignments[assignment_index].completed_date = Calendar.Date.today().to_string()
+		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
 		p_subject.is_finished =  true
 	elif p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
-		p_subject.assignments[assignment_index].completed_date = Calendar.Date.today().to_string()
+		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
 		
 		if  p_subject.division_type != ResourceData.DivisionType.None and\
 			assignment_index == p_subject.assignments.size() - 1:

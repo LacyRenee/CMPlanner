@@ -41,7 +41,9 @@ func _on_option_button_progress_item_selected(index: int) -> void:
 	if index == ResourceData.progress.Completed or\
 	   index == ResourceData.progress.Omit_assignment or\
 	   index == ResourceData.progress.Complete_and_finish:
-		self.title = self.get_meta("subject").resource.title + " - " + ResourceData.progress.keys()[index].replace("_", " ") + " on " + Calendar.Date.today().to_string()
+		var formatted_date = CMDatabaseUtilities.get_formatted_date(CMDatabaseUtilities._calendar.Date.today())
+		self.title = self.get_meta("subject").resource.title + " - " + \
+			 ResourceData.progress.keys()[index].replace("_", " ") + " on " + formatted_date
 		self.fold()
 	else:
 		self.title = self.get_meta("subject").resource.title
