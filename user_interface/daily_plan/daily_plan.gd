@@ -13,6 +13,9 @@ extends Control
 ## Access to the list of subjects
 @onready var vbox_subject_panels: VBoxContainer = %VBoxSubjectPanels
 
+## Access to the today's plan button
+@onready var btn_today_plan: Button = %BtnTodayPlan
+
 
 ## Path to the Panel subject scene
 const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
@@ -34,10 +37,11 @@ const STUDENT_PANEL_GROUP = "student_panel"
 var today : Calendar.Date = Calendar.Date.today()
 
 ## Holds the selected date
-var selected_date = today
+var selected_date : Calendar.Date = today
 
-## Holds the day for the current date
-var day_of_week : Time.Weekday = today.get_weekday()
+## Holds the day of the week for the current date
+var day_of_week : Time.Weekday = CMDatabaseUtilities.zellers_congruence(today.day, today.month, today.year)
+
 
 ## Holds the subjects to be displayed for today
 var todays_subjects : Array[ResourceData.Subjects] = []
@@ -45,6 +49,8 @@ var todays_subjects : Array[ResourceData.Subjects] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	format_date()
+	
 	# Add the student filter to the view
 	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
 	for student in student_list:
@@ -55,12 +61,29 @@ func _ready() -> void:
 	# Add the subject and assignments
 	create_daily_plan_assignments()
 	
+	# TODO Add a subject filter
 	# Add the list of active subjects to the subject filter
-	for subject in todays_subjects:
-		item_list_subject_filter.add_item(ResourceData.Subjects.keys()[subject].replace("_", " "))
+	#for subject in todays_subjects:
+	#	item_list_subject_filter.add_item(ResourceData.Subjects.keys()[subject].replace("_", " "))
 	
 	# Signal Functions
 	SignalBus.connect("display_next_assignment", display_next_assignment, 0)
+	pass
+
+
+## Removes the Assignment panels 
+func refresh_assignments() -> void:
+	for i in vbox_subject_panels.get_child_count():
+		vbox_subject_panels.get_child(i).call_deferred("queue_free")
+	pass
+
+
+## Formats the selected date to be displayed on top of the page
+func format_date() -> void:
+	var date = CMDatabaseUtilities._calendar.get_weekday_formatted(selected_date.year, selected_date.month, selected_date.day)
+	var formatted_month = CMDatabaseUtilities._calendar.get_month_formatted(selected_date.month, CMDatabaseUtilities._calendar.MonthFormat.MONTH_FORMAT_FULL)
+
+	btn_today_plan.text = date + ", " + formatted_month + " " + str(selected_date.day) + ", " + str(selected_date.year)
 	pass
 
 
@@ -89,26 +112,26 @@ func create_daily_plan_assignments() -> void:
 			
 			# Add the student subject assignments for the day to the subject view
 			for subject_assignment in student_subject_list:
-				# Only add active assignments 
+				# Only add active assignments for each panel subject
 				if subject_assignment.student == student and\
 				   subject_assignment.is_finished == false and\
 				   CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_subject_scene.get_subject()):
 					panel_subject_scene.visible = true
 					
-					# Only add subjects that matches today
+					# Only add subjects that matches the selected day
 					if subject_assignment.week_days.has(day_of_week) and \
 					   student == subject_assignment.student and \
 					   CMDatabaseUtilities.compare_strings(ResourceData.Subjects.keys()[subject_assignment.subject], panel_subject_scene.get_subject()):
 						
-						# Only add the assignment if the start date is the same as today or after
+						# Only add the assignment if the start date is the same as the selected date or after
 						if !subject_assignment.start_date.is_empty():
 							var split_date = subject_assignment.start_date.split("-")
 							var year : int = int(split_date[2])
 							var month : int = int(split_date[0])
 							var day : int  = int(split_date[1])
 							var formatted_date = CMDatabaseUtilities._calendar.Date.new(year, month, day)
-						
-							if formatted_date.is_equal(today) or formatted_date.is_after(today):
+
+							if formatted_date.is_equal(selected_date) or formatted_date.is_before(selected_date):
 								panel_student_scene.visible = true
 								create_assignment_view(subject_assignment, panel_student_scene)
 						
@@ -127,12 +150,14 @@ func create_daily_plan_assignments() -> void:
 ## Creates the progress view for the first selected assignment that is not complete
 func create_assignment_view(p_subject : Subject, p_container : Node) -> void:
 	for first_incomplete in p_subject.assignments:
+		# Displays all assignments completed on the same day
 		if first_incomplete.start_date == today.to_string() and \
 		   (first_incomplete.progress == ResourceData.progress.Completed or \
 		   first_incomplete.progress == ResourceData.progress.Omit_assignment):
 			create_assignment(p_subject, p_container, first_incomplete)
 			continue
-			
+		
+		# OTherwise, display the next assignment
 		create_assignment(p_subject, p_container, first_incomplete)
 		return
 	pass
@@ -192,20 +217,22 @@ func create_assignment(p_subject : Subject, p_container : Node, p_assignment : A
 #endregion
 
 
-## Remove the assignment view
-func refresh_page() -> void:
-	var nodes = vbox_subject_panels.get_children()
-	
-	for n in nodes:
-		n.call_deferred("queue_free")
-	pass
-
-
 ## Display a new assignment when the previous assignment is either 
 ## completed or omitted 
 func display_next_assignment() -> void:
-	refresh_page()
+	refresh_assignments()
 	
+	create_daily_plan_assignments()
+	pass
+
+
+
+
+## Refreshes the selected date and associated assignments
+func refresh_date() -> void:
+	day_of_week = CMDatabaseUtilities.zellers_congruence(selected_date.day, selected_date.month, selected_date.year)
+	format_date()
+	refresh_assignments()
 	create_daily_plan_assignments()
 	pass
 
@@ -213,17 +240,26 @@ func display_next_assignment() -> void:
 #region Signal Functions
 ## Displays the following dates assignment plans
 func _on_btn_next_daily_plan_pressed() -> void:
+	selected_date.add_days(1)
+	refresh_date()
 	pass
+
 
 ## Displays today's assignment plans
 func _on_btn_today_plan_pressed() -> void:
+	selected_date = selected_date.today()
+	refresh_date()
 	pass
+
 
 ## Displays yesterday's assignments
 func _on_btn_previous_daily_plan_pressed() -> void:
+	selected_date.subtract_days(1)
+	refresh_date()
 	pass 
 
-# Displays the selected student assignments
+
+## Displays the selected student assignments
 func _on_item_list_student_filter_multi_selected(index: int, selected: bool) -> void:
 	# Student overview panels
 	var student_panels = get_tree().get_nodes_in_group(STUDENT_PANEL_GROUP)
@@ -238,5 +274,10 @@ func _on_item_list_student_filter_multi_selected(index: int, selected: bool) -> 
 			for panel in student_panels:
 				if panel.get_meta(STUDENT_ID) == item_list_student_filter.get_item_metadata(i).resource_path:
 					panel.visible = false
+	pass
+
+
+## Saves the daily note
+func _on_btn_save_daily_note_pressed() -> void:
 	pass
 #endregion

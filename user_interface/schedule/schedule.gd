@@ -121,11 +121,14 @@ func create_schedule_overview_table() -> void:
 	var assignment_list = CMDatabaseUtilities.get_subject_list()
 		
 	for student in student_list:
+		# Add the students to the filter list
 		var index = item_list_students.add_item(student.name)
 		item_list_students.set_item_metadata(index, student)
 		
+		# Create the row
 		create_student_weekly_overview_row(student)
 		
+		# Add the student assignments
 		var assignments = get_all_student_assignments(student, assignment_list)
 		create_weekly_assignment_overview(student, assignments)
 	pass
@@ -185,29 +188,30 @@ func create_weekly_assignment_overview(p_student : Student, p_assignment_list : 
 
 	# Adds the assignment to each day it's assigned
 	for assignment in p_assignment_list:
-		for day in assignment.week_days:
-			match day:
-				ResourceData.week_day.Sunday:
-					var label = create_weekly_assignment_label(assignment.subject)
-					student_row.get_child(1).get_child(0).get_child(0).add_child(label)
-				ResourceData.week_day.Monday:
-					var label = create_weekly_assignment_label(assignment.subject)
-					student_row.get_child(2).get_child(0).get_child(0).add_child(label)
-				ResourceData.week_day.Tuesday:
-					var label = create_weekly_assignment_label(assignment.subject)
-					student_row.get_child(3).get_child(0).get_child(0).add_child(label)
-				ResourceData.week_day.Wednesday:
-					var label = create_weekly_assignment_label(assignment.subject)
-					student_row.get_child(4).get_child(0).get_child(0).add_child(label)
-				ResourceData.week_day.Thursday:
-					var label = create_weekly_assignment_label(assignment.subject)
-					student_row.get_child(5).get_child(0).get_child(0).add_child(label)
-				ResourceData.week_day.Friday:
-					var label = create_weekly_assignment_label(assignment.subject)
-					student_row.get_child(6).get_child(0).get_child(0).add_child(label)
-				ResourceData.week_day.Saturday:
-					var label = create_weekly_assignment_label(assignment.subject)
-					student_row.get_child(7).get_child(0).get_child(0).add_child(label)
+		if assignment.is_finished == false:
+			for day in assignment.week_days:
+				match day:
+					ResourceData.week_day.Sunday:
+						var label = create_weekly_assignment_label(assignment.subject)
+						student_row.get_child(1).get_child(0).get_child(0).add_child(label)
+					ResourceData.week_day.Monday:
+						var label = create_weekly_assignment_label(assignment.subject)
+						student_row.get_child(2).get_child(0).get_child(0).add_child(label)
+					ResourceData.week_day.Tuesday:
+						var label = create_weekly_assignment_label(assignment.subject)
+						student_row.get_child(3).get_child(0).get_child(0).add_child(label)
+					ResourceData.week_day.Wednesday:
+						var label = create_weekly_assignment_label(assignment.subject)
+						student_row.get_child(4).get_child(0).get_child(0).add_child(label)
+					ResourceData.week_day.Thursday:
+						var label = create_weekly_assignment_label(assignment.subject)
+						student_row.get_child(5).get_child(0).get_child(0).add_child(label)
+					ResourceData.week_day.Friday:
+						var label = create_weekly_assignment_label(assignment.subject)
+						student_row.get_child(6).get_child(0).get_child(0).add_child(label)
+					ResourceData.week_day.Saturday:
+						var label = create_weekly_assignment_label(assignment.subject)
+						student_row.get_child(7).get_child(0).get_child(0).add_child(label)
 	pass
 
 
@@ -315,7 +319,7 @@ func create_subject_assignment(p_assignment : Subject, p_container : Node) -> vo
 	student_lesson_info_scene.lbl_start.text = start_title
 	
 	# Format the division type text (e.g., Chapter 1 - 10)
-	if student_lesson_info_scene.lbl_division_type.text == ResourceData.DivisionType.keys()[ResourceData.DivisionType.None]:
+	if p_assignment.division_type == ResourceData.DivisionType.None:
 		student_lesson_info_scene.lbl_division_type.text = ""
 	else:
 		var count = p_assignment.assignments.size()

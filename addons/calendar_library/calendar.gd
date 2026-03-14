@@ -743,7 +743,8 @@ class Date:
 	# Returns the number of days in the month. If the year
 	# is a leap year February will return 29 days.
 	func _get_days_in_month() -> int:
-		var days_in_month: Array[int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+		var days_in_month: Array[int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]		
+		
 		if month == 2 and is_leap_year():
 			return 29
 		return days_in_month[month - 1]
@@ -757,9 +758,11 @@ class Date:
 		if month < 3:
 			month += 12
 			year -= 1
+			
 		var k: int = year % 100
 		var j: int = int(year / 100)
 		var f = day + (13 * (month + 1) / 5) + k + (k / 4) + (j / 4) - 2 * j
+		
 		# Adjusted Zeller's Congruence for Godot's Sunday = 0
 		return (f + 6) % 7 as Time.Weekday
 	
@@ -820,6 +823,7 @@ class Date:
 		day -= days
 		while day < 1:
 			month -= 1
+		
 			if month < 1:
 				month = 12
 				year -= 1

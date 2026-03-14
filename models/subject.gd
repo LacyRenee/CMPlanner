@@ -30,19 +30,5 @@ extends Resource
 ## Assignments to be scheduled for the student
 @export var assignments : Array[Assignment] = []  
 
-## Daily notes
-@export var daily_notes : Array[DailyNotes] = []
-
 ## True when all assignments have been completed/omitted
 @export var is_finished : bool = false
-
-
-## Built-in class to hold the daily notes
-class DailyNotes:
-	extends Resource
-	
-	## Date the note was made
-	var date : String = ""
-	
-	## Note information for the daily assignment
-	var note : String = ""

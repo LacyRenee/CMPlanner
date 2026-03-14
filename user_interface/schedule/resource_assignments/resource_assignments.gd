@@ -62,8 +62,8 @@ func display_assignments(p_subject : Subject) -> void:
 		
 		if subject.division_type != ResourceData.DivisionType.None:
 			instance.option_progress.set_item_disabled(4, true)
-			instance.set_label_date(assignment.completed_date)
-
+		
+		instance.set_label_date(assignment.completed_date)
 		
 		# Save the old data
 		old_date = assignment.completed_date

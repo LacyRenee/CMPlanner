@@ -149,7 +149,25 @@ static func parse_json_data() -> void:
 	pass
 
 
-#region Date Functions
+
+#region Utility Functions
+## The mathematical formula used to calculate the day of the week for any given date
+static func zellers_congruence(day: int, month: int, year: int) -> Time.Weekday:
+	if month < 3:
+		month += 12
+		year -= 1
+
+	var q = day
+	var m = month
+	var K = year % 100
+	var C = year / 100
+	var h = (q + (13 * (m + 1)) / 5 + K + K / 4 + C / 4 - 2 * C) % 7
+	
+	# Adjusted Zeller's Congruence for Godot's Sunday = 0
+	return (h + 6) % 7 as Time.Weekday
+
+
+## Formats a date as DD/MM/YYYY
 static func get_formatted_date(p_date : Calendar.Date) -> String:
 	var pattern : String = "%m-%d-%Y"
 	var formatted_date = _calendar.get_date_formatted(p_date.year, p_date.month, p_date.day, pattern)
