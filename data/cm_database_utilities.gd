@@ -92,20 +92,31 @@ static func get_formatted_date(p_date : Calendar.Date) -> String:
 	return formatted_date
 
 
-## Verifies the date format: MM-DD-YYYY or MM/DD/YYYY
+## Verifies the date format: MM-DD-YYYY
 static func verify_date_format(p_date : String) -> bool:
 	var regex_date_dash = RegEx.new()
 	regex_date_dash.compile("^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])-\\d{4}$")
 	
-	var regex_format_slash = RegEx.new()
-	regex_format_slash.compile("^(0[1-9]|1[0-2])/(0[1-9]|[12]\\d|3[01])/\\d{4}$")
-	
 	if regex_date_dash.search(p_date) != null:
-		return true
-	elif regex_format_slash.search(p_date) != null:
 		return true
 	else:
 		return false
+	pass
+
+
+## Strips the strings and compares them
+static func compare_strings(p_string_one : String, p_string_two : String) -> bool:
+	var result : bool 
+	
+	var formatted_string_one = p_string_one.replace("_", " ").to_lower().strip_edges()
+	var formatted_string_two = p_string_two.replace("_", " ").to_lower().strip_edges()
+	
+	if formatted_string_one == formatted_string_two:
+		result = true
+	else:
+		result = false
+	
+	return result
 
 
 ## Parses through JSON objects of ResourceItems and adds them to the database file
@@ -304,6 +315,12 @@ static func does_resource_item_exist(p_title : String) -> bool:
 
 
 #region Subject Functions
+## Retrieve all the subjects in the database
+static func get_subject_list() -> Array[Subject]:
+	var db = get_database()
+	return db.subject_list
+
+
 static func update_active_subjects() -> void:
 	active_subjects.clear()
 	var subject_list : Array[Subject] = get_subject_list()
@@ -323,11 +340,6 @@ static func add_subject(p_subject : Subject) -> void:
 	update_active_subjects()
 	pass
 
-
-## Retrieve all the subjects in the database
-static func get_subject_list() -> Array[Subject]:
-	var db = get_database()
-	return db.subject_list
 
 
 ## Removes the scheduled resource
@@ -388,6 +400,39 @@ static func update_selected_resource_assignments(p_resource : ResourceItem) -> A
 
 
 #region Assignment Functions
+## Save the daily assignment note
+static func save_daily_note(p_note : String, p_date : String) -> void:
+	var db = get_database()
+
+	# Update the daily note if it exists
+	for i in db.daily_notes.size():
+		if compare_strings(db.daily_notes[i].notes, p_date):
+			db.daily_notes[i].notes = p_note
+			overwrite_database(db)
+			return
+	
+	# Create a daily note if it does not exist
+	var new_daily_note : DailyNotes = DailyNotes.new()
+	new_daily_note.date = p_date
+	new_daily_note.notes = p_note
+
+	
+	db.daily_notes.append(new_daily_note)
+	overwrite_database(db)
+	pass
+
+
+## Retrieves a selected daily note
+static func get_daily_note(p_date : String) -> DailyNotes:
+	var db = get_database()
+	var note_list : Array[DailyNotes] = db.daily_notes
+
+	for i in note_list.size():
+		if note_list[i].date == p_date:
+			return note_list[i]
+	return null
+
+
 ## Save the note for the selected assignment
 static func save_assignment_note(p_subject : Subject, p_assignment : Assignment, p_note : String) -> void:
 	var db = get_database()
@@ -467,21 +512,4 @@ static func overwrite_database(p_file : CMDatabase) -> void:
 ## The user file path to the user settings
 static func get_database_filepath() -> String:
 	return cm_database_path + DATABASE_PATH
-#endregion
-
-
-#region tools
-## Strips the strings and compares them
-static func compare_strings(p_string_one : String, p_string_two : String) -> bool:
-	var result : bool 
-	
-	var formatted_string_one = p_string_one.replace("_", " ").to_lower().strip_edges()
-	var formatted_string_two = p_string_two.replace("_", " ").to_lower().strip_edges()
-	
-	if formatted_string_one == formatted_string_two:
-		result = true
-	else:
-		result = false
-	
-	return result
 #endregion

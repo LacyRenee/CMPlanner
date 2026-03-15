@@ -115,17 +115,40 @@ func _on_button_save_pressed() -> void:
 	   option_progress.selected == ResourceData.progress.Complete_and_finish:
 		if !CMDatabaseUtilities.verify_date_format(label_date.text):
 			error_check_form()
-			label_date.text = "Date must be in MM-DD-YYYY format"
+			label_date.text = ""
+			label_date.placeholder_text = "Date must be in MM-DD-YYYY format"
 			return
+		else:
+			var split_date = label_date.text.split("-")
+			var month = int(split_date[0])
+			var day = int(split_date[1])
+			var year = int(split_date[2])
+			var formatted_date : Calendar.Date = Calendar.Date.new(year, month, day)
+			
+			if !formatted_date.is_valid():
+				label_date.text = ""
+				label_date.placeholder_text = "Date is not valid."
+				return
 	
 	if option_progress.selected == ResourceData.progress.Incomplete or\
 	   option_progress.selected == ResourceData.progress.In_progress:
 			if label_date.text.strip_edges().is_empty():
 				label_date.text = "NA" 
 			elif !CMDatabaseUtilities.verify_date_format(label_date.text):
-				error_check_form()
-				label_date.text = "Date must be in MM-DD-YYYY format"
+				label_date.text = ""
+				label_date.placeholder_text = "Date must be in MM-DD-YYYY format"
 				return
+			else:
+				var split_date = label_date.text.split("-")
+				var month = int(split_date[0])
+				var day = int(split_date[1])
+				var year = int(split_date[2])
+				var formatted_date : Calendar.Date = Calendar.Date.new(year, month, day)
+				
+				if !formatted_date.is_valid():
+					label_date.text = ""
+					label_date.placeholder_text = "Date is not valid."
+					return
 				
 	label_date.editable = false
 	option_progress.disabled = true

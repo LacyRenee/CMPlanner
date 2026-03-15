@@ -16,6 +16,15 @@ extends Control
 ## Access to the today's plan button
 @onready var btn_today_plan: Button = %BtnTodayPlan
 
+## Access to the daily notes
+@onready var panel_container_daily_note: PanelContainer = %PanelContainerDailyNote
+
+## Access to the assignment filters
+@onready var panel_container_filters: PanelContainer = %PanelContainerFilters
+
+## Access to the daily notes
+@onready var text_edit_daily_note: TextEdit = %TextEditDailyNote
+
 
 ## Path to the Panel subject scene
 const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
@@ -49,14 +58,14 @@ var todays_subjects : Array[ResourceData.Subjects] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Format the Today button date text
 	format_date()
 	
+	# Add the daily note
+	populate_daily_note()
+	
 	# Add the student filter to the view
-	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
-	for student in student_list:
-		if student.is_active:
-			var index = item_list_student_filter.add_item(student.name)
-			item_list_student_filter.set_item_metadata(index, student)
+	populate_student_filter()
 		
 	# Add the subject and assignments
 	create_daily_plan_assignments()
@@ -68,6 +77,27 @@ func _ready() -> void:
 	
 	# Signal Functions
 	SignalBus.connect("display_next_assignment", display_next_assignment, 0)
+	pass
+
+
+## Adds the daily note text if any
+func populate_daily_note() -> void:
+	var result = CMDatabaseUtilities.get_daily_note(CMDatabaseUtilities.get_formatted_date(selected_date))
+	if result != null:
+		if CMDatabaseUtilities.get_formatted_date(selected_date) == result.date:
+			text_edit_daily_note.text = result.notes
+	else:
+		text_edit_daily_note.text = ""
+	pass
+
+
+## Adds all of the students to the filter ItemList
+func populate_student_filter() -> void:
+	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
+	for student in student_list:
+		if student.is_active:
+			var index = item_list_student_filter.add_item(student.name)
+			item_list_student_filter.set_item_metadata(index, student)
 	pass
 
 
@@ -116,12 +146,13 @@ func create_daily_plan_assignments() -> void:
 				if subject_assignment.student == student and\
 				   subject_assignment.is_finished == false and\
 				   CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_subject_scene.get_subject()):
-					panel_subject_scene.visible = true
 					
 					# Only add subjects that matches the selected day
 					if subject_assignment.week_days.has(day_of_week) and \
 					   student == subject_assignment.student and \
 					   CMDatabaseUtilities.compare_strings(ResourceData.Subjects.keys()[subject_assignment.subject], panel_subject_scene.get_subject()):
+						
+						panel_subject_scene.visible = true
 						
 						# Only add the assignment if the start date is the same as the selected date or after
 						if !subject_assignment.start_date.is_empty():
@@ -144,6 +175,28 @@ func create_daily_plan_assignments() -> void:
 								else:
 									panel_student_scene.visible = true
 									create_assignment_view(subject_assignment, panel_student_scene)
+	
+	
+	# Display a message if no assignments are scheduled for the day
+	var is_assignment : bool
+	for i in vbox_subject_panels.get_child_count():
+		if vbox_subject_panels.get_child(i).visible == true:
+			is_assignment = true
+			panel_container_daily_note.visible = true
+			panel_container_filters.visible = true
+			return
+		else:
+			is_assignment = false
+	
+	if is_assignment == false:
+		var label : RichTextLabel = RichTextLabel.new()
+		label.text = "No assignments are scheduled for the day."
+		label.fit_content = true
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		vbox_subject_panels.add_child(label)
+		
+		panel_container_daily_note.visible = false
+		panel_container_filters.visible = false
 	pass
 
 
@@ -229,6 +282,7 @@ func display_next_assignment() -> void:
 func refresh_date() -> void:
 	day_of_week = CMDatabaseUtilities.zellers_congruence(selected_date.day, selected_date.month, selected_date.year)
 	format_date()
+	populate_daily_note()
 	refresh_assignments()
 	create_daily_plan_assignments()
 	pass
@@ -276,5 +330,7 @@ func _on_item_list_student_filter_multi_selected(index: int, selected: bool) -> 
 
 ## Saves the daily note
 func _on_btn_save_daily_note_pressed() -> void:
-	pass
+	if !text_edit_daily_note.text.strip_edges().is_empty():
+		CMDatabaseUtilities.save_daily_note(text_edit_daily_note.text, CMDatabaseUtilities.get_formatted_date(selected_date))
+		pass
 #endregion
