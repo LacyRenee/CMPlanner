@@ -20,6 +20,8 @@ func _ready() -> void:
 		for r in resources:
 			var index = resource_list.add_item(r.title)
 			resource_list.set_item_metadata(index, r)
+		
+		resource_list.sort_items_by_text()
 	pass 
 
 

@@ -21,7 +21,7 @@ layout_mode = 2
 [node name="LabelWelcomeHeader" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"HeaderLargeLabelDark"
-text = "Welcome to your personal Charlotte Mason inspired home instruction Planner!"
+text = "Welcome to your Charlotte Mason inspired home instruction Planner!"
 fit_content = true
 horizontal_alignment = 1
 

@@ -85,6 +85,17 @@ static func zellers_congruence(day: int, month: int, year: int) -> Time.Weekday:
 	return (h + 6) % 7 as Time.Weekday
 
 
+## Takes a string date and converts it into a calendar date
+static func convert_string_to_date(p_string : String) -> Calendar.Date:
+	var split_date = p_string.split("-")
+	var year = int(split_date[0])
+	var month = int(split_date[1])
+	var day = int(split_date[2])
+	
+	var formatted_from_date : Calendar.Date = Calendar.Date.new(year, month, day)
+	return formatted_from_date
+
+
 ## Formats a date as MM/DD/YYYY
 static func get_formatted_date(p_date : Calendar.Date) -> String:
 	var pattern : String = "%m-%d-%Y"
@@ -138,7 +149,6 @@ static func parse_json_data() -> void:
 	var json_divisions = json_data.Divisions
 		
 	if json_library != null:
-		var resource_item_count : int = 0
 		for item in json_library:
 			# Check to see if the title already exists in the database
 			if does_resource_item_exist(item.TITLE):
@@ -152,7 +162,7 @@ static func parse_json_data() -> void:
 			resource.contributor_name = item.CONTRIBUTOR_NAME if item.CONTRIBUTOR_NAME != "NA" else ""
 			resource.web_url = item.WEB_URL if item.WEB_URL != "NA" else ""
 			resource.publisher = item.PUBLISHER if item.PUBLISHER != "NA" else ""
-			resource.copyright_date = str(item.COPYRIGHT_DATE) if str(item.COPYRIGHT_DATE) != "NA" else null
+			resource.copyright_date = str(item.COPYRIGHT_DATE) if str(item.COPYRIGHT_DATE) != "NA" else "null"
 			resource.year_written = str(item.YEAR_WRITTEN) if str(item.YEAR_WRITTEN) != "NA" else ""
 			resource.number_of_pages = item.NUMBER_OF_PAGES if str(item.NUMBER_OF_PAGES) != "NA" else ""
 			resource.edition = item.EDITION if item.EDITION != "NA" else ""
@@ -284,7 +294,7 @@ static func update_resource_item(p_resource : ResourceItem) -> void:
 	db.resource_list[index] = p_resource
 	
 	# Update all associated assignments
-	db.subject_list = update_selected_resource_assignments(p_resource)
+	#db.subject_list = update_selected_resource_assignments(p_resource)
 	
 	overwrite_database(db)
 	pass
@@ -376,26 +386,26 @@ static func remove_selected_resource_subjects(p_resource : ResourceItem) -> void
 
 
 ## Updates all assignments associated with the selected ResourceItem
-static func update_selected_resource_assignments(p_resource : ResourceItem) -> Array[Subject]:
-	var assignment_list : Array[Subject] = get_subject_list()
+static func update_selected_resource_assignments(p_resource : ResourceItem) -> void:
+	var db = get_database()
+	var subject_list : Array[Subject] = get_subject_list()
 
-	for assignment in assignment_list:
-		if assignment.resource == p_resource:
-			if assignment.division_type != ResourceData.DivisionType.None:
-				var new_assignment_list : Array[Assignment] = []
-				for title in p_resource.division_list:
+	for subject in subject_list:
+		if subject.resource == p_resource:
+			if subject.division_type == ResourceData.DivisionType.None:
+				pass
+			else:
+				subject.assignments.clear()
+				for assignment in p_resource.division_list:
 					var new_assignment : Assignment = Assignment.new()
-					new_assignment.title = title
+					new_assignment.title = assignment
 					new_assignment.progress = ResourceData.progress.Incomplete
-					new_assignment_list.append(new_assignment)
-				
-				assignment.assignments = new_assignment_list
-		else:
-			assignment_list.append(assignment)
+					subject.assignments.append(new_assignment)
 	
+	db.subject_list = subject_list
+	overwrite_database(db)
 	update_active_subjects()
-
-	return assignment_list
+	pass
 #endregion
 
 
@@ -469,7 +479,7 @@ static func save_assignment_progress(p_subject : Subject, p_assignment : Assignm
 	var db = get_database()
 	var assignment_index = p_subject.assignments.find(p_assignment)
 	
-	p_subject.assignments[assignment_index].progress = p_index
+	p_subject.assignments[assignment_index].progress = p_index as ResourceData.progress
 
 	# Save the completed date or finsihed complete date based on the progress
 	if p_index == ResourceData.progress.Complete_and_finish:

@@ -146,6 +146,8 @@ func populate_resource_list() -> void:
 		
 		var index_duplicate = item_list_resource_duplicate.add_item(resource_list[r].title)
 		item_list_resource_duplicate.set_item_metadata(index_duplicate, r)
+	
+	item_list_resource.sort_items_by_text()
 	pass
 
 
@@ -435,5 +437,5 @@ func _on_check_start_date_pressed() -> void:
 	pass
 
 
-func _on_options_resources_item_selected(index: int) -> void:
+func _on_options_resources_item_selected(_index: int) -> void:
 	pass # Replace with function body.

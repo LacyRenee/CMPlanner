@@ -129,7 +129,7 @@ func create_daily_plan_assignments() -> void:
 	for index in ResourceData.Subjects:
 		var panel_subject_scene = PANEL_SUBJECT.instantiate()
 		vbox_subject_panels.add_child(panel_subject_scene)
-		panel_subject_scene.set_subject(index)
+		panel_subject_scene.set_subject(index.replace("_", " "))
 		panel_subject_scene.visible = false
 		
 		for student in student_list:
@@ -298,7 +298,7 @@ func _on_btn_next_daily_plan_pressed() -> void:
 
 ## Displays today's assignment plans
 func _on_btn_today_plan_pressed() -> void:
-	selected_date = selected_date.today()
+	selected_date = Calendar.Date.today()
 	refresh_date()
 	pass
 
@@ -311,7 +311,7 @@ func _on_btn_previous_daily_plan_pressed() -> void:
 
 
 ## Displays the selected student assignments
-func _on_item_list_student_filter_multi_selected(index: int, selected: bool) -> void:
+func _on_item_list_student_filter_multi_selected(_index: int, _selected: bool) -> void:
 	# Student overview panels
 	var student_panels = get_tree().get_nodes_in_group(STUDENT_PANEL_GROUP)
 	

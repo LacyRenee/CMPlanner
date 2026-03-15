@@ -7,8 +7,7 @@ extends Control
 const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division_item.tscn"
 
 
-## onready variables
-#region
+#region onready variables
 ## Access to the title line edit text
 @onready var title: LineEdit = %LeTitle
 
@@ -78,12 +77,15 @@ const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division
 ## Access to the confirmation popup to delete a resource
 @onready var popup_delete_resource_confirmation: PopupPanel = %PopupDeleteResourceConfirmation
 
-
+## Access to the confirmation popup to update all division lists
+@onready var popup_update_division_list_confirmation: PopupPanel = %PopupUpdateDivisionListConfirmation
 #endregion
 
 
 ## The Resource that is to be saved to the database
-var resource_item = ResourceItem.new()
+var resource_item : ResourceItem = ResourceItem.new()
+
+var old_data : Array[String] = []
 
 ## File path to the selected resource item
 var resource_item_path : String = ""
@@ -116,7 +118,7 @@ func _ready() -> void:
 	
 	# Populate the Subject options
 	for s in ResourceData.Subjects :
-		ob_subject.add_item(s)
+		ob_subject.add_item(s.replace("_", " "))
 	#endregion
 	
 	# Listens for a division item to be deleted
@@ -360,6 +362,7 @@ func _on_btn_division_pressed() -> void:
 ## Allow the form to be editable
 func _on_btn_edit_pressed() -> void:
 	update_view_option(ResourceData.ViewingOptions.Edit)
+	old_data = resource_item.division_list
 	pass
 
 ## Saves the newly inputted ResourceItem
@@ -402,7 +405,28 @@ func _on_btn_update_pressed() -> void:
 	
 	# Save the data
 	save_data()
+	
+	if resource_item.division_list != old_data:
+		popup_update_division_list_confirmation.show()
+		return
+	
 	CMDatabaseUtilities.update_resource_item(resource_item)
+	
+	# Remove any format themes
+	remove_format_themes()
+	
+	# Change the view
+	view_option = ResourceData.ViewingOptions.View
+	update_view()
+	pass
+
+
+## Confirms the process of deleting updated division lists items
+## and resetting student progress
+func _on_btn_division_list_okay_pressed() -> void:
+	CMDatabaseUtilities.update_resource_item(resource_item)
+	CMDatabaseUtilities.update_selected_resource_assignments(resource_item)
+	popup_update_division_list_confirmation.hide()
 	
 	# Remove any format themes
 	remove_format_themes()

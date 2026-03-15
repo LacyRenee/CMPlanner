@@ -250,7 +250,7 @@ func create_subject_assignment_overview() -> void:
 		# Add the subject panel to the active container
 		var panel_active_subject_scene = PANEL_SUBJECT.instantiate()
 		vbox_subject_overview.add_child(panel_active_subject_scene)
-		panel_active_subject_scene.set_subject(index)
+		panel_active_subject_scene.set_subject(index.replace("_", " "))
 		panel_active_subject_scene.visible = false
 		
 		# Add the subject panel to the completed container
