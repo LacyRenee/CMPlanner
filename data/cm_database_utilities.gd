@@ -69,6 +69,17 @@ func _ready() -> void:
 
 
 #region Utility Functions
+## Outlines the selected control in red
+static func error_style_box_flat() -> StyleBoxFlat:
+	var red_border = StyleBoxFlat.new()
+	red_border.border_color = Color.RED
+	red_border.border_width_bottom = 2
+	red_border.border_width_left = 2
+	red_border.border_width_right = 2
+	red_border.border_width_top = 2
+	return red_border
+
+
 ## The mathematical formula used to calculate the day of the week for any given date
 static func zellers_congruence(day: int, month: int, year: int) -> Time.Weekday:
 	if month < 3:
@@ -485,6 +496,15 @@ static func save_assignment_progress(p_subject : Subject, p_assignment : Assignm
 	if p_index == ResourceData.progress.Complete_and_finish:
 		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
 		p_subject.is_finished =  true
+	elif p_index == ResourceData.progress.Completed and p_subject.resource.division_type == ResourceData.DivisionType.None or\
+		 p_index == ResourceData.progress.Omit_assignment and p_subject.resource.division_type == ResourceData.DivisionType.None:
+		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
+		
+		var new_assignment : Assignment = Assignment.new()
+		new_assignment.title = p_subject.resource.title
+		new_assignment.progress = ResourceData.progress.Incomplete
+		new_assignment.completed_date = "NA"
+		p_subject.assignments.append(new_assignment)
 	elif p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
 		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
 		
@@ -503,6 +523,125 @@ static func save_assignment_progress(p_subject : Subject, p_assignment : Assignm
 	
 	overwrite_database(db)
 	pass
+#endregion
+
+
+#region Report functions
+## Create a summary of what assignments have been finished
+static func generate_report(p_student : Student, p_date_from : String, p_date_to : String, p_subjects : Array[ResourceData.Subjects]) -> String:
+	var subject_list : Array[Subject] = get_subject_list()
+	var report_data : Array[Dictionary] = []
+	var result : bool 
+	
+	# Parse out the data for the selected Student and Subjects and date	
+	for i in subject_list.size():	
+		if subject_list[i].student == p_student and\
+		   p_subjects.has(subject_list[i].subject):
+			
+			if !subject_list[i].start_date.is_empty():
+				var date_from : Calendar.Date = convert_string_to_date(p_date_from)
+				var date_to : Calendar.Date = convert_string_to_date(p_date_to)
+				var assignment_start_date : Calendar.Date = convert_string_to_date(subject_list[i].start_date)
+				
+				if (assignment_start_date.is_equal(date_from) or assignment_start_date.is_after(date_from)) and\
+				   (assignment_start_date.is_equal(date_to) or assignment_start_date.is_before(date_to)):
+					var data = create_report_row(subject_list[i])
+					
+					report_data.append(data)
+			else:
+				var date_from : Calendar.Date = convert_string_to_date(p_date_from)
+				var date_to : Calendar.Date = convert_string_to_date(p_date_to)
+				var assignment_start_after_start_date : Calendar.Date = convert_string_to_date(subject_list[i].start_after.start_date)
+				
+				if (assignment_start_after_start_date.is_equal(date_from) or assignment_start_after_start_date.is_after(date_from)) and\
+				   (assignment_start_after_start_date.is_equal(date_to) or assignment_start_after_start_date.is_before(date_to)):
+					var data = create_report_row(subject_list[i])
+					
+					report_data.append(data)
+	
+	if !report_data.is_empty():
+		var filename = save_progress_report(p_student, report_data)
+		return filename
+	else:
+		return ""
+
+
+## Creates a row of data for the Progress Report
+static func create_report_row(p_subject : Subject) -> Dictionary:
+	var student_key = "student"
+	var student_value = p_subject.student.name
+	
+	var subject_key : String = "subject"
+	var subject_value : String = ResourceData.Subjects.keys()[p_subject.subject]
+	
+	var resource_key : String = "resource_title"
+	var resource_value : String = p_subject.resource.title
+	
+	var assignment_title_key : String = "assignment"
+	var assignment_title_value : Array[String] = []
+	
+	var completed_date_key : String = "completed_date"
+	var completed_date_value : Array[String] = []
+	
+	var notes_key : String = "notes"
+	var notes_value : Array[String] = []
+	
+	# Add the assignment, dates, and notes into their nested arrays
+	for a in p_subject.assignments.size():
+		assignment_title_value.append(p_subject.assignments[a].title if !p_subject.assignments[a].title.is_empty() else "NA")
+		completed_date_value.append(p_subject.assignments[a].completed_date if !p_subject.assignments[a].completed_date.is_empty() else "NA")
+		notes_value.append(p_subject.assignments[a].notes if !p_subject.assignments[a].notes.is_empty() else "NA")
+	
+	# create the data object
+	var data : Dictionary = {
+		student_key: student_value,
+		subject_key: subject_value,
+		resource_key: resource_value,
+		assignment_title_key: assignment_title_value,
+		completed_date_key: completed_date_value,
+		notes_key: notes_value
+	}
+	return data
+
+
+## Saves the Progress report to the user's Desktop
+static func save_progress_report(p_student : Student, p_report_data : Array[Dictionary]) -> String:
+	# Create the file
+	var filename = OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP) + "/" + p_student.name + "_report.csv"
+	var file = FileAccess.open(filename, FileAccess.WRITE)
+	
+	if file == null: 
+		return ""
+		
+	# Table headers
+	var headers = ["student", "subject", "resource_title", "assignment", "completed_date", "notes"]
+	file.store_csv_line(headers)
+	
+	for record in p_report_data:
+		for assignment_count in record.assignment.size():
+			var row = []
+			
+			if assignment_count == 0:
+				row.append(record.student)
+				row.append(record.subject)
+				row.append(record.resource_title)
+			else: # Append for student, subject, and resource_title
+				row.append("-")
+				row.append("-")
+				row.append("-")
+			
+			row.append(record.assignment[assignment_count])
+			
+			row.append(record.completed_date[assignment_count])
+			
+			row.append(record.notes[assignment_count])
+			
+			file.store_csv_line(row)
+	
+	# Save and close the file
+	file.close()
+	return filename
+
 #endregion
 
 

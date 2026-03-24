@@ -79,7 +79,6 @@ func _ready() -> void:
 	if OS.has_feature("mobile"):
 		is_mobile = true
 	
-	
 	# Set the View to "New"
 	update_view_option(ResourceData.ViewingOptions.New)
 	
@@ -93,22 +92,12 @@ func _ready() -> void:
 	populate_resource_list()
 	
 	# Display start after options if any subjects have been assigned
-	var subject_list = CMDatabaseUtilities.get_subject_list()
-	if !subject_list.is_empty():
-		panel_container_start_after.visible = true
-		
-		for r in subject_list.size():
-			options_resources.add_item(subject_list[r].resource.title)
-			options_resources.set_item_metadata(r, subject_list[r])
-		
-		options_resources.selected = -1
+	populate_start_after_resources()
 	
 	
-	## Populate the subject options
+	# Populate the subject options
 	for subject in ResourceData.Subjects:
-		option_button_subjects.add_item(subject.replace("_", " "))
-		
-	
+		option_button_subjects.add_item(subject.replace("_", " "))	
 	
 	# Populate the study method options
 	for method in ResourceData.study_method:
@@ -145,9 +134,31 @@ func populate_resource_list() -> void:
 		item_list_resource.set_item_metadata(index, resource_list[r])
 		
 		var index_duplicate = item_list_resource_duplicate.add_item(resource_list[r].title)
-		item_list_resource_duplicate.set_item_metadata(index_duplicate, r)
+		item_list_resource_duplicate.set_item_metadata(index_duplicate, resource_list[r])
 	
 	item_list_resource.sort_items_by_text()
+	pass
+
+
+## Add all the resources available for the start after
+func populate_start_after_resources() -> void:
+	var subject_list : Array[Subject] = CMDatabaseUtilities.get_subject_list()
+	if !subject_list.is_empty():
+		panel_container_start_after.visible = true
+		options_resources.clear()
+		
+		for r in subject_list.size():
+			if subject_list[r].student == options_student_list.get_selected_metadata():
+				options_resources.add_item(subject_list[r].resource.title)
+				options_resources.set_item_metadata(r, subject_list[r])
+		
+		options_resources.selected = -1
+	else:
+		panel_container_start_after.visible = false
+	
+	if options_resources.item_count == 0:
+		panel_container_start_after.visible = false
+	
 	pass
 
 
@@ -320,7 +331,7 @@ func save_data(p_new_subject : Subject) -> Subject:
 		p_new_subject.start_date = btn_todays_date.text
 	else:
 		var index = options_resources.selected
-		p_new_subject.start_after = options_resources.get_item_metadata(index)
+		p_new_subject.start_after = options_resources.get_selected_metadata()
 	
 	# Add the week days
 	var selected_days = get_tree().get_nodes_in_group("day_selected")
@@ -380,7 +391,8 @@ func _on_le_search_resource_text_changed(new_text: String) -> void:
 	
 	for i in range(item_list_resource_duplicate.get_item_count()):
 		if item_list_resource_duplicate.get_item_text(i).to_lower().find(search_value) != -1:
-			var index = item_list_resource.add_item(item_list_resource_duplicate.get_item_metadata(i).title)
+			var resource : ResourceItem = item_list_resource_duplicate.get_item_metadata(i)
+			var index = item_list_resource.add_item(resource.title)
 			item_list_resource.set_item_metadata(index, item_list_resource_duplicate.get_item_metadata(i))
 			item_list_resource.select(index)
 	pass
@@ -438,4 +450,10 @@ func _on_check_start_date_pressed() -> void:
 
 
 func _on_options_resources_item_selected(_index: int) -> void:
-	pass # Replace with function body.
+	pass
+
+
+## Populate the Start After resources based on the student
+func _on_options_student_list_item_selected(index: int) -> void:
+	populate_start_after_resources()
+	pass 

@@ -52,6 +52,16 @@ extends Control
 
 ## Access to the text input for the to date
 @onready var line_edit_date_to: LineEdit = %LineEditDateTo
+
+## Access to the subject options for the report
+@onready var option_subjects: OptionButton = %OptionSubjects
+
+## Access to the associated subjects for the student
+@onready var vbox_selected_subjects: VBoxContainer = %VBoxSelectedSubjects
+
+## Access to the label to display whether the report was generated or not
+@onready var label_notification: RichTextLabel = %LabelNotification
+
 #endregion
 
 
@@ -91,17 +101,25 @@ func _on_popup_btn_cancel_pressed() -> void:
 
 ## Saves the student to the database
 func _on_popup_btn_save_pressed() -> void:
-	var new_student : Student = Student.new()
-	new_student.name = popup_le_name.text
-	new_student.grade =  option_grade.selected
-	new_student.is_active = true
-	
-	CMDatabaseUtilities.add_student(new_student)
-	popup_le_name.text = ""
-	option_grade.selected = -1
-	popup_panel.hide()
-	
-	SignalBus.refresh_student_table.emit()
+	# Student's must have a name
+	if popup_le_name.text.is_empty():
+		var style = CMDatabaseUtilities.error_style_box_flat()
+		popup_le_name.add_theme_stylebox_override("normal", style)
+	else:
+		var new_student : Student = Student.new()
+		new_student.name = popup_le_name.text
+		new_student.grade =  option_grade.selected
+		new_student.is_active = true
+		
+		CMDatabaseUtilities.add_student(new_student)
+		
+		# Reset form
+		popup_le_name.text = ""
+		option_grade.selected = -1
+		popup_le_name.remove_theme_stylebox_override("normal")
+		popup_panel.hide()
+		
+		SignalBus.refresh_student_table.emit()
 	pass
 
 
@@ -112,10 +130,11 @@ func _on_button_pressed() -> void:
 
 
 #region Report functions
+## Displays the required fields for each specific report
 func _on_option_progress_type_item_selected(index: int) -> void:
 	if index == 0: # Report
 		hbox_student_report.visible = true
-		hbox_sort_by.visible = true
+		#hbox_sort_by.visible = true
 		hbox_date_range.visible = true
 		hbox_subjects.visible = true
 		btn_generate_report.visible = true
@@ -124,13 +143,13 @@ func _on_option_progress_type_item_selected(index: int) -> void:
 		populate_subjects_for_student(option_students.get_item_metadata(option_students.get_selected_id()))
 	elif index == 1: # Attendance
 		hbox_student_report.visible = false
-		hbox_sort_by.visible = false
+		#hbox_sort_by.visible = false
 		hbox_date_range.visible = false
 		hbox_subjects.visible = false
 		btn_generate_report.visible = true
 	else: # Bibliography
 		hbox_student_report.visible = false
-		hbox_sort_by.visible = false
+		#hbox_sort_by.visible = false
 		hbox_date_range.visible = false
 		hbox_subjects.visible = false
 		btn_generate_report.visible = true
@@ -168,8 +187,9 @@ func populate_subjects_for_student(p_student : Student) -> void:
 	else:
 		for i in selected_subjects.size():
 			var checkbox : CheckBox = CheckBox.new()
-			checkbox.text = str(ResourceData.Subjects.keys()[selected_subjects[i]]).replace("_", " ")
 			panel_selected_subjects.get_child(0).add_child(checkbox)
+			checkbox.text = str(ResourceData.Subjects.keys()[selected_subjects[i]]).replace("_", " ")
+			checkbox.set_meta("subject", ResourceData.Subjects.keys()[selected_subjects[i]])
 		
 		btn_generate_report.disabled = false
 	pass
@@ -220,11 +240,29 @@ func _on_btn_generate_report_pressed() -> void:
 	
 	# If there are no errors, generate the report! Woohoo!
 	if option_report_type.selected == 0: # Report
-		pass
+		var student : Student = option_students.get_selected_metadata()
+		var subjects : Array[ResourceData.Subjects] = []
+		
+		if option_subjects.selected == 0: # all resources
+			for i in vbox_selected_subjects.get_child_count():
+				var title = vbox_selected_subjects.get_child(i).get_meta("subject")
+				subjects.append(ResourceData.Subjects[title])
+		elif option_subjects.selected == 1: # selected resources
+			for i in vbox_selected_subjects.get_child_count():
+				if vbox_selected_subjects.get_child(i).is_pressed():
+					subjects.append(ResourceData.Subjects[vbox_selected_subjects.get_child(i).get_meta("subject")])
+		
+		var result = CMDatabaseUtilities.generate_report(student, formatted_from_date.to_string(), formatted_to_date.to_string(), subjects)
+		
+		if result.is_empty():
+			label_notification.text = "Report was unable to be generated"
+		else:
+			label_notification.text = "Progress report for " + student.name + " was created at " + result
+		
 	elif option_report_type.selected == 1: # Attendance
 		pass
 	elif option_report_type.selected == 2 : # Bibliography
-		pass	
+		pass
 	pass
 
 

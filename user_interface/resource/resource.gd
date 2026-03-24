@@ -315,32 +315,6 @@ func display_selected_resource(resource: ResourceItem) -> void:
 	pass
 
 
-## Red lines the title field if empty
-func error_format_title_empty() -> void:
-	var red_border = StyleBoxFlat.new()
-	red_border.border_color = Color.RED
-	red_border.border_width_bottom = 2
-	red_border.border_width_left = 2
-	red_border.border_width_right = 2
-	red_border.border_width_top = 2
-	
-	title.add_theme_stylebox_override("normal", red_border)
-	pass
-
-
-## Shows the user that the Number of Pages field must be a number
-func error_format_number_of_pages() -> void:
-	var red_border = StyleBoxFlat.new()
-	red_border.border_color = Color.RED
-	red_border.border_width_bottom = 2
-	red_border.border_width_left = 2
-	red_border.border_width_right = 2
-	red_border.border_width_top = 2
-	
-	le_number_of_pages.add_theme_stylebox_override("normal", red_border)
-	pass
-
-
 ## Removes any format themes that were applied during errors
 func remove_format_themes() -> void:
 	title.remove_theme_stylebox_override("normal")
@@ -370,12 +344,14 @@ func _on_btn_save_pressed() -> void:
 	
 	## Do not save resource without a title
 	if title.text.is_empty():
-		error_format_title_empty()
+		var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+		title.add_theme_stylebox_override("normal", error_style_box)
 		return
 	
 	if !le_number_of_pages.text.is_empty():
 		if !le_number_of_pages.text.is_valid_int():
-			error_format_number_of_pages()
+			var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+			le_number_of_pages.add_theme_stylebox_override("normal", error_style_box)
 			return
 	
 	# Save the form data to the resource
@@ -395,12 +371,14 @@ func _on_btn_save_pressed() -> void:
 func _on_btn_update_pressed() -> void:
 	# Do not save resource without a title
 	if title.text.is_empty():
-		error_format_title_empty()
+		var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+		title.add_theme_stylebox_override("normal", error_style_box)
 		return
 	
 	if !le_number_of_pages.text.is_empty():
 		if !le_number_of_pages.text.is_valid_int():
-			error_format_number_of_pages()
+			var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+			le_number_of_pages.add_theme_stylebox_override("normal", error_style_box)
 			return
 	
 	# Save the data

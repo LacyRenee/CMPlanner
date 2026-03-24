@@ -198,6 +198,7 @@ text = "Subjects:"
 fit_content = true
 
 [node name="OptionSubjects" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxSubjects"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
@@ -213,6 +214,7 @@ visible = false
 layout_mode = 2
 
 [node name="VBoxSelectedSubjects" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/PanelContainerSelectedSubjects"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="ControlSpacer2" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
@@ -226,6 +228,15 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_type_variation = &"AccentButton"
 text = "Generate"
+
+[node name="LabelNotification" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+fit_content = true
+
+[node name="TimerNotification" type="Timer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/LabelNotification"]
+wait_time = 5.0
+one_shot = true
 
 [node name="Button" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

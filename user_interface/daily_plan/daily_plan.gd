@@ -51,7 +51,6 @@ var selected_date : Calendar.Date = today
 ## Holds the day of the week for the current date
 var day_of_week : Time.Weekday = CMDatabaseUtilities.zellers_congruence(today.day, today.month, today.year)
 
-
 ## Holds the subjects to be displayed for today
 var todays_subjects : Array[ResourceData.Subjects] = []
 
@@ -108,6 +107,25 @@ func refresh_assignments() -> void:
 	pass
 
 
+## Display a new assignment when the previous assignment is either 
+## completed or omitted 
+func display_next_assignment() -> void:
+	refresh_assignments()
+	
+	create_daily_plan_assignments()
+	pass
+
+
+## Refreshes the selected date and associated assignments
+func refresh_date() -> void:
+	day_of_week = CMDatabaseUtilities.zellers_congruence(selected_date.day, selected_date.month, selected_date.year)
+	format_date()
+	populate_daily_note()
+	refresh_assignments()
+	create_daily_plan_assignments()
+	pass
+
+
 ## Formats the selected date to be displayed on top of the page
 func format_date() -> void:
 	var date = CMDatabaseUtilities._calendar.get_weekday_formatted(selected_date.year, selected_date.month, selected_date.day)
@@ -127,11 +145,13 @@ func create_daily_plan_assignments() -> void:
 		return
 	
 	for index in ResourceData.Subjects:
+		# Add all Subject panels and mark invisible
 		var panel_subject_scene = PANEL_SUBJECT.instantiate()
 		vbox_subject_panels.add_child(panel_subject_scene)
 		panel_subject_scene.set_subject(index.replace("_", " "))
 		panel_subject_scene.visible = false
 		
+		# Add the student panels to each subject panel
 		for student in student_list:
 			var panel_student_scene = PANEL_STUDENT.instantiate()
 			panel_subject_scene.v_box_subject.add_child(panel_student_scene)
@@ -146,35 +166,25 @@ func create_daily_plan_assignments() -> void:
 				if subject_assignment.student == student and\
 				   subject_assignment.is_finished == false and\
 				   CMDatabaseUtilities.compare_strings(str(ResourceData.Subjects.keys()[subject_assignment.subject]), panel_subject_scene.get_subject()):
-					
 					# Only add subjects that matches the selected day
 					if subject_assignment.week_days.has(day_of_week) and \
-					   student == subject_assignment.student and \
-					   CMDatabaseUtilities.compare_strings(ResourceData.Subjects.keys()[subject_assignment.subject], panel_subject_scene.get_subject()):
-						
-						panel_subject_scene.visible = true
+					   student == subject_assignment.student:
 						
 						# Only add the assignment if the start date is the same as the selected date or after
 						if !subject_assignment.start_date.is_empty():
-							var split_date = subject_assignment.start_date.split("-")
-							var year : int = int(split_date[2])
-							var month : int = int(split_date[0])
-							var day : int  = int(split_date[1])
-							var formatted_date = CMDatabaseUtilities._calendar.Date.new(year, month, day)
-
+							var formatted_date = CMDatabaseUtilities.convert_string_to_date(subject_assignment.start_date)
+							
 							if formatted_date.is_equal(selected_date) or formatted_date.is_before(selected_date):
+								# Make subject panel visible bc an assignment exists
+								panel_subject_scene.visible = true
 								panel_student_scene.visible = true
 								create_assignment_view(subject_assignment, panel_student_scene)
 						
 						# Only add the assignment if the start after ResourceItem has all assignments completed
 						if subject_assignment.start_after != null:
-							for i in subject_assignment.start_after.assignments.size():
-								if subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Completed or\
-								   subject_assignment.start_after.assignments[i].progress != ResourceData.progress.Omit_assignment:
-									return
-								else:
-									panel_student_scene.visible = true
-									create_assignment_view(subject_assignment, panel_student_scene)
+							panel_subject_scene.visible = true
+							panel_student_scene.visible = true
+							create_assignment_view(subject_assignment, panel_student_scene)
 	
 	
 	# Display a message if no assignments are scheduled for the day
@@ -203,16 +213,18 @@ func create_daily_plan_assignments() -> void:
 ## Creates the progress view for the first selected assignment that is not complete
 func create_assignment_view(p_subject : Subject, p_container : Node) -> void:
 	for first_incomplete in p_subject.assignments:
-		# Displays all assignments completed on the same day
-		if first_incomplete.start_date == today.to_string() and \
-		   (first_incomplete.progress == ResourceData.progress.Completed or \
-		   first_incomplete.progress == ResourceData.progress.Omit_assignment):
-			create_assignment(p_subject, p_container, first_incomplete)
-			continue
+		# Add assignments that have been completed on the selected day
+		if (first_incomplete.progress == ResourceData.progress.Completed or\
+			first_incomplete.progress == ResourceData.progress.Omit_assignment):
+				if first_incomplete.completed_date == CMDatabaseUtilities.get_formatted_date(selected_date):
+					create_assignment(p_subject, p_container, first_incomplete)
+					continue
+				else: # Skip completed assignments that are before today
+					continue
 		
-		# Otherwise, display the next assignment
+		# Add the first incomplete assignment
 		create_assignment(p_subject, p_container, first_incomplete)
-		return
+		break
 	pass
 
 
@@ -257,7 +269,7 @@ func create_assignment(p_subject : Subject, p_container : Node, p_assignment : A
 		assignment_scene.lbl_division_title.text = ""
 	
 	assignment_scene.lbl_study_method.text = str(ResourceData.study_method.keys()[p_subject.study_method].replace("_", " "))
-	assignment_scene.lbl_date.text = Calendar.Date.today()._to_string()
+	assignment_scene.lbl_date.text = CMDatabaseUtilities.get_formatted_date(selected_date)
 	assignment_scene.text_edit_notes.text = p_assignment.notes if !p_assignment.notes.is_empty() else ""
 	
 	assignment_scene.option_button_progress.selected = p_assignment.progress
@@ -265,27 +277,6 @@ func create_assignment(p_subject : Subject, p_container : Node, p_assignment : A
 	p_container.visible = true
 	pass
 #endregion
-
-
-## Display a new assignment when the previous assignment is either 
-## completed or omitted 
-func display_next_assignment() -> void:
-	refresh_assignments()
-	
-	create_daily_plan_assignments()
-	pass
-
-
-
-
-## Refreshes the selected date and associated assignments
-func refresh_date() -> void:
-	day_of_week = CMDatabaseUtilities.zellers_congruence(selected_date.day, selected_date.month, selected_date.year)
-	format_date()
-	populate_daily_note()
-	refresh_assignments()
-	create_daily_plan_assignments()
-	pass
 
 
 #region Signal Functions

@@ -12,7 +12,7 @@ corner_radius_bottom_left = 10
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0bb0u"]
 content_margin_left = 10.0
 content_margin_right = 10.0
-bg_color = Color(0.011764706, 0.29761627, 0.29761627, 1)
+bg_color = Color(0.023529412, 0.3372549, 0.30588236, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
