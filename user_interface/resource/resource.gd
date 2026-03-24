@@ -253,7 +253,11 @@ func get_all_division_items() -> Array:
 	var array : Array[String]
 	
 	for i in division_item_list:
-		array.append(i.get_text())
+		if i.get_text().is_empty():
+			i.visible = false
+			continue
+		else:
+			array.append(i.get_text())
 	
 	return array
 
@@ -292,6 +296,7 @@ func display_selected_resource(resource: ResourceItem) -> void:
 	# Save the current resource
 	resource_item = resource
 	
+	# Add the main information
 	title.text = resource_item.title
 	isbn.text = resource_item.isbn
 	resource_type_options.selected = resource_item.resource_type
@@ -299,6 +304,16 @@ func display_selected_resource(resource: ResourceItem) -> void:
 	contributor_name.text = resource_item.contributor_name
 	division_type_options.selected = resource_item.division_type
 	
+	# Add the additional information
+	le_url.text = resource.web_url if !resource.web_url.is_empty() else ""
+	le_publisher.text = resource.publisher if !resource.publisher.is_empty() else ""
+	le_copyright_date.text = resource.copyright_date if !resource.copyright_date.is_empty() else ""
+	le_year_written.text = resource.year_written if !resource.year_written.is_empty() else ""
+	le_number_of_pages.text = str(resource.number_of_pages) if resource.number_of_pages != null else ""
+	le_edition.text = resource.edition if !resource.edition.is_empty() else ""
+	le_description.text = resource.description if !resource.description.is_empty() else ""
+	
+	# Add the divsion items
 	if resource_item.division_type != ResourceData.DivisionType.None:
 		division_container.show()
 		division_list.remove_child(division_list.get_child(0))

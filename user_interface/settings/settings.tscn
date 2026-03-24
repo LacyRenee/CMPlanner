@@ -73,7 +73,7 @@ theme_override_constants/separation = 10
 
 [node name="PanelContainerGenerateReports" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 6
 theme_type_variation = &"BackgroundPanel"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports"]
@@ -87,9 +87,7 @@ fit_content = true
 
 [node name="LabelReportInfo" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
 layout_mode = 2
-text = "Progress Reports is a summary of what assignments have been finished. 
-Attendance Report counts days with assignmnets marked Worked On or FInished for each student. 
-Bibliography Reports is a list of all the resources you have scheduled or used."
+text = "Progress Reports is a summary of what assignments have been finished."
 fit_content = true
 
 [node name="ControlSpacer" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
@@ -110,13 +108,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
-item_count = 3
+item_count = 1
 popup/item_0/text = "Progress Report"
 popup/item_0/id = 0
-popup/item_1/text = "Attendance Report"
-popup/item_1/id = 1
-popup/item_2/text = "Bibliography Report"
-popup/item_2/id = 2
 
 [node name="HBoxStudentReport" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
 unique_name_in_owner = true
@@ -238,7 +232,12 @@ fit_content = true
 wait_time = 5.0
 one_shot = true
 
+[node name="ControlSpacer" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
 [node name="Button" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Load Data"
 

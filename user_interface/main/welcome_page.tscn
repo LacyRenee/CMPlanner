@@ -31,7 +31,7 @@ layout_mode = 2
 
 [node name="LabelWelcomeBody" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "This planner differs from others in the sense that it's not restricted by the clock. Charlotte Mason believed that learning should be a routine - a part of our daily living! Not restricted by time. I hope you find this planner a tool that facilitates in structuring your day while giving you the freedom to learn and explore at your own pace!"
+text = "This planner differs from others in the sense that it's not bound  by the clock. Rather, Charlotte Mason believed that learning should be a routine - a part of our daily living and not restricted by time. I hope you find this planner a tool that facilitates in structuring your day while giving you the freedom to learn and explore at your own pace!"
 fit_content = true
 
 [node name="ControlSpacer2" type="Control" parent="MarginContainer/VBoxContainer"]
@@ -42,7 +42,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Here's a quick overview to get you started!
 1. In the Settings tab, add your students.
-2. In the Resource tab, you can add, view, edit, and delete your resources (i.e., books, digital media, etc...).
+2. In the Resource tab, you can add, view, edit, and delete your resources (e.g., books, digital media, etc...).
 3. From the selected Resource, you can then schedule it for your student
 4. In the Schedule tab. you can see all scheduled assignments
 5. Finally, any assignments scheduled for today will appear here on the home page!"

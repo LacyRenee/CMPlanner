@@ -427,7 +427,7 @@ static func save_daily_note(p_note : String, p_date : String) -> void:
 
 	# Update the daily note if it exists
 	for i in db.daily_notes.size():
-		if compare_strings(db.daily_notes[i].notes, p_date):
+		if compare_strings(db.daily_notes[i].date, p_date):
 			db.daily_notes[i].notes = p_note
 			overwrite_database(db)
 			return
@@ -452,6 +452,12 @@ static func get_daily_note(p_date : String) -> DailyNotes:
 		if note_list[i].date == p_date:
 			return note_list[i]
 	return null
+
+
+## Retrieves all of the daily notes
+static func get_daily_note_list() -> Array[DailyNotes]:
+	var db = get_database()
+	return db.daily_notes
 
 
 ## Save the note for the selected assignment
@@ -532,6 +538,8 @@ static func generate_report(p_student : Student, p_date_from : String, p_date_to
 	var subject_list : Array[Subject] = get_subject_list()
 	var report_data : Array[Dictionary] = []
 	var result : bool 
+	var date_from : Calendar.Date = convert_string_to_date(p_date_from)
+	var date_to : Calendar.Date = convert_string_to_date(p_date_to)
 	
 	# Parse out the data for the selected Student and Subjects and date	
 	for i in subject_list.size():	
@@ -539,23 +547,20 @@ static func generate_report(p_student : Student, p_date_from : String, p_date_to
 		   p_subjects.has(subject_list[i].subject):
 			
 			if !subject_list[i].start_date.is_empty():
-				var date_from : Calendar.Date = convert_string_to_date(p_date_from)
-				var date_to : Calendar.Date = convert_string_to_date(p_date_to)
+				
 				var assignment_start_date : Calendar.Date = convert_string_to_date(subject_list[i].start_date)
 				
 				if (assignment_start_date.is_equal(date_from) or assignment_start_date.is_after(date_from)) and\
 				   (assignment_start_date.is_equal(date_to) or assignment_start_date.is_before(date_to)):
-					var data = create_report_row(subject_list[i])
+					var data = create_report_row(subject_list[i], date_from, date_to)
 					
 					report_data.append(data)
 			else:
-				var date_from : Calendar.Date = convert_string_to_date(p_date_from)
-				var date_to : Calendar.Date = convert_string_to_date(p_date_to)
 				var assignment_start_after_start_date : Calendar.Date = convert_string_to_date(subject_list[i].start_after.start_date)
 				
 				if (assignment_start_after_start_date.is_equal(date_from) or assignment_start_after_start_date.is_after(date_from)) and\
 				   (assignment_start_after_start_date.is_equal(date_to) or assignment_start_after_start_date.is_before(date_to)):
-					var data = create_report_row(subject_list[i])
+					var data = create_report_row(subject_list[i], date_from, date_to)
 					
 					report_data.append(data)
 	
@@ -567,7 +572,7 @@ static func generate_report(p_student : Student, p_date_from : String, p_date_to
 
 
 ## Creates a row of data for the Progress Report
-static func create_report_row(p_subject : Subject) -> Dictionary:
+static func create_report_row(p_subject : Subject, p_date_from : Calendar.Date, p_date_to : Calendar.Date) -> Dictionary:
 	var student_key = "student"
 	var student_value = p_subject.student.name
 	
@@ -586,11 +591,29 @@ static func create_report_row(p_subject : Subject) -> Dictionary:
 	var notes_key : String = "notes"
 	var notes_value : Array[String] = []
 	
+	var daily_notes_key : String = "daily_notes"
+	var daily_notes_value : String = ""
+	
+	# List of all daily notes
+	var daily_notes : Array[DailyNotes] = get_daily_note_list()
+	
 	# Add the assignment, dates, and notes into their nested arrays
 	for a in p_subject.assignments.size():
 		assignment_title_value.append(p_subject.assignments[a].title if !p_subject.assignments[a].title.is_empty() else "NA")
 		completed_date_value.append(p_subject.assignments[a].completed_date if !p_subject.assignments[a].completed_date.is_empty() else "NA")
 		notes_value.append(p_subject.assignments[a].notes if !p_subject.assignments[a].notes.is_empty() else "NA")
+		
+		# Find any daily notes for the assignment
+		
+		for n in daily_notes.size():
+			if !p_subject.assignments[a].completed_date.is_empty():
+				var daily_note_date : Calendar.Date = convert_string_to_date(daily_notes[n].date)
+				var assignment_completed_date : Calendar.Date = convert_string_to_date(p_subject.assignments[a].completed_date)
+				
+				if daily_note_date.is_equal(assignment_completed_date):
+					daily_notes_value = daily_notes[n].notes
+				else:
+					daily_notes_value = "NA"
 	
 	# create the data object
 	var data : Dictionary = {
@@ -599,10 +622,14 @@ static func create_report_row(p_subject : Subject) -> Dictionary:
 		resource_key: resource_value,
 		assignment_title_key: assignment_title_value,
 		completed_date_key: completed_date_value,
-		notes_key: notes_value
+		notes_key: notes_value,
+		daily_notes_key: daily_notes_value
 	}
 	return data
 
+
+static func find_note_by_date() -> void:
+	pass
 
 ## Saves the Progress report to the user's Desktop
 static func save_progress_report(p_student : Student, p_report_data : Array[Dictionary]) -> String:
@@ -614,7 +641,7 @@ static func save_progress_report(p_student : Student, p_report_data : Array[Dict
 		return ""
 		
 	# Table headers
-	var headers = ["student", "subject", "resource_title", "assignment", "completed_date", "notes"]
+	var headers = ["student", "subject", "resource_title", "assignment", "completed_date", "notes", "daily_notes"]
 	file.store_csv_line(headers)
 	
 	for record in p_report_data:
@@ -635,6 +662,9 @@ static func save_progress_report(p_student : Student, p_report_data : Array[Dict
 			row.append(record.completed_date[assignment_count])
 			
 			row.append(record.notes[assignment_count])
+			
+			if record.completed_date[assignment_count] != "NA":
+				row.append(record.daily_notes)
 			
 			file.store_csv_line(row)
 	

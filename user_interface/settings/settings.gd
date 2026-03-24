@@ -78,16 +78,16 @@ func _ready() -> void:
 		student_table.visible = false
 	else:
 		student_table.visible = true
+		
+	# Populate the grade options for the add student popup
+	for grade in CMDatabaseUtilities.GRADES:
+		option_grade.add_item(grade.replace("_", " "))
 	pass
 
 
 ## Shows the popup panel to add a student
 func _on_btn_add_student_pressed() -> void:
 	popup_panel.show()
-	
-	# Populate the grade options
-	for grade in CMDatabaseUtilities.GRADES:
-		option_grade.add_item(grade.replace("_", " "))
 	pass 
 
 
@@ -184,6 +184,7 @@ func populate_subjects_for_student(p_student : Student) -> void:
 	# Populate subject list
 	if selected_subjects.is_empty():
 		btn_generate_report.disabled = true
+		label_notification.text = "No assignments exist for " + p_student.name
 	else:
 		for i in selected_subjects.size():
 			var checkbox : CheckBox = CheckBox.new()
@@ -192,6 +193,7 @@ func populate_subjects_for_student(p_student : Student) -> void:
 			checkbox.set_meta("subject", ResourceData.Subjects.keys()[selected_subjects[i]])
 		
 		btn_generate_report.disabled = false
+		label_notification.text = ""
 	pass
 
 
@@ -221,12 +223,12 @@ func _on_btn_generate_report_pressed() -> void:
 	
 	# Mark the form for any date errors
 	if from_date_result == false:
-		line_edit_date_from.add_theme_stylebox_override("normal", error_box())
+		line_edit_date_from.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
 		if to_date_result == false:
-			line_edit_date_to.add_theme_stylebox_override("normal", error_box())
+			line_edit_date_to.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
 		return
 	elif to_date_result == false:
-		line_edit_date_to.add_theme_stylebox_override("normal", error_box())
+		line_edit_date_to.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
 		return
 	
 	# Verify the from date is before the to date
@@ -234,8 +236,8 @@ func _on_btn_generate_report_pressed() -> void:
 	var formatted_to_date = CMDatabaseUtilities.convert_string_to_date(line_edit_date_to.text)
 	
 	if !formatted_from_date.is_before(formatted_to_date):
-		line_edit_date_from.add_theme_stylebox_override("normal", error_box())
-		line_edit_date_to.add_theme_stylebox_override("normal", error_box())
+		line_edit_date_from.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
+		line_edit_date_to.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
 		return
 	
 	# If there are no errors, generate the report! Woohoo!
@@ -264,16 +266,4 @@ func _on_btn_generate_report_pressed() -> void:
 	elif option_report_type.selected == 2 : # Bibliography
 		pass
 	pass
-
-
-## Creates a red stylebox 
-func error_box() -> StyleBoxFlat:
-	var red_border = StyleBoxFlat.new()
-	red_border.border_color = Color.RED
-	red_border.border_width_bottom = 2
-	red_border.border_width_left = 2
-	red_border.border_width_right = 2
-	red_border.border_width_top = 2
-
-	return red_border
 #endregion

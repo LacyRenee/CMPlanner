@@ -62,6 +62,7 @@ func _on_btn_edit_pressed() -> void:
 ## Allows the student to be deleted
 func _on_btn_delete_pressed() -> void:
 	popup_panel_confirm_delete.show()
+	lbl_popup_title.text = "Remove " + student.name + " ?"
 	pass
 
 

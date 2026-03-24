@@ -24,6 +24,9 @@ extends FoldableContainer
 ## Access to the confirmation popup when a note is saved
 @onready var popup_panel_save_note: PopupPanel = %PopupPanelSaveNote
 
+## Access to the save note button
+@onready var btn_save_notes: Button = %BtnSaveNotes
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -57,6 +60,10 @@ func _on_option_button_progress_item_selected(index: int) -> void:
 func _on_btn_save_notes_pressed() -> void:
 	if !text_edit_notes.text.is_empty():
 		CMDatabaseUtilities.save_assignment_note(self.get_meta("subject"), self.get_meta("assignment"), text_edit_notes.text)
+		var x = int(btn_save_notes.global_position.x) - 5
+		var y = int (btn_save_notes.global_position.y) + 40
+
+		popup_panel_save_note.position = Vector2i(x, y)
 		popup_panel_save_note.show()
 		
 		timer_save_note.start()
