@@ -36,6 +36,10 @@ const WELCOME_SCENE_PATH : String = "res://user_interface/main/welcome_page.tscn
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Force the application to open in windowed mode
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	#DisplayServer.window_set_size(Vector2i(1200, 720))
+	
 	# Set the screen scale factor 
 	if OS.has_feature("mobile"):
 		CMDatabaseUtilities.is_mobile = true
