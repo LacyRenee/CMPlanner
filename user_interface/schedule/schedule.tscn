@@ -91,7 +91,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 select_mode = 2
-max_columns = 5
+max_columns = 0
 
 [node name="HBoxStudents" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerWeeklyOverview/VBoxContainer/PanelContainerWeeklyViewOptions/VBoxContainer"]
 unique_name_in_owner = true
@@ -343,7 +343,7 @@ max_size = Vector2i(450, 250)
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 445.0
-offset_bottom = 245.0
+offset_bottom = 2837.0
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 20

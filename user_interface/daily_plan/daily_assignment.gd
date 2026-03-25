@@ -38,7 +38,7 @@ func _ready() -> void:
 ## Save the progress state
 func _on_option_button_progress_item_selected(index: int) -> void:
 	# Save progress state
-	CmDatabaseUtilities.save_assignment_progress(self.get_meta("subject"), self.get_meta("assignment"), index)
+	CMDatabaseUtilities.save_assignment_progress(self.get_meta("subject"), self.get_meta("assignment"), index)
 	
 	# Display completion status in the title of the assignment
 	if index == ResourceData.progress.Completed or\
@@ -58,16 +58,15 @@ func _on_option_button_progress_item_selected(index: int) -> void:
 
 ## Save the assignment note
 func _on_btn_save_notes_pressed() -> void:
-	if !text_edit_notes.text.is_empty():
-		CMDatabaseUtilities.save_assignment_note(self.get_meta("subject"), self.get_meta("assignment"), text_edit_notes.text)
-		var x = int(btn_save_notes.global_position.x) - 5
-		var y = int (btn_save_notes.global_position.y) + 40
+	CMDatabaseUtilities.save_assignment_note(self.get_meta("subject"), self.get_meta("assignment"), text_edit_notes.text)
+	var x = int(btn_save_notes.global_position.x) - 5
+	var y = int (btn_save_notes.global_position.y) + 40
 
-		popup_panel_save_note.position = Vector2i(x, y)
-		popup_panel_save_note.show()
-		
-		timer_save_note.start()
-		timer_save_note.connect("timeout", _on_timer_save_note_timeout)
+	popup_panel_save_note.position = Vector2i(x, y)
+	popup_panel_save_note.show()
+	
+	timer_save_note.start()
+	timer_save_note.connect("timeout", _on_timer_save_note_timeout)
 	pass 
 
 

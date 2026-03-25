@@ -25,6 +25,9 @@ extends Control
 ## Access to the daily notes
 @onready var text_edit_daily_note: TextEdit = %TextEditDailyNote
 
+## Access to the label to notify user if there are assignments for the day
+@onready var label_is_assignments: RichTextLabel = %LabelIsAssignments
+
 
 ## Path to the Panel subject scene
 const PANEL_SUBJECT = preload("uid://bv6p480uv7ng2")
@@ -138,8 +141,9 @@ func format_date() -> void:
 #region Daily Assignment Functions
 ## Creates the panel header for each subject
 func create_daily_plan_assignments() -> void:
-	var student_subject_list : Array[Subject] = CmDatabaseUtilities.get_subject_list()
+	var student_subject_list : Array[Subject] = CMDatabaseUtilities.get_subject_list()
 	var student_list : Array[Student] = CMDatabaseUtilities.get_student_list()
+	var assignments_exist = false
 	
 	if student_subject_list.is_empty():
 		return
@@ -178,33 +182,22 @@ func create_daily_plan_assignments() -> void:
 								# Make subject panel visible bc an assignment exists
 								panel_subject_scene.visible = true
 								panel_student_scene.visible = true
+								assignments_exist = true
 								create_assignment_view(subject_assignment, panel_student_scene)
 						
 						# Only add the assignment if the start after ResourceItem has all assignments completed
 						if subject_assignment.start_after != null:
 							panel_subject_scene.visible = true
 							panel_student_scene.visible = true
+							assignments_exist = true
 							create_assignment_view(subject_assignment, panel_student_scene)
 	
-	
-	# Display a message if no assignments are scheduled for the day
-	var is_assignment : bool
-	for i in vbox_subject_panels.get_child_count():
-		if vbox_subject_panels.get_child(i).visible == true:
-			is_assignment = true
-			panel_container_daily_note.visible = true
-			panel_container_filters.visible = true
-			return
-		else:
-			is_assignment = false
-	
-	if is_assignment == false:
-		var label : RichTextLabel = RichTextLabel.new()
-		label.text = "No assignments are scheduled for the day."
-		label.fit_content = true
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		vbox_subject_panels.add_child(label)
-		
+	if assignments_exist == true:
+		label_is_assignments.visible = false
+		panel_container_daily_note.visible = true
+		panel_container_filters.visible = true
+	else:
+		label_is_assignments.visible = true
 		panel_container_daily_note.visible = false
 		panel_container_filters.visible = false
 	pass

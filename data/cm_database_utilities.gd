@@ -123,7 +123,6 @@ static func verify_date_format(p_date : String) -> bool:
 		return true
 	else:
 		return false
-	pass
 
 
 ## Strips the strings and compares them
@@ -537,7 +536,6 @@ static func save_assignment_progress(p_subject : Subject, p_assignment : Assignm
 static func generate_report(p_student : Student, p_date_from : String, p_date_to : String, p_subjects : Array[ResourceData.Subjects]) -> String:
 	var subject_list : Array[Subject] = get_subject_list()
 	var report_data : Array[Dictionary] = []
-	var result : bool 
 	var date_from : Calendar.Date = convert_string_to_date(p_date_from)
 	var date_to : Calendar.Date = convert_string_to_date(p_date_to)
 	
@@ -552,7 +550,7 @@ static func generate_report(p_student : Student, p_date_from : String, p_date_to
 				
 				if (assignment_start_date.is_equal(date_from) or assignment_start_date.is_after(date_from)) and\
 				   (assignment_start_date.is_equal(date_to) or assignment_start_date.is_before(date_to)):
-					var data = create_report_row(subject_list[i], date_from, date_to)
+					var data = create_report_row(subject_list[i])
 					
 					report_data.append(data)
 			else:
@@ -560,7 +558,7 @@ static func generate_report(p_student : Student, p_date_from : String, p_date_to
 				
 				if (assignment_start_after_start_date.is_equal(date_from) or assignment_start_after_start_date.is_after(date_from)) and\
 				   (assignment_start_after_start_date.is_equal(date_to) or assignment_start_after_start_date.is_before(date_to)):
-					var data = create_report_row(subject_list[i], date_from, date_to)
+					var data = create_report_row(subject_list[i])
 					
 					report_data.append(data)
 	
@@ -572,7 +570,7 @@ static func generate_report(p_student : Student, p_date_from : String, p_date_to
 
 
 ## Creates a row of data for the Progress Report
-static func create_report_row(p_subject : Subject, p_date_from : Calendar.Date, p_date_to : Calendar.Date) -> Dictionary:
+static func create_report_row(p_subject : Subject) -> Dictionary:
 	var student_key = "student"
 	var student_value = p_subject.student.name
 	

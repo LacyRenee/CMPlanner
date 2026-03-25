@@ -69,7 +69,7 @@ func _on_btn_delete_pressed() -> void:
 ## Saves the edited student information
 func _on_btn_save_pressed() -> void:
 	student.name = le_name.text
-	student.grade = option_grade.selected
+	student.grade = option_grade.selected as CMDatabaseUtilities.GRADES
 	CMDatabaseUtilities.save_edited_student(student)
 	le_name.editable = false
 	option_grade.disabled = true

@@ -87,6 +87,7 @@ func _ready() -> void:
 
 ## Shows the popup panel to add a student
 func _on_btn_add_student_pressed() -> void:
+	option_grade.selected = 0
 	popup_panel.show()
 	pass 
 
@@ -103,8 +104,7 @@ func _on_popup_btn_cancel_pressed() -> void:
 func _on_popup_btn_save_pressed() -> void:
 	# Student's must have a name
 	if popup_le_name.text.is_empty():
-		var style = CMDatabaseUtilities.error_style_box_flat()
-		popup_le_name.add_theme_stylebox_override("normal", style)
+		popup_le_name.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
 	else:
 		var new_student : Student = Student.new()
 		new_student.name = popup_le_name.text
