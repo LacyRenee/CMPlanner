@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://j534kdp8bf1u"]
+[gd_scene load_steps=0 format=3 uid="uid://j534kdp8bf1u"]
 
 [node name="WelcomePage" type="PanelContainer"]
 anchors_preset = 15
