@@ -105,7 +105,6 @@ func display_assignments_page(p_subject : Subject) -> void:
 	pass
 
 
-
 ## Displays the daily plan page
 func display_daily_plan_page() -> void:
 	remove_scene_from_attacher()
