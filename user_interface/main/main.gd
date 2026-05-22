@@ -250,3 +250,8 @@ func _on_btn_settings_pressed() -> void:
 func _on_btn_schedule_pressed() -> void:
 	SignalBus.display_schedule_page.emit()
 	pass 
+
+
+## Displays the Memorize page
+func _on_btn_memorize_pressed() -> void:
+	pass 

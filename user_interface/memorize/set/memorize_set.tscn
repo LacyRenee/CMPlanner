@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4m604xss1vsu"]
+
+[ext_resource type="Script" uid="uid://sddn13u0vdm7" path="res://user_interface/memorize/set/memorize_set.gd" id="1_lkhkw"]
+
+[node name="MemorizeSet" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lkhkw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxTitle" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LblTitle" type="RichTextLabel" parent="VBoxContainer/HBoxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Title:"
+fit_content = true
+
+[node name="LeTitle" type="LineEdit" parent="VBoxContainer/HBoxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+
+[node name="HBoxSubtitle" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LblSubtitle" type="RichTextLabel" parent="VBoxContainer/HBoxSubtitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Subtitle:"
+fit_content = true
+
+[node name="LeSubtitle" type="LineEdit" parent="VBoxContainer/HBoxSubtitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+
+[node name="HBoxStartDate" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LblStartDate" type="RichTextLabel" parent="VBoxContainer/HBoxStartDate"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start Date:"
+fit_content = true
+
+[node name="LeStartDate" type="LineEdit" parent="VBoxContainer/HBoxStartDate"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+
+[node name="HBoxDescription" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LblDescription" type="RichTextLabel" parent="VBoxContainer/HBoxDescription"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Description: "
+fit_content = true
+
+[node name="LeDescription" type="LineEdit" parent="VBoxContainer/HBoxDescription"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+
+[node name="PanelContainerPlaceholder" type="PanelContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"BackgroundPanel"

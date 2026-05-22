@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3 uid="uid://cwtvuhdc01pbi"]
+
+[ext_resource type="Script" uid="uid://dnlextyl86poa" path="res://user_interface/memorize/card/card.gd" id="1_s4onc"]
+
+[node name="Card" type="FoldableContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s4onc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HBoxTitle" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblTitle" type="RichTextLabel" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Title: "
+fit_content = true
+
+[node name="LeTItle" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+
+[node name="HBoxDescription" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblDescription" type="RichTextLabel" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxDescription"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Description: "
+fit_content = true
+
+[node name="LeDescription" type="TextEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxDescription"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
+caret_blink = true
+
+[node name="HBoxStartDate" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblStartDate" type="RichTextLabel" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxStartDate"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start Date:"
+fit_content = true
+
+[node name="LeStartDate" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxStartDate"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.0
