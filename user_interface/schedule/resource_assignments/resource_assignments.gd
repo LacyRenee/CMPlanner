@@ -57,9 +57,13 @@ func display_assignments(p_subject : Subject) -> void:
 		
 		instance.set_label_count(str(count) + ". ")
 		instance.set_label_title(assignment.title)
-		instance.set_label_date(assignment.completed_date)
 		instance.set_option_progress(assignment.progress)
 		instance.set_notes(assignment.notes)
+		
+		if subject.division_type != ResourceData.DivisionType.None:
+			instance.option_progress.set_item_disabled(4, true)
+		
+		instance.set_label_date(assignment.completed_date)
 		
 		# Save the old data
 		old_date = assignment.completed_date
@@ -83,10 +87,15 @@ func update_assignments(index : int, p_date : String, p_progress : ResourceData.
 			if p_date == "NA":
 				p_date = Calendar.Date.today().to_string()
 				vbox_assignment_rows.get_child(index + 1).get_child(2).text = p_date
-			
+		
+		if p_progress == ResourceData.progress.Complete_and_finish:
+			subject.is_finished = true
+		else:
+			subject.is_finished = false
+		
 		subject.assignments[index].completed_date = p_date
-		subject.assignments[index].progress = p_progress
 		subject.assignments[index].notes = p_notes
+		subject.assignments[index].progress = p_progress
 		
 		CMDatabaseUtilities.update_subject(subject)
 	pass

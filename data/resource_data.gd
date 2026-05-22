@@ -94,5 +94,6 @@ enum progress {
 	Incomplete,
 	In_progress,
 	Completed,
-	Omit_assignment
+	Omit_assignment,
+	Complete_and_finish
 }

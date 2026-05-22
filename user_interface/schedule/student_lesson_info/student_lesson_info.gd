@@ -39,6 +39,10 @@ extends VBoxContainer
 ## Access to the assignment start value
 @onready var lbl_start: RichTextLabel = %LblStart
 
+## Access to the confirmation popup to remove an assignment
+@onready var popup_panel_delete_assignment_confirmation: PopupPanel = %PopupPanelDeleteAssignmentConfirmation
+
+
 var subject : Subject 
 
 # Called when the node enters the scene tree for the first time.
@@ -57,8 +61,7 @@ func get_subject() -> Subject:
 
 ## Removes the subject from the schedule
 func _on_btn_remove_from_schedule_pressed() -> void:
-	CMDatabaseUtilities.remove_subject_from_schedule(subject)
-	SignalBus.refresh_scheduled_subject_view.emit()
+	popup_panel_delete_assignment_confirmation.show()
 	pass 
 
 
@@ -72,4 +75,17 @@ func _on_btn_edit_schedule_pressed() -> void:
 ## Changes the scene to the resource_assignment view
 func _on_btn_view_schedule_pressed() -> void:
 	SignalBus.display_resource_assignments_page.emit(subject)
+	pass
+
+
+## Confirms the process of removing the assigned subject
+func _on_btn_okay_remove_assignment_pressed() -> void:
+	CMDatabaseUtilities.remove_subject_from_schedule(subject)
+	SignalBus.refresh_scheduled_subject_view.emit()
+	popup_panel_delete_assignment_confirmation.hide()
+	pass
+
+## Cancels the request to remove the assigned subject
+func _on_btn_cancel_remove_assignment_pressed() -> void:
+	popup_panel_delete_assignment_confirmation.hide()
 	pass

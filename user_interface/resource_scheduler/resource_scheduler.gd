@@ -79,7 +79,6 @@ func _ready() -> void:
 	if OS.has_feature("mobile"):
 		is_mobile = true
 	
-	
 	# Set the View to "New"
 	update_view_option(ResourceData.ViewingOptions.New)
 	
@@ -93,22 +92,12 @@ func _ready() -> void:
 	populate_resource_list()
 	
 	# Display start after options if any subjects have been assigned
-	var subject_list = CMDatabaseUtilities.get_subject_list()
-	if !subject_list.is_empty():
-		panel_container_start_after.visible = true
-		
-		for r in subject_list.size():
-			options_resources.add_item(subject_list[r].resource.title)
-			options_resources.set_item_metadata(r, subject_list[r])
-		
-		options_resources.selected = -1
+	populate_start_after_resources()
 	
 	
-	## Populate the subject options
+	# Populate the subject options
 	for subject in ResourceData.Subjects:
-		option_button_subjects.add_item(subject.replace("_", " "))
-		
-	
+		option_button_subjects.add_item(subject.replace("_", " "))	
 	
 	# Populate the study method options
 	for method in ResourceData.study_method:
@@ -145,7 +134,31 @@ func populate_resource_list() -> void:
 		item_list_resource.set_item_metadata(index, resource_list[r])
 		
 		var index_duplicate = item_list_resource_duplicate.add_item(resource_list[r].title)
-		item_list_resource_duplicate.set_item_metadata(index_duplicate, r)
+		item_list_resource_duplicate.set_item_metadata(index_duplicate, resource_list[r])
+	
+	item_list_resource.sort_items_by_text()
+	pass
+
+
+## Add all the resources available for the start after
+func populate_start_after_resources() -> void:
+	var subject_list : Array[Subject] = CMDatabaseUtilities.get_subject_list()
+	if !subject_list.is_empty():
+		panel_container_start_after.visible = true
+		options_resources.clear()
+		
+		for r in subject_list.size():
+			if subject_list[r].student == options_student_list.get_selected_metadata():
+				options_resources.add_item(subject_list[r].resource.title)
+				options_resources.set_item_metadata(r, subject_list[r])
+		
+		options_resources.selected = -1
+	else:
+		panel_container_start_after.visible = false
+	
+	if options_resources.item_count == 0:
+		panel_container_start_after.visible = false
+	
 	pass
 
 
@@ -223,11 +236,17 @@ func set_selected_date(p_date) -> void:
 func create_assignments(p_resource : ResourceItem) -> Array[Assignment]:
 	var assignment_list : Array[Assignment] = []
 	
-	for title in p_resource.division_list:
-		var assignment : Assignment = Assignment.new()
-		assignment.title = title
-		assignment.progress = ResourceData.progress.Incomplete
-		assignment_list.append(assignment)
+	if p_resource.division_type == ResourceData.DivisionType.None:
+		var new_assignment : Assignment = Assignment.new()
+		new_assignment.title = p_resource.title
+		new_assignment.progress = ResourceData.progress.Incomplete
+		assignment_list.append(new_assignment)
+	else:
+		for title in p_resource.division_list:
+			var new_assignment : Assignment = Assignment.new()
+			new_assignment.title = title
+			new_assignment.progress = ResourceData.progress.Incomplete
+			assignment_list.append(new_assignment)
 	
 	return assignment_list
 
@@ -292,10 +311,11 @@ func save_data(p_new_subject : Subject) -> Subject:
 	# Add the selected resource
 	p_new_subject.resource = item_list_resource.get_item_metadata(item_list_resource.get_selected_items()[0])
 	
-	## Create the assignments if the ResourceItem has a division type
-	if p_new_subject.resource.division_type != ResourceData.DivisionType.None:
-		p_new_subject.division_type = p_new_subject.resource.division_type
-		p_new_subject.assignments = create_assignments(p_new_subject.resource)
+	# Add the division type
+	p_new_subject.division_type = p_new_subject.resource.division_type
+	
+	# Create the assignments for the subject
+	p_new_subject.assignments = create_assignments(p_new_subject.resource)
 	
 	# Add the student
 	p_new_subject.student = options_student_list.get_item_metadata(options_student_list.selected)
@@ -311,7 +331,7 @@ func save_data(p_new_subject : Subject) -> Subject:
 		p_new_subject.start_date = btn_todays_date.text
 	else:
 		var index = options_resources.selected
-		p_new_subject.start_after = options_resources.get_item_metadata(index)
+		p_new_subject.start_after = options_resources.get_selected_metadata()
 	
 	# Add the week days
 	var selected_days = get_tree().get_nodes_in_group("day_selected")
@@ -352,7 +372,6 @@ func _on_btn_save_schedule_pressed() -> void:
 		add_error_formats(errors)
 		return
 	
-	
 	# Create the new subject and add all the data
 	var new_subject : Subject = Subject.new()
 	save_data(new_subject)
@@ -372,7 +391,8 @@ func _on_le_search_resource_text_changed(new_text: String) -> void:
 	
 	for i in range(item_list_resource_duplicate.get_item_count()):
 		if item_list_resource_duplicate.get_item_text(i).to_lower().find(search_value) != -1:
-			var index = item_list_resource.add_item(item_list_resource_duplicate.get_item_metadata(i).title)
+			var resource : ResourceItem = item_list_resource_duplicate.get_item_metadata(i)
+			var index = item_list_resource.add_item(resource.title)
 			item_list_resource.set_item_metadata(index, item_list_resource_duplicate.get_item_metadata(i))
 			item_list_resource.select(index)
 	pass
@@ -394,19 +414,16 @@ func _on_btn_update_schedule_pressed() -> void:
 		add_error_formats(errors)
 		return
 	
-	# Verify that the assignment already exists
-	var assignment_list = CMDatabaseUtilities.get_subject_list()
-	for assignment in assignment_list:
-		updated_subject.week_days.clear()
-		save_data(updated_subject)
-		
-		# Student assignment found! Update it
-		if assignment.student == updated_subject.student and assignment.resource == updated_subject.resource:
-			CMDatabaseUtilities.update_subject(updated_subject)
-		else:
-			CMDatabaseUtilities.add_subject(updated_subject)
+	# Clear the week days so they aren't duplicated
+	updated_subject.week_days.clear()
 	
+	# Save the new data
+	save_data(updated_subject)
 	
+	# Update the database
+	CMDatabaseUtilities.update_subject(updated_subject)
+	
+	# Signal the schedulge page to be displayed
 	SignalBus.display_schedule_page.emit()
 	pass
 
@@ -432,5 +449,11 @@ func _on_check_start_date_pressed() -> void:
 	pass
 
 
-func _on_options_resources_item_selected(index: int) -> void:
-	pass # Replace with function body.
+func _on_options_resources_item_selected(_index: int) -> void:
+	pass
+
+
+## Populate the Start After resources based on the student
+func _on_options_student_list_item_selected(index: int) -> void:
+	populate_start_after_resources()
+	pass 

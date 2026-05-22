@@ -81,7 +81,7 @@ placeholder_text = "Start typing to search for a resource"
 
 [node name="ItemListResource" type="ItemList" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -316,6 +316,7 @@ theme_type_variation = &"DeleteButton"
 text = "Cancel"
 
 [connection signal="text_changed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerResourceItem/VBoxContainer/HBoxContainer/LeSearchResource" to="." method="_on_le_search_resource_text_changed"]
+[connection signal="item_selected" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerAssignStudents/VBoxStudents/OptionsStudentList" to="." method="_on_options_student_list_item_selected"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/CheckStartDate" to="." method="_on_check_start_date_pressed"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartDate/HBoxContainer/BtnTodaysDate" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerStartAfter/HBoxContainer/CheckStartAfter" to="." method="_on_check_start_after_pressed"]

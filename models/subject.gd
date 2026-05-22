@@ -24,25 +24,11 @@ extends Resource
 ## Use after a specified resource
 @export var start_after : Subject
 
-## Specifies whether the Subject is scheduled or not
-@export var is_active : bool = true
-
 ## Selected division type used for assignments
 @export var division_type : ResourceData.DivisionType
 
 ## Assignments to be scheduled for the student
 @export var assignments : Array[Assignment] = []  
 
-## Daily notes
-@export var daily_notes : Array[DailyNotes] = []
-
-
-## Built-in class to hold the daily notes
-class DailyNotes:
-	extends Resource
-	
-	## Date the note was made
-	var date : String = ""
-	
-	## Note information for the daily assignment
-	var note : String = ""
+## True when all assignments have been completed/omitted
+@export var is_finished : bool = false

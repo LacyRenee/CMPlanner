@@ -41,6 +41,7 @@ layout_mode = 2
 
 [node name="LblStudents" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_type_variation = &"HeaderLargeLabelDark"
 text = "List of Students"
 fit_content = true
 autowrap_mode = 0
@@ -66,7 +67,177 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 2
 
+[node name="VSeparator2" type="VSeparator" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PanelContainerGenerateReports" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports"]
+layout_mode = 2
+
+[node name="LabelGenerateReports" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"HeaderLargeLabelDark"
+text = "Generate Reports"
+fit_content = true
+
+[node name="LabelReportInfo" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+layout_mode = 2
+text = "Progress Reports is a summary of what assignments have been finished."
+fit_content = true
+
+[node name="ControlSpacer" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxReportType" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxReportType"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Report Type:"
+fit_content = true
+
+[node name="OptionReportType" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxReportType"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+item_count = 1
+popup/item_0/text = "Progress Report"
+popup/item_0/id = 0
+
+[node name="HBoxStudentReport" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LabelStudent" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxStudentReport"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Student:"
+fit_content = true
+
+[node name="OptionStudents" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxStudentReport"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="HBoxSortBy" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxSortBy"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Sort By:"
+fit_content = true
+
+[node name="OptionButton" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxSortBy"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+selected = 0
+item_count = 2
+popup/item_0/text = "Subject"
+popup/item_0/id = 0
+popup/item_1/text = "Date"
+popup/item_1/id = 1
+
+[node name="HBoxDateRange" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LabelFrom" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxDateRange"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "From:"
+fit_content = true
+
+[node name="LineEditDateFrom" type="LineEdit" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxDateRange"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+placeholder_text = "MM-DD-YYYY"
+
+[node name="LabelTo" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxDateRange"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "to:"
+fit_content = true
+
+[node name="LineEditDateTo" type="LineEdit" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxDateRange"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+placeholder_text = "MM-DD-YYYY"
+
+[node name="HBoxSubjects" type="HBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="LabelSubject" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxSubjects"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Subjects:"
+fit_content = true
+
+[node name="OptionSubjects" type="OptionButton" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxSubjects"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 2
+popup/item_0/text = "All Subjects"
+popup/item_0/id = 0
+popup/item_1/text = "Selected Subjects"
+popup/item_1/id = 1
+
+[node name="PanelContainerSelectedSubjects" type="PanelContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="VBoxSelectedSubjects" type="VBoxContainer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/PanelContainerSelectedSubjects"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ControlSpacer2" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BtnGenerateReport" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"AccentButton"
+text = "Generate"
+
+[node name="LabelNotification" type="RichTextLabel" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+fit_content = true
+
+[node name="TimerNotification" type="Timer" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/LabelNotification"]
+wait_time = 5.0
+one_shot = true
+
+[node name="ControlSpacer" type="Control" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
 [node name="Button" type="Button" parent="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Load Data"
 
@@ -75,7 +246,6 @@ unique_name_in_owner = true
 oversampling_override = 1.0
 initial_position = 1
 size = Vector2i(450, 250)
-visible = true
 
 [node name="MarginContainer" type="MarginContainer" parent="PopupPanel"]
 offset_left = 5.0
@@ -146,6 +316,10 @@ theme_type_variation = &"DeleteButton"
 text = "Cancel"
 
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/BtnAddStudent" to="." method="_on_btn_add_student_pressed"]
+[connection signal="item_selected" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxReportType/OptionReportType" to="." method="_on_option_progress_type_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxStudentReport/OptionStudents" to="." method="_on_option_students_item_selected"]
+[connection signal="item_selected" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/HBoxSubjects/OptionSubjects" to="." method="_on_option_subjects_item_selected"]
+[connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/PanelContainerGenerateReports/VBoxContainer/BtnGenerateReport" to="." method="_on_btn_generate_report_pressed"]
 [connection signal="pressed" from="ScrollContainer/PanelContainer/MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnSave" to="." method="_on_popup_btn_save_pressed"]
 [connection signal="pressed" from="PopupPanel/MarginContainer/VBoxContainer/HBoxContainer3/PopupBtnCancel" to="." method="_on_popup_btn_cancel_pressed"]

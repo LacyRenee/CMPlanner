@@ -66,6 +66,80 @@ func _ready() -> void:
 	pass
 	
 
+
+
+#region Utility Functions
+## Outlines the selected control in red
+static func error_style_box_flat() -> StyleBoxFlat:
+	var red_border = StyleBoxFlat.new()
+	red_border.border_color = Color.RED
+	red_border.border_width_bottom = 2
+	red_border.border_width_left = 2
+	red_border.border_width_right = 2
+	red_border.border_width_top = 2
+	return red_border
+
+
+## The mathematical formula used to calculate the day of the week for any given date
+static func zellers_congruence(day: int, month: int, year: int) -> Time.Weekday:
+	if month < 3:
+		month += 12
+		year -= 1
+
+	var q = day
+	var m = month
+	var K = year % 100
+	var C = year / 100
+	var h = (q + (13 * (m + 1)) / 5 + K + K / 4 + C / 4 - 2 * C) % 7
+	
+	# Adjusted Zeller's Congruence for Godot's Sunday = 0
+	return (h + 6) % 7 as Time.Weekday
+
+
+## Takes a string date and converts it into a calendar date
+static func convert_string_to_date(p_string : String) -> Calendar.Date:
+	var split_date = p_string.split("-")
+	var year = int(split_date[0])
+	var month = int(split_date[1])
+	var day = int(split_date[2])
+	
+	var formatted_from_date : Calendar.Date = Calendar.Date.new(year, month, day)
+	return formatted_from_date
+
+
+## Formats a date as MM/DD/YYYY
+static func get_formatted_date(p_date : Calendar.Date) -> String:
+	var pattern : String = "%m-%d-%Y"
+	var formatted_date = _calendar.get_date_formatted(p_date.year, p_date.month, p_date.day, pattern)
+	return formatted_date
+
+
+## Verifies the date format: MM-DD-YYYY
+static func verify_date_format(p_date : String) -> bool:
+	var regex_date_dash = RegEx.new()
+	regex_date_dash.compile("^(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])-\\d{4}$")
+	
+	if regex_date_dash.search(p_date) != null:
+		return true
+	else:
+		return false
+
+
+## Strips the strings and compares them
+static func compare_strings(p_string_one : String, p_string_two : String) -> bool:
+	var result : bool 
+	
+	var formatted_string_one = p_string_one.replace("_", " ").to_lower().strip_edges()
+	var formatted_string_two = p_string_two.replace("_", " ").to_lower().strip_edges()
+	
+	if formatted_string_one == formatted_string_two:
+		result = true
+	else:
+		result = false
+	
+	return result
+
+
 ## Parses through JSON objects of ResourceItems and adds them to the database file
 static func parse_json_data() -> void:
 	var file_string = FileAccess.get_file_as_string(USER_LIBRARY_PATH)
@@ -85,7 +159,6 @@ static func parse_json_data() -> void:
 	var json_divisions = json_data.Divisions
 		
 	if json_library != null:
-		var resource_item_count : int = 0
 		for item in json_library:
 			# Check to see if the title already exists in the database
 			if does_resource_item_exist(item.TITLE):
@@ -99,7 +172,7 @@ static func parse_json_data() -> void:
 			resource.contributor_name = item.CONTRIBUTOR_NAME if item.CONTRIBUTOR_NAME != "NA" else ""
 			resource.web_url = item.WEB_URL if item.WEB_URL != "NA" else ""
 			resource.publisher = item.PUBLISHER if item.PUBLISHER != "NA" else ""
-			resource.copyright_date = str(item.COPYRIGHT_DATE) if str(item.COPYRIGHT_DATE) != "NA" else null
+			resource.copyright_date = str(item.COPYRIGHT_DATE) if str(item.COPYRIGHT_DATE) != "NA" else "null"
 			resource.year_written = str(item.YEAR_WRITTEN) if str(item.YEAR_WRITTEN) != "NA" else ""
 			resource.number_of_pages = item.NUMBER_OF_PAGES if str(item.NUMBER_OF_PAGES) != "NA" else ""
 			resource.edition = item.EDITION if item.EDITION != "NA" else ""
@@ -147,13 +220,6 @@ static func parse_json_data() -> void:
 							count += 1
 				CMDatabaseUtilities.save_resource_item(resource)
 	pass
-
-
-#region Date Functions
-static func get_formatted_date(p_date : Calendar.Date) -> String:
-	var pattern : String = "%m-%d-%Y"
-	var formatted_date = _calendar.get_date_formatted(p_date.year, p_date.month, p_date.day, pattern)
-	return formatted_date
 #endregion
 
 
@@ -238,7 +304,7 @@ static func update_resource_item(p_resource : ResourceItem) -> void:
 	db.resource_list[index] = p_resource
 	
 	# Update all associated assignments
-	db.subject_list = update_selected_resource_assignments(p_resource)
+	#db.subject_list = update_selected_resource_assignments(p_resource)
 	
 	overwrite_database(db)
 	pass
@@ -269,13 +335,20 @@ static func does_resource_item_exist(p_title : String) -> bool:
 
 
 #region Subject Functions
+## Retrieve all the subjects in the database
+static func get_subject_list() -> Array[Subject]:
+	var db = get_database()
+	return db.subject_list
+
+
 static func update_active_subjects() -> void:
 	active_subjects.clear()
 	var subject_list : Array[Subject] = get_subject_list()
 	
 	for subject in subject_list:
-		if not active_subjects.has(subject.subject):
-			active_subjects.append(subject.subject)
+		if subject.is_finished == false:
+			if not active_subjects.has(subject.subject):
+				active_subjects.append(subject.subject)
 	pass
 
 
@@ -287,11 +360,6 @@ static func add_subject(p_subject : Subject) -> void:
 	update_active_subjects()
 	pass
 
-
-## Retrieve all the subjects in the database
-static func get_subject_list() -> Array[Subject]:
-	var db = get_database()
-	return db.subject_list
 
 
 ## Removes the scheduled resource
@@ -328,36 +396,78 @@ static func remove_selected_resource_subjects(p_resource : ResourceItem) -> void
 
 
 ## Updates all assignments associated with the selected ResourceItem
-static func update_selected_resource_assignments(p_resource : ResourceItem) -> Array[Subject]:
-	var assignment_list : Array[Subject] = get_subject_list()
+static func update_selected_resource_assignments(p_resource : ResourceItem) -> void:
+	var db = get_database()
+	var subject_list : Array[Subject] = get_subject_list()
 
-	for assignment in assignment_list:
-		if assignment.resource == p_resource:
-			if assignment.division_type != ResourceData.DivisionType.None:
-				var new_assignment_list : Array[Assignment] = []
-				for title in p_resource.division_list:
+	for subject in subject_list:
+		if subject.resource == p_resource:
+			if subject.division_type == ResourceData.DivisionType.None:
+				pass
+			else:
+				subject.assignments.clear()
+				for assignment in p_resource.division_list:
 					var new_assignment : Assignment = Assignment.new()
-					new_assignment.title = title
+					new_assignment.title = assignment
 					new_assignment.progress = ResourceData.progress.Incomplete
-					new_assignment_list.append(new_assignment)
-				
-				assignment.assignments = new_assignment_list
-		else:
-			assignment_list.append(assignment)
+					subject.assignments.append(new_assignment)
 	
+	db.subject_list = subject_list
+	overwrite_database(db)
 	update_active_subjects()
-
-	return assignment_list
+	pass
 #endregion
 
 
 #region Assignment Functions
+## Save the daily assignment note
+static func save_daily_note(p_note : String, p_date : String) -> void:
+	var db = get_database()
+
+	# Update the daily note if it exists
+	for i in db.daily_notes.size():
+		if compare_strings(db.daily_notes[i].date, p_date):
+			db.daily_notes[i].notes = p_note
+			overwrite_database(db)
+			return
+	
+	# Create a daily note if it does not exist
+	var new_daily_note : DailyNotes = DailyNotes.new()
+	new_daily_note.date = p_date
+	new_daily_note.notes = p_note
+
+	
+	db.daily_notes.append(new_daily_note)
+	overwrite_database(db)
+	pass
+
+
+## Retrieves a selected daily note
+static func get_daily_note(p_date : String) -> DailyNotes:
+	var db = get_database()
+	var note_list : Array[DailyNotes] = db.daily_notes
+
+	for i in note_list.size():
+		if note_list[i].date == p_date:
+			return note_list[i]
+	return null
+
+
+## Retrieves all of the daily notes
+static func get_daily_note_list() -> Array[DailyNotes]:
+	var db = get_database()
+	return db.daily_notes
+
+
 ## Save the note for the selected assignment
 static func save_assignment_note(p_subject : Subject, p_assignment : Assignment, p_note : String) -> void:
 	var db = get_database()
 	
-	var assignment_index = p_subject.assignments.find(p_assignment)
-	p_subject.assignments[assignment_index].notes = p_note
+	if p_subject.assignments.is_empty():
+		pass
+	else:
+		var assignment_index = p_subject.assignments.find(p_assignment)
+		p_subject.assignments[assignment_index].notes = p_note
 	
 	var subject_index = db.subject_list.find(p_subject)
 	db.subject_list[subject_index] = p_subject
@@ -383,20 +493,183 @@ static func save_assignment_start_date(p_subject : Subject, p_assignment : Assig
 ## Save the assignment progress
 static func save_assignment_progress(p_subject : Subject, p_assignment : Assignment, p_index : int) -> void:
 	var db = get_database()
-	
 	var assignment_index = p_subject.assignments.find(p_assignment)
-	p_subject.assignments[assignment_index].progress = p_index
 	
-	# Save end date progress complete or omit
-	if p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
-		p_subject.assignments[assignment_index].end_date = Calendar.Date.today().to_string()
+	p_subject.assignments[assignment_index].progress = p_index as ResourceData.progress
+
+	# Save the completed date or finsihed complete date based on the progress
+	if p_index == ResourceData.progress.Complete_and_finish:
+		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
+		p_subject.is_finished =  true
+	elif p_index == ResourceData.progress.Completed and p_subject.resource.division_type == ResourceData.DivisionType.None or\
+		 p_index == ResourceData.progress.Omit_assignment and p_subject.resource.division_type == ResourceData.DivisionType.None:
+		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
+		
+		var new_assignment : Assignment = Assignment.new()
+		new_assignment.title = p_subject.resource.title
+		new_assignment.progress = ResourceData.progress.Incomplete
+		new_assignment.completed_date = "NA"
+		p_subject.assignments.append(new_assignment)
+	elif p_index == ResourceData.progress.Completed or p_index == ResourceData.progress.Omit_assignment:
+		p_subject.assignments[assignment_index].completed_date = get_formatted_date(_calendar.Date.today())
+		
+		if  p_subject.division_type != ResourceData.DivisionType.None and\
+			assignment_index == p_subject.assignments.size() - 1:
+			p_subject.is_finished =  true
+		else:
+			p_subject.is_finished =  false
+	else:
+		p_subject.assignments[assignment_index].completed_date = ""
+		p_subject.is_finished =  false
+
 	
 	var subject_index = db.subject_list.find(p_subject)
 	db.subject_list[subject_index] = p_subject
 	
 	overwrite_database(db)
-
 	pass
+#endregion
+
+
+#region Report functions
+## Create a summary of what assignments have been finished
+static func generate_report(p_student : Student, p_date_from : String, p_date_to : String, p_subjects : Array[ResourceData.Subjects]) -> String:
+	var subject_list : Array[Subject] = get_subject_list()
+	var report_data : Array[Dictionary] = []
+	var date_from : Calendar.Date = convert_string_to_date(p_date_from)
+	var date_to : Calendar.Date = convert_string_to_date(p_date_to)
+	
+	# Parse out the data for the selected Student and Subjects and date	
+	for i in subject_list.size():	
+		if subject_list[i].student == p_student and\
+		   p_subjects.has(subject_list[i].subject):
+			
+			if !subject_list[i].start_date.is_empty():
+				
+				var assignment_start_date : Calendar.Date = convert_string_to_date(subject_list[i].start_date)
+				
+				if (assignment_start_date.is_equal(date_from) or assignment_start_date.is_after(date_from)) and\
+				   (assignment_start_date.is_equal(date_to) or assignment_start_date.is_before(date_to)):
+					var data = create_report_row(subject_list[i])
+					
+					report_data.append(data)
+			else:
+				var assignment_start_after_start_date : Calendar.Date = convert_string_to_date(subject_list[i].start_after.start_date)
+				
+				if (assignment_start_after_start_date.is_equal(date_from) or assignment_start_after_start_date.is_after(date_from)) and\
+				   (assignment_start_after_start_date.is_equal(date_to) or assignment_start_after_start_date.is_before(date_to)):
+					var data = create_report_row(subject_list[i])
+					
+					report_data.append(data)
+	
+	if !report_data.is_empty():
+		var filename = save_progress_report(p_student, report_data)
+		return filename
+	else:
+		return ""
+
+
+## Creates a row of data for the Progress Report
+static func create_report_row(p_subject : Subject) -> Dictionary:
+	var student_key = "student"
+	var student_value = p_subject.student.name
+	
+	var subject_key : String = "subject"
+	var subject_value : String = ResourceData.Subjects.keys()[p_subject.subject]
+	
+	var resource_key : String = "resource_title"
+	var resource_value : String = p_subject.resource.title
+	
+	var assignment_title_key : String = "assignment"
+	var assignment_title_value : Array[String] = []
+	
+	var completed_date_key : String = "completed_date"
+	var completed_date_value : Array[String] = []
+	
+	var notes_key : String = "notes"
+	var notes_value : Array[String] = []
+	
+	var daily_notes_key : String = "daily_notes"
+	var daily_notes_value : String = ""
+	
+	# List of all daily notes
+	var daily_notes : Array[DailyNotes] = get_daily_note_list()
+	
+	# Add the assignment, dates, and notes into their nested arrays
+	for a in p_subject.assignments.size():
+		assignment_title_value.append(p_subject.assignments[a].title if !p_subject.assignments[a].title.is_empty() else "NA")
+		completed_date_value.append(p_subject.assignments[a].completed_date if !p_subject.assignments[a].completed_date.is_empty() else "NA")
+		notes_value.append(p_subject.assignments[a].notes if !p_subject.assignments[a].notes.is_empty() else "NA")
+		
+		# Find any daily notes for the assignment
+		
+		for n in daily_notes.size():
+			if !p_subject.assignments[a].completed_date.is_empty():
+				var daily_note_date : Calendar.Date = convert_string_to_date(daily_notes[n].date)
+				var assignment_completed_date : Calendar.Date = convert_string_to_date(p_subject.assignments[a].completed_date)
+				
+				if daily_note_date.is_equal(assignment_completed_date):
+					daily_notes_value = daily_notes[n].notes
+				else:
+					daily_notes_value = "NA"
+	
+	# create the data object
+	var data : Dictionary = {
+		student_key: student_value,
+		subject_key: subject_value,
+		resource_key: resource_value,
+		assignment_title_key: assignment_title_value,
+		completed_date_key: completed_date_value,
+		notes_key: notes_value,
+		daily_notes_key: daily_notes_value
+	}
+	return data
+
+
+static func find_note_by_date() -> void:
+	pass
+
+## Saves the Progress report to the user's Desktop
+static func save_progress_report(p_student : Student, p_report_data : Array[Dictionary]) -> String:
+	# Create the file
+	var filename = OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP) + "/" + p_student.name + "_report.csv"
+	var file = FileAccess.open(filename, FileAccess.WRITE)
+	
+	if file == null: 
+		return ""
+		
+	# Table headers
+	var headers = ["student", "subject", "resource_title", "assignment", "completed_date", "notes", "daily_notes"]
+	file.store_csv_line(headers)
+	
+	for record in p_report_data:
+		for assignment_count in record.assignment.size():
+			var row = []
+			
+			if assignment_count == 0:
+				row.append(record.student)
+				row.append(record.subject)
+				row.append(record.resource_title)
+			else: # Append for student, subject, and resource_title
+				row.append("-")
+				row.append("-")
+				row.append("-")
+			
+			row.append(record.assignment[assignment_count])
+			
+			row.append(record.completed_date[assignment_count])
+			
+			row.append(record.notes[assignment_count])
+			
+			if record.completed_date[assignment_count] != "NA":
+				row.append(record.daily_notes)
+			
+			file.store_csv_line(row)
+	
+	# Save and close the file
+	file.close()
+	return filename
+
 #endregion
 
 

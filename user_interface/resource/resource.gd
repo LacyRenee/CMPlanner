@@ -7,8 +7,7 @@ extends Control
 const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division_item.tscn"
 
 
-## onready variables
-#region
+#region onready variables
 ## Access to the title line edit text
 @onready var title: LineEdit = %LeTitle
 
@@ -78,12 +77,15 @@ const DIVSION_SCENE_PATH : String = "res://user_interface/division_item/division
 ## Access to the confirmation popup to delete a resource
 @onready var popup_delete_resource_confirmation: PopupPanel = %PopupDeleteResourceConfirmation
 
-
+## Access to the confirmation popup to update all division lists
+@onready var popup_update_division_list_confirmation: PopupPanel = %PopupUpdateDivisionListConfirmation
 #endregion
 
 
 ## The Resource that is to be saved to the database
-var resource_item = ResourceItem.new()
+var resource_item : ResourceItem = ResourceItem.new()
+
+var old_data : Array[String] = []
 
 ## File path to the selected resource item
 var resource_item_path : String = ""
@@ -116,7 +118,7 @@ func _ready() -> void:
 	
 	# Populate the Subject options
 	for s in ResourceData.Subjects :
-		ob_subject.add_item(s)
+		ob_subject.add_item(s.replace("_", " "))
 	#endregion
 	
 	# Listens for a division item to be deleted
@@ -251,7 +253,11 @@ func get_all_division_items() -> Array:
 	var array : Array[String]
 	
 	for i in division_item_list:
-		array.append(i.get_text())
+		if i.get_text().is_empty():
+			i.visible = false
+			continue
+		else:
+			array.append(i.get_text())
 	
 	return array
 
@@ -290,6 +296,7 @@ func display_selected_resource(resource: ResourceItem) -> void:
 	# Save the current resource
 	resource_item = resource
 	
+	# Add the main information
 	title.text = resource_item.title
 	isbn.text = resource_item.isbn
 	resource_type_options.selected = resource_item.resource_type
@@ -297,6 +304,16 @@ func display_selected_resource(resource: ResourceItem) -> void:
 	contributor_name.text = resource_item.contributor_name
 	division_type_options.selected = resource_item.division_type
 	
+	# Add the additional information
+	le_url.text = resource.web_url if !resource.web_url.is_empty() else ""
+	le_publisher.text = resource.publisher if !resource.publisher.is_empty() else ""
+	le_copyright_date.text = resource.copyright_date if !resource.copyright_date.is_empty() else ""
+	le_year_written.text = resource.year_written if !resource.year_written.is_empty() else ""
+	le_number_of_pages.text = str(resource.number_of_pages) if resource.number_of_pages != null else ""
+	le_edition.text = resource.edition if !resource.edition.is_empty() else ""
+	le_description.text = resource.description if !resource.description.is_empty() else ""
+	
+	# Add the divsion items
 	if resource_item.division_type != ResourceData.DivisionType.None:
 		division_container.show()
 		division_list.remove_child(division_list.get_child(0))
@@ -310,32 +327,6 @@ func display_selected_resource(resource: ResourceItem) -> void:
 			instance.disable_delete_button()
 		
 		renumber_divisions()
-	pass
-
-
-## Red lines the title field if empty
-func error_format_title_empty() -> void:
-	var red_border = StyleBoxFlat.new()
-	red_border.border_color = Color.RED
-	red_border.border_width_bottom = 2
-	red_border.border_width_left = 2
-	red_border.border_width_right = 2
-	red_border.border_width_top = 2
-	
-	title.add_theme_stylebox_override("normal", red_border)
-	pass
-
-
-## Shows the user that the Number of Pages field must be a number
-func error_format_number_of_pages() -> void:
-	var red_border = StyleBoxFlat.new()
-	red_border.border_color = Color.RED
-	red_border.border_width_bottom = 2
-	red_border.border_width_left = 2
-	red_border.border_width_right = 2
-	red_border.border_width_top = 2
-	
-	le_number_of_pages.add_theme_stylebox_override("normal", red_border)
 	pass
 
 
@@ -360,6 +351,7 @@ func _on_btn_division_pressed() -> void:
 ## Allow the form to be editable
 func _on_btn_edit_pressed() -> void:
 	update_view_option(ResourceData.ViewingOptions.Edit)
+	old_data = resource_item.division_list
 	pass
 
 ## Saves the newly inputted ResourceItem
@@ -367,12 +359,14 @@ func _on_btn_save_pressed() -> void:
 	
 	## Do not save resource without a title
 	if title.text.is_empty():
-		error_format_title_empty()
+		var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+		title.add_theme_stylebox_override("normal", error_style_box)
 		return
 	
 	if !le_number_of_pages.text.is_empty():
 		if !le_number_of_pages.text.is_valid_int():
-			error_format_number_of_pages()
+			var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+			le_number_of_pages.add_theme_stylebox_override("normal", error_style_box)
 			return
 	
 	# Save the form data to the resource
@@ -392,17 +386,40 @@ func _on_btn_save_pressed() -> void:
 func _on_btn_update_pressed() -> void:
 	# Do not save resource without a title
 	if title.text.is_empty():
-		error_format_title_empty()
+		var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+		title.add_theme_stylebox_override("normal", error_style_box)
 		return
 	
 	if !le_number_of_pages.text.is_empty():
 		if !le_number_of_pages.text.is_valid_int():
-			error_format_number_of_pages()
+			var error_style_box = CMDatabaseUtilities.error_style_box_flat()
+			le_number_of_pages.add_theme_stylebox_override("normal", error_style_box)
 			return
 	
 	# Save the data
 	save_data()
+	
+	if resource_item.division_list != old_data:
+		popup_update_division_list_confirmation.show()
+		return
+	
 	CMDatabaseUtilities.update_resource_item(resource_item)
+	
+	# Remove any format themes
+	remove_format_themes()
+	
+	# Change the view
+	view_option = ResourceData.ViewingOptions.View
+	update_view()
+	pass
+
+
+## Confirms the process of deleting updated division lists items
+## and resetting student progress
+func _on_btn_division_list_okay_pressed() -> void:
+	CMDatabaseUtilities.update_resource_item(resource_item)
+	CMDatabaseUtilities.update_selected_resource_assignments(resource_item)
+	popup_update_division_list_confirmation.hide()
 	
 	# Remove any format themes
 	remove_format_themes()

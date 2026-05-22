@@ -9,3 +9,6 @@ extends Resource
 
 ## List of all subjects for the application
 @export var subject_list : Array[Subject]
+
+## List of all daily notes
+@export var daily_notes : Array[DailyNotes]
