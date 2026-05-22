@@ -3,6 +3,7 @@
 ### Always displays the application name in the header
 ### A PanelContainer is used for displaying the selected view
 ### A footer is used to display the options: ResourceList page, settings, etc...
+### Adding a comment to verify my branches are working
 ################################################################################
 extends Control
 
