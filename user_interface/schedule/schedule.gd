@@ -71,7 +71,7 @@ func _ready() -> void:
 	# If the application is running on mobile, shorthand the table header
 	if CMDatabaseUtilities.get_is_mobile():
 		mobile_shorthand_table_header()
-		item_list_students.max_columns = 1
+		item_list_students.max_columns = 0
 	
 	create_schedule_overview_table()
 	
