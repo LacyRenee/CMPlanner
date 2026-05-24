@@ -34,6 +34,9 @@ const RESOURCE_ASSIGNMENTS_PATH : String = "res://user_interface/schedule/resour
 ## Scene path to the welcome page
 const WELCOME_SCENE_PATH : String = "res://user_interface/main/welcome_page.tscn"
 
+## Scene path to the memorize page
+const MEMORIZE_SCENE_PATH = preload("uid://v27uylacnbov")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -254,4 +257,8 @@ func _on_btn_schedule_pressed() -> void:
 
 ## Displays the Memorize page
 func _on_btn_memorize_pressed() -> void:
+	remove_scene_from_attacher()
+	
+	var instance = MEMORIZE_SCENE_PATH.instantiate()
+	panel_container_attacher.add_child(instance)
 	pass 

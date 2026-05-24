@@ -21,50 +21,76 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer"]
 layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="HBoxTitle" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+[node name="HBoxTitle" type="HBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LblTitle" type="RichTextLabel" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxTitle"]
+[node name="LblTitle" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxTitle"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Title: "
 fit_content = true
 
-[node name="LeTItle" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxTitle"]
+[node name="LeTItle" type="LineEdit" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxTitle"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 6.0
 
-[node name="HBoxDescription" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+[node name="HBoxContent" type="HBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LblDescription" type="RichTextLabel" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxDescription"]
+[node name="LblContent" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContent"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Description: "
+text = "Content: "
 fit_content = true
 
-[node name="LeDescription" type="TextEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxDescription"]
+[node name="LeContent" type="TextEdit" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContent"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 6.0
 caret_blink = true
 
-[node name="HBoxStartDate" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+[node name="HBoxStartDate" type="HBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 
-[node name="LblStartDate" type="RichTextLabel" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxStartDate"]
+[node name="LblStartDate" type="RichTextLabel" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxStartDate"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Start Date:"
 fit_content = true
 
-[node name="LeStartDate" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxStartDate"]
+[node name="LeStartDate" type="LineEdit" parent="MarginContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxStartDate"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 6.0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BtnDeleteCard" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_type_variation = &"DeleteButton"
+text = "Delete"
+
+[connection signal="pressed" from="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/BtnDeleteCard" to="." method="_on_btn_delete_card_pressed"]

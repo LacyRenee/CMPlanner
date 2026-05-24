@@ -673,6 +673,13 @@ static func save_progress_report(p_student : Student, p_report_data : Array[Dict
 #endregion
 
 
+#region Memorize Set Functions
+static func save_set(p_set : Set) -> void:
+	
+	pass
+#endregion
+
+
 #region Database functions
 ## Retreives the database file
 static func get_database() -> CMDatabase:

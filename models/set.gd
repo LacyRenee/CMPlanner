@@ -4,6 +4,9 @@ extends Resource
 ## Title of the set
 @export var title : String
 
+## Subtitle of the set
+@export var subtitle : String
+
 ## The date to begin studying
 @export var start_date : String
 

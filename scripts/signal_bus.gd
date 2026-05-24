@@ -72,7 +72,11 @@ signal display_resource_assignments_page(assignment)
 @warning_ignore("unused_signal")
 signal display_resource_assignments(assignment)
 
-
 ## Emitted when the editted assignments should be saved
 @warning_ignore("unused_signal")
 signal update_resource_assignments(index, date, progress, notes)
+
+
+## Emitted from Card when a card needs to be removed from a set
+@warning_ignore("unused_signal")
+signal delete_card(card)
