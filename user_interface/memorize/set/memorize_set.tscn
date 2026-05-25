@@ -119,5 +119,5 @@ theme_type_variation = &"AccentButton"
 text = "Save Set"
 
 [connection signal="pressed" from="VBoxContainer/HBoxFooter/BtnAddCard" to="." method="_on_btn_add_card_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxFooter/BtnSave" to="." method="_on_btn_save_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxFooter/BtnSave" to="." method="_on_btn_save_card_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxFooter/BtnSave" to="." method="_on_btn_save_pressed"]

@@ -6,8 +6,18 @@ const MEMORIZE_SET_SCENE_PATH = preload("uid://d4m604xss1vsu")
 ## Holds a new memorize set
 @onready var panel_container_holder: PanelContainer = %PanelContainerHolder
 
+## List of all Memorize sets
+@onready var option_button_study_set: OptionButton = %OptionButtonStudySet
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Populate the study set dropdown
+	var memorize_sets = CMDatabaseUtilities.get_all_memorize_sets()
+	
+	if memorize_sets != null:
+		for i in memorize_sets:
+			option_button_study_set.add_item(i.title)
 	pass
 
 

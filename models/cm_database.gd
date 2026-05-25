@@ -12,3 +12,6 @@ extends Resource
 
 ## List of all daily notes
 @export var daily_notes : Array[DailyNotes]
+
+## List of all Memorize sets
+@export var memorize_sets : Array[Set]

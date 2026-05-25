@@ -33,7 +33,7 @@ func delete_card(p_card) -> void:
 	pass
 
 
-func create_set() -> void:
+func create_set() -> Set:
 	# Create the set
 	var new_set : Set = Set.new()
 	new_set.title = le_title.text
@@ -48,7 +48,8 @@ func create_set() -> void:
 		new_card.content = v_box_placeholder.get_child(i).le_content.text
 		
 		new_set.card_list.append(new_card)
-	pass
+	
+	return new_set
 
 
 ## Add a new card to the Memorize Set
@@ -62,9 +63,29 @@ func _on_btn_add_card_pressed() -> void:
 
 ## Begin the process to save the new Memorize Set
 func _on_btn_save_card_pressed() -> void:
+	# Error check the Memorize Set
 	if le_title.text.is_empty():
 		le_title.add_theme_stylebox_override("normal",CMDatabaseUtilities.error_style_box_flat())
 		return
-	else:
-		create_set()
+	
+	# Error check the cards
+	var count_errors : int = 0
+	for card in v_box_placeholder.get_child_count():
+		if v_box_placeholder.get_child(card).le_title.text.is_empty():
+			v_box_placeholder.get_child(card).le_title.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
+			count_errors += 1
+		else:
+			v_box_placeholder.get_child(card).le_title.remove_theme_stylebox_override("normal")
+			
+		if v_box_placeholder.get_child(card).le_content.text.is_empty():
+			v_box_placeholder.get_child(card).le_content.add_theme_stylebox_override("normal", CMDatabaseUtilities.error_style_box_flat())
+			count_errors += 1
+		else:
+			v_box_placeholder.get_child(card).le_content.remove_theme_stylebox_override("normal")
+			
+	if count_errors > 0:
+		return
+	
+	# Create the set
+	CMDatabaseUtilities.save_set(create_set())
 	pass

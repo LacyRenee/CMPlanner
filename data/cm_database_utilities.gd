@@ -674,9 +674,18 @@ static func save_progress_report(p_student : Student, p_report_data : Array[Dict
 
 
 #region Memorize Set Functions
+## Saves a new memorize set to the database
 static func save_set(p_set : Set) -> void:
-	
+	var db = get_database()
+	db.memorize_sets.append(p_set)
+	overwrite_database(db)
 	pass
+
+
+## Retrieves all the memorize sets
+static func get_all_memorize_sets() -> Array[Set]:
+	var db = get_database()
+	return db.memorize_sets
 #endregion
 
 
