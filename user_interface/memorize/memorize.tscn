@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://v27uylacnbov"]
+[gd_scene load_steps=3 format=3 uid="uid://v27uylacnbov"]
 
 [ext_resource type="Script" uid="uid://d2453t07w43t8" path="res://user_interface/memorize/memorize.gd" id="1_kgl6u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ej1s"]
+bg_color = Color(0.95686275, 0.96862745, 0.9843137, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.011764706, 0.15686275, 0.29803923, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Memorize" type="Control"]
 layout_mode = 3
@@ -13,36 +25,40 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_kgl6u")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
 theme_type_variation = &"BackgroundPanel"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="ControlSpacer" type="Control" parent="PanelContainer/VBoxContainer"]
+[node name="ControlSpacer" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="BtnNewSet" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="BtnNewSet" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Create Study Set"
 
-[node name="ControlSpacer2" type="Control" parent="PanelContainer/VBoxContainer"]
+[node name="ControlSpacer2" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="HBoxStudySet" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="HBoxStudySet" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="LblStudySet" type="RichTextLabel" parent="PanelContainer/VBoxContainer/HBoxStudySet"]
+[node name="LblStudySet" type="RichTextLabel" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -50,19 +66,106 @@ text = "Select a set to study:"
 fit_content = true
 autowrap_mode = 0
 
-[node name="OptionButtonStudySet" type="OptionButton" parent="PanelContainer/VBoxContainer/HBoxStudySet"]
+[node name="OptionButtonStudySet" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="ControlSpacer3" type="Control" parent="PanelContainer/VBoxContainer"]
+[node name="HBoxSetActions" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="BtnEditSet" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet/HBoxSetActions"]
+layout_mode = 2
+text = "Edit"
+
+[node name="BtnSaveSet" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet/HBoxSetActions"]
+layout_mode = 2
+theme_type_variation = &"AccentButton"
+text = "Save"
+
+[node name="BtnDeleteSet" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet/HBoxSetActions"]
+layout_mode = 2
+theme_type_variation = &"DeleteButton"
+text = "Delete"
+
+[node name="ControlSpacer3" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="PanelContainerHolder" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+[node name="PanelContainerNewSetHolder" type="PanelContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"BackgroundPanel"
 
-[connection signal="pressed" from="PanelContainer/VBoxContainer/BtnNewSet" to="." method="_on_btn_new_set_pressed"]
+[node name="PanelContainerCardHolder" type="PanelContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 10
+theme_type_variation = &"BackgroundPanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainerCardHolder"]
+layout_mode = 2
+
+[node name="ControlSpacer" type="Control" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BtnCardPrevious" type="Button" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "<"
+
+[node name="PanelCardStudy" type="PanelContainer" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_type_variation = &"BackgroundPanel"
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ej1s")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LblCardTitle" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Title"
+fit_content = true
+
+[node name="LblCardCount" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Daily"
+fit_content = true
+autowrap_mode = 0
+
+[node name="LblCardContent" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Content"
+fit_content = true
+
+[node name="BtnCardNext" type="Button" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = ">"
+
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/BtnNewSet" to="." method="_on_btn_new_set_pressed"]
+[connection signal="item_selected" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet/OptionButtonStudySet" to="." method="_on_option_button_study_set_item_selected"]
