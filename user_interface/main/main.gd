@@ -83,6 +83,9 @@ func _ready() -> void:
 	
 	# Displays the scheduled resource assignments page
 	SignalBus.connect("display_resource_assignments_page", display_assignments_page, 0)
+	
+	# Displays the Memorize Page
+	SignalBus.connect("display_memorize_page", display_memorize_page)
 	#endregion
 	pass
 
@@ -213,6 +216,16 @@ func display_schedule_page() -> void:
 	pass
 
 
+## Displays the memorize page
+func display_memorize_page() -> void:
+	# Remove any other page
+	remove_scene_from_attacher()
+	
+	var instance = MEMORIZE_SCENE_PATH.instantiate()
+	panel_container_attacher.add_child(instance)
+	pass
+
+
 ## Remove current container from the PanelContainerAttacher
 func remove_scene_from_attacher() -> void:
 	if panel_container_attacher.get_child_count() > 0:
@@ -258,7 +271,5 @@ func _on_btn_schedule_pressed() -> void:
 ## Displays the Memorize page
 func _on_btn_memorize_pressed() -> void:
 	remove_scene_from_attacher()
-	
-	var instance = MEMORIZE_SCENE_PATH.instantiate()
-	panel_container_attacher.add_child(instance)
+	display_memorize_page()
 	pass 

@@ -674,6 +674,23 @@ static func save_progress_report(p_student : Student, p_report_data : Array[Dict
 
 
 #region Memorize Set Functions
+## Checks for duplicate titles
+static func check_title_duplication(p_set : Set) -> String:
+	var memorize_sets = get_all_memorize_sets()
+	
+	# Check for duplicates
+	for i in memorize_sets.size():
+		if p_set.title == memorize_sets[i].title:
+			return "duplicate"
+	
+	# Check for similarities
+	for i in memorize_sets.size():
+		if p_set.title.similarity(memorize_sets[i].title):
+			return memorize_sets[i].title
+	
+	return "OK"
+
+
 ## Saves a new memorize set to the database
 static func save_set(p_set : Set) -> void:
 	var db = get_database()
@@ -682,10 +699,46 @@ static func save_set(p_set : Set) -> void:
 	pass
 
 
+## Removes the selected set from the database
+static func remove_set(p_set : Set) -> void:
+	var db = get_database()
+	var index = db.memorize_sets.find(p_set)
+	db.memorize_sets.remove_at(index)
+	overwrite_database(db)
+	pass
+
 ## Retrieves all the memorize sets
 static func get_all_memorize_sets() -> Array[Set]:
 	var db = get_database()
 	return db.memorize_sets
+	
+
+## Sort the card deck for study: Daily, Odd, Even, Weekdays, Days of the Month
+static func sort_memorize_set_for_study(p_set : Set) -> Array[Card]:
+	var new_set : Array = []
+	
+	for i in p_set.card_list.size():
+		# If first card is not finished, stop here
+		if i == 0 and p_set.card_list[i].is_finished == false:
+			var obj = {
+				"Daily": "Daily",
+				"Card": p_set.card_list[i]
+			}
+			new_set.append(obj)
+			
+	
+	# Daily
+	
+	# Odd
+	
+	# Even
+	
+	# Weekly
+	
+	# Monthly
+	
+	
+	return new_set
 #endregion
 
 

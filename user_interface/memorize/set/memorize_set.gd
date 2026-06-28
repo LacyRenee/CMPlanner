@@ -21,6 +21,22 @@ const CARD_SCENE_PATH = preload("uid://cwtvuhdc01pbi")
 ## Access to the description of the memory set
 @onready var le_description: LineEdit = %LeDescription
 
+## Access to the popup panel
+@onready var popup_panel: PopupPanel = %PopupPanel
+
+## Access to the popup title
+@onready var lbl_title: RichTextLabel = %LblTitle
+
+## Access to the popup content
+@onready var lbl_content: RichTextLabel = %LblContent
+
+## Access to the popup OK button
+@onready var btn_ok: Button = %BtnOK
+
+## Access to the popup cancel button
+@onready var btn_cancel: Button = %BtnCancel
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	SignalBus.connect("delete_card", delete_card)
@@ -86,6 +102,36 @@ func _on_btn_save_card_pressed() -> void:
 	if count_errors > 0:
 		return
 	
-	# Create the set
-	CMDatabaseUtilities.save_set(create_set())
+	# Verify no duplicates
+	var new_set : Set = create_set()
+	var result = CMDatabaseUtilities.check_title_duplication(new_set)
+	if result == "OK":
+		popup_panel.show()
+		lbl_title.text = "Success!"
+		lbl_content.text = new_set.title + " was created successfully!"
+		btn_cancel.visible = false
+	elif result == "duplicate":
+		popup_panel.show()
+		lbl_title.text = "Duplicate Found"
+		lbl_content.text = "Unable to save the current set. Please rename"
+		btn_ok.visible = false
+		btn_cancel.text = "OK"
+	else:
+		popup_panel.show()
+		lbl_title.text = "Warning!"
+		lbl_content.text = "A similar title was found: " + result + ". Are you sure you want to save?"
+		btn_ok.visible = true
+		btn_cancel.visible = true
+		btn_cancel.text = "Cancel"
 	pass
+
+
+func _on_popup_btn_ok_pressed() -> void:
+	CMDatabaseUtilities.save_set(create_set())
+	SignalBus.display_memorize_page.emit()
+	pass
+
+
+func _on_popup_btn_cancel_pressed() -> void:
+	popup_panel.hide()
+	pass 

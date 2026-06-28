@@ -76,7 +76,10 @@ signal display_resource_assignments(assignment)
 @warning_ignore("unused_signal")
 signal update_resource_assignments(index, date, progress, notes)
 
-
 ## Emitted from Card when a card needs to be removed from a set
 @warning_ignore("unused_signal")
 signal delete_card(card)
+
+## Emitted to display the Memorize apge
+@warning_ignore("unused_signal")
+signal display_memorize_page
