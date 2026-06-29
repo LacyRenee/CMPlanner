@@ -21,6 +21,18 @@ const MEMORIZE_SET_SCENE_PATH = preload("uid://d4m604xss1vsu")
 ## Container for all the set actions
 @onready var hbox_set_actions: HBoxContainer = %HBoxSetActions
 
+## Access to the Card title to be studied
+@onready var lbl_card_title: RichTextLabel = %LblCardTitle
+
+## Access to the card count to be studied
+@onready var lbl_card_count: RichTextLabel = %LblCardCount
+
+## Access to the card subtitle to be studied
+@onready var lbl_card_subtitle: RichTextLabel = %LblCardSubtitle
+
+## Access to the card content to be studied 
+@onready var lbl_card_content: RichTextLabel = $VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer/LblCardContent
+
 ## Displays the previous study card
 @onready var btn_card_previous: Button = %BtnCardPrevious
 
@@ -41,6 +53,9 @@ var is_study_view : bool = false
 
 ## Holds the cards to be studied
 var study_set : Array[Card] = []
+
+## Counter for the study set
+var study_set_counter : int = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -98,19 +113,22 @@ func _on_option_button_study_set_item_selected(index: int) -> void:
 	# Create the study cards
 	var study_set_copy : Array[Card] = option_button_study_set.get_item_metadata(index).card_list
 	
-	if study_set_copy != null:
+	if !study_set_copy.is_empty():
 		for i in study_set_copy.size():
 			study_set.append(study_set_copy[i])
 			
 			if study_set[i].is_finished == false:
-				return
+				break
 	
 	if study_set.is_empty():
-		toggle_study_card_buttons(true, false)
+		toggle_study_card_buttons(true, true)
 	else:
 		toggle_study_card_buttons(true, false)
-	
-	# Display first card
+		
+		# Display the first card
+		lbl_card_title.text = study_set[0].title
+		lbl_card_subtitle.text = "" if study_set[0].subtitle.is_empty() else study_set[0].subtitle
+		lbl_card_content.text = study_set[0].content
 	
 	pass
 
@@ -122,6 +140,15 @@ func _on_btn_study_card_previous_pressed() -> void:
 
 ## Displays the next study card
 func _on_btn_study_card_next_pressed() -> void:
+	# Check if we're at the end of the study set
+	if (study_set_counter + 1) == study_set.size():
+		print("End of set")
+		
+	match study_set_counter:
+		0:
+			pass
+		1:
+			pass
 	pass
 
 

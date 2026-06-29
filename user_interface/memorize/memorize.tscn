@@ -146,12 +146,14 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="LblCardTitle" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Title"
 fit_content = true
 
 [node name="LblCardCount" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Daily"
@@ -161,7 +163,8 @@ autowrap_mode = 0
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LblCardContent" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="LblCardSubtitle" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -172,7 +175,7 @@ fit_content = true
 layout_mode = 2
 text = "?"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer"]
+[node name="LblCardContent" type="RichTextLabel" parent="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/PanelCardStudy/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Content"
