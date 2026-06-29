@@ -707,11 +707,21 @@ static func remove_set(p_set : Set) -> void:
 	overwrite_database(db)
 	pass
 
+
 ## Retrieves all the memorize sets
 static func get_all_memorize_sets() -> Array[Set]:
 	var db = get_database()
 	return db.memorize_sets
+
+
+## Retrieves the label associated with the counter number
+static func get_study_card_counter_label(p_counter : int) -> String:
+	var label : String = ""
 	
+	label = MemorizeSetData.Counter.keys()[p_counter]
+	
+	return label
+
 
 ## Sort the card deck for study: Daily, Odd, Even, Weekdays, Days of the Month
 static func sort_memorize_set_for_study(p_set : Set) -> Array[Card]:

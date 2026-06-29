@@ -93,6 +93,16 @@ func toggle_study_card_buttons(p_prev : bool, p_next : bool) -> void:
 	pass
 
 
+## Sets the study card text
+func set_study_card_text(p_title : String, p_count : int, p_content : String, p_subtitle : String = "") -> void:
+	lbl_card_title.text = p_title
+	lbl_card_count.text = CMDatabaseUtilities.get_study_card_counter_label(p_count)
+	lbl_card_content.text = p_content
+	lbl_card_subtitle.text = p_subtitle
+	
+	pass
+
+
 ## Displays the memorize set
 func _on_btn_new_set_pressed() -> void:
 	if panel_container_new_set_holder.get_child_count() == 0:
@@ -126,15 +136,18 @@ func _on_option_button_study_set_item_selected(index: int) -> void:
 		toggle_study_card_buttons(true, false)
 		
 		# Display the first card
-		lbl_card_title.text = study_set[0].title
-		lbl_card_subtitle.text = "" if study_set[0].subtitle.is_empty() else study_set[0].subtitle
-		lbl_card_content.text = study_set[0].content
-	
+		set_study_card_text(study_set[0].title, 0, study_set[0].content, study_set[0].subtitle)	
 	pass
 
 
 ## Displays the previous study card
 func _on_btn_study_card_previous_pressed() -> void:
+	if (study_set_counter - 1) == 0:
+		set_study_card_text(study_set[0].title, 0, study_set[0].content, study_set[0].subtitle)
+		toggle_study_card_buttons(true, false)
+		
+		# Go back one item in the array
+		study_set_counter -= 1
 	pass
 
 
@@ -142,7 +155,11 @@ func _on_btn_study_card_previous_pressed() -> void:
 func _on_btn_study_card_next_pressed() -> void:
 	# Check if we're at the end of the study set
 	if (study_set_counter + 1) == study_set.size():
-		print("End of set")
+		set_study_card_text("", 0, "You've finished the set! Take a break!")
+		toggle_study_card_buttons(false, true)
+		
+		# Go to next item in study array
+		study_set_counter += 1
 		
 	match study_set_counter:
 		0:
@@ -172,4 +189,9 @@ func _on_popup_btn_ok_pressed() -> void:
 ## Hides the popup
 func _on_popup_btn_cancel_pressed() -> void:
 	popup_panel.hide()
+	pass
+
+
+## Returns the user to the creation/edit view
+func _on_btn_edit_memorize_set_pressed() -> void:
 	pass

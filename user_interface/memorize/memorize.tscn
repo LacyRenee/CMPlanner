@@ -198,8 +198,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
 offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
+offset_right = 445.0
+offset_bottom = 391.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -245,6 +245,7 @@ text = "Cancel"
 
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/BtnNewSet" to="." method="_on_btn_new_set_pressed"]
 [connection signal="item_selected" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet/OptionButtonStudySet" to="." method="_on_option_button_study_set_item_selected"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet/HBoxSetActions/BtnEditSet" to="." method="_on_btn_edit_memorize_set_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxStudySet/HBoxSetActions/BtnDeleteSet" to="." method="_on_btn_delete_memorize_set_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/BtnCardPrevious" to="." method="_on_btn_study_card_previous_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainerCardHolder/VBoxContainer/HBoxContainer/BtnCardNext" to="." method="_on_btn_study_card_next_pressed"]

@@ -35,6 +35,7 @@ config/icon="uid://bq1pla35bdj0w"
 ResourceData="*res://data/resource_data.gd"
 SignalBus="*res://scripts/signal_bus.gd"
 CmDatabaseUtilities="*res://data/cm_database_utilities.gd"
+MemorizeSetData="*res://data/memorize_set_data.gd"
 
 [display]
 

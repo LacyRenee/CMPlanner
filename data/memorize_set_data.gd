@@ -1,0 +1,48 @@
+################################################################################
+## Global lists for a Memorize Set
+################################################################################
+extends Node
+
+enum Counter {
+	Daily,
+	Odd,
+	Even,
+	Sunday,
+	Monday,
+	Tuesday,
+	Wednesday,
+	Thursday,
+	Friday,
+	Saturday,
+	One,
+	Two,
+	Three,
+	Four,
+	Five,
+	Six,
+	Seven,
+	Eight,
+	Nine,
+	Ten,
+	Eleven,
+	Twelve,
+	Thirteen,
+	Fourteen,
+	Fifteen,
+	Sixteen,
+	Seventeen,
+	Eighteen,
+	Nineteen,
+	Twenty,
+	Twenty_One,
+	Twenty_Two,
+	Twenty_Three,
+	Twenty_Four,
+	Twenty_Five,
+	Twenty_Six,
+	Twenty_Seven,
+	Twenty_Eight,
+	Twenty_Nine,
+	Thirty,
+	Thirty_one
+}
